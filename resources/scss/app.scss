@@ -1,0 +1,341 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+*,::before,::after{
+
+  text-decoration: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  scroll-behavior: smooth;
+}
+.dynamic-link {
+//   color: $secondary;
+  text-decoration: none;
+  font-weight: 500;
+//   border-bottom: 2px solid $secondary;
+  line-break: anywhere;
+}
+
+body {
+  scroll-behavior: smooth;
+  // font-weight: 400;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+  font-size: 15px;
+  background-color: initial ;
+}
+
+h1, h2, h3, h4, h5 {
+  // font-family: 'undefined';
+  font-weight: 700;
+}
+
+// html {font-size: 100%;} /* 16px */
+
+h1 {font-size: 4.210rem; /* 67.36px */}
+
+h2 {font-size: 3.158rem; /* 50.56px */}
+
+h3 {font-size: 2.369rem; /* 37.92px */}
+
+h4 {font-size: 1.777rem; /* 28.48px */}
+
+h5 {font-size: 1.333rem; /* 21.28px */}
+
+small {font-size: 0.750rem; /* 12px */}
+
+
+$primary-color: #333;
+$secondary-color: rgb(34 197 94);
+$border-radius: 5px;
+$background-color: rgba(247, 247, 247,0.9);
+// $background-color: #f7f7f7;
+$input-border-color: #e0e0e0;
+$white: #fff;
+$shadow: 0px 0px 1px rgba(0,0,0,0.2);
+$text:rgb(113 113 122);
+body {
+  background-color: $background-color;
+  margin: 0;
+  padding: 0;
+//   height: 100vh;
+}
+
+.alert{
+    padding: 10px;
+    font-weight: 400;
+    font-size: 14px;
+    border-radius: 5px;
+    width: 100%;
+    margin: 10px 0;
+    &.alert-danger{
+        background-color: rgba(255, 0, 0,0.1);
+        color: red;
+    }
+}
+
+ .header {
+    width: 100%;
+    background-color: $white;
+    // margin-bottom: 20px;
+    padding: 15px 20px;
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: $shadow;
+
+    button{
+         width: max-content;
+        padding: 8px 20px;
+        background-color: $secondary-color;
+        color: $white;
+        box-shadow: 0px 0px 2px #ccc;
+        border: none;
+        border-radius: $border-radius;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        cursor: pointer;
+    }
+    .user{
+        display: flex;
+        align-items: center;
+        background-color: red($color: #000000);
+        gap: 10px;
+    }
+    .logo {
+      width: 130px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin: 0;
+      color: $secondary-color;
+    }
+  }
+.container {
+  width: 100%;
+    padding:1rem;
+  .login-form {
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    .card{
+        border-radius: $border-radius;
+        box-shadow: $shadow;
+        background-color: $white;
+        padding: 2rem;
+        width: 380px;
+    }
+    h2 {
+      font-size: 20px;
+      color: $primary-color;
+    }
+
+    p {
+      font-size: 13px;
+      color: $text;
+      margin: 10px;
+      font-weight: 400;
+    }
+
+
+    form {
+
+      .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+        margin: 20px 0px;
+        label {
+          display: block;
+          font-weight: bold;
+          margin-bottom: 5px;
+          font-weight: 500;
+          font-size: 13px;
+        }
+
+        input {
+          width: 100%;
+          padding: 8px;
+          border: 1px solid $input-border-color;
+          border-radius: $border-radius;
+          font-size: 14px;
+          transition: all 1s ease-in-out;
+          &:hover{
+            border-color: $secondary-color;
+          }
+        }
+
+        span {
+          font-size: 12px;
+          color: $primary-color;
+        }
+      }
+
+      .login-button {
+        width: max-content;
+        padding: 8px 20px;
+        background-color: $white;
+        color: $primary-color;
+        // color: #fff;
+        box-shadow: 0px 0px 2px #ccc;
+        // border: 1px solid $text;
+        border: none;
+        border-radius: $border-radius;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        cursor: pointer;
+      }
+    }
+
+    .forgot-password {
+      display: block;
+      margin-top: 10px;
+      font-size: 14px;
+      color: $primary-color;
+      text-decoration: underline;
+        font-size: 12px;
+        font-weight: 300;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.home{
+    width: 100%;
+    .content{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .row{
+            width: 800px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 5px;
+            margin-inline: auto;
+            .col{
+                width: 50%;
+                .card{
+                min-height: 100px;
+                border-radius: $border-radius;
+                box-shadow: $shadow;
+                background-color: $white;
+                padding: 1rem 2rem ;
+
+                    &.styck{
+                        position: sticky;
+                        top: 60px;
+                background-color: RED;
+                    }
+                }
+                &:first-child{
+                    // width: 50%;
+                }
+                &:last-child{
+                    // width: 40%;
+                }
+                form {
+
+                .form-group {
+                    margin-bottom: 15px;
+                    text-align: left;
+                    margin: 20px 0px;
+                    width: 100%;
+                    label {
+                    display: block;
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                    font-weight: 500;
+                    font-size: 13px;
+                    }
+
+                    select,input {
+                    width: 100%;
+                    padding: 8px;
+                    border: 1px solid $input-border-color;
+                    border-radius: $border-radius;
+                    font-size: 14px;
+                    }
+
+                    span {
+                    font-size: 12px;
+                    color: $primary-color;
+                    }
+                }
+                .contentchild{
+                    width: 100%;
+                    h5{
+                        font-size: 15px;
+                        color: $primary-color;
+                        margin-top: 15px;
+                    }
+                    .rowinput{
+                        display: flex;
+                        gap: 10px;
+                        width: 100%;
+                    }
+                }
+
+                  .login-button {
+                    width: max-content;
+                    padding: 8px 30px;
+                    background-color: $secondary-color;
+                    margin-top: 10px;
+                    color: $white;
+                    box-shadow: 0px 0px 2px #ccc;
+                    border: none;
+                    border-radius: $border-radius;
+                    font-size: 16px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                    cursor: pointer;
+                }
+
+                }
+                .items{
+                    width: 100%;
+                    .item{
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 10px 0;
+                        font-size: 14px;
+                        color: $primary-color;
+                        &.total{
+                            border-top: 1px solid $input-border-color;
+                            margin-top: 15px;
+                            padding: 15px 0;
+                            text-transform: uppercase;
+                            span{
+                            font-weight: 800 !important;
+                            }
+                        }
+                        span{
+
+                            &:last-child{
+                                font-weight: 600;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
