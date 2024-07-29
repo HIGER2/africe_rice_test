@@ -1,4 +1,4 @@
-import { computed, reactive } from "vue"
+import { computed, reactive, ref } from "vue"
 import { toast } from 'vue3-toastify';
 
 
@@ -8,8 +8,19 @@ export const useManagerStore = () => {
     const user = reactive({
         "marital_status": "",
         "number_child": "",
+        "depart_date":"",
         "children": [],
+        "total_t_w_f" :0,
+        "total_p_e_t" :0,
+        "total_f_i_a" :0,
+        "total_u" :0,
+        "total_p_c_a" :0,
+        "total_amount" :0,
     });
+
+    // let employeeConnected.value?.category = "GSS1";
+
+    let employeeConnected = ref();
 
     const calculate = (item) => {
         let amount = 0
@@ -33,7 +44,7 @@ export const useManagerStore = () => {
     }
 
 
-const separatorMillier = (montant) => {
+ const separatorMillier = (montant) => {
 
 const options = {
     useGrouping: true,
@@ -47,11 +58,11 @@ const options = {
 
 
     const Total_T_W_F = (item) => {
-
+        // console.log(item);
        return computed(() => {
-             let amount = 0
+            let amount = 0
             item?.staff_category.forEach(element => {
-                if (element.name == "GS_1_5") {
+                if (element.name == employeeConnected.value?.category) {
                     amount += element.montant
 
                     if (user.marital_status == 'yes') {
@@ -75,8 +86,8 @@ const options = {
             let amount = 0
         item?.staff_category.forEach(element => {
 
-            if (element.name == "GS_1_5") {
-                if (element.name == "GS_1_5") {
+            if (element.name == employeeConnected.value?.category) {
+                if (element.device == "XOF") {
                 amount += Number(element.montant);
 
                 } else {
@@ -88,15 +99,16 @@ const options = {
         return amount
         }).value
     }
-    const Total_F_I_A = (item) => {
+
+     const Total_F_I_A = (item) => {
 
         return computed(() => {
             let amount = 0
         let room = 0;
             // console.log(item?.staff_category);
             item?.staff_category.forEach(element => {
-                if (element.name == "GS_1_5") {
-                    amount += Number(element.montant);
+                if (element.name == employeeConnected.value?.category) {
+                    amount += (Number(element.montant) * 7);
                     if (user.children.length > 0) {
                         let nbF = 0;
                         let nbH = 0;
@@ -128,8 +140,7 @@ const options = {
 
                         });
                     }
-
-                    amount +=(Number(element.montant) * room)
+                    amount +=((Number(element.montant) * room) * 7)
                 }
             });
 
@@ -140,8 +151,8 @@ const options = {
         return computed(() => {
             let amount = 0
         item?.staff_category.forEach(element => {
-            if (element.name == "GS_1_5") {
-                if (element.name == "GS_1_5" || element.name == "GS_6_9") {
+            if (element.name == employeeConnected.value?.category) {
+                if (element.name == employeeConnected.value?.category || element.name == "GS_6_9") {
                 amount += Number(element.montant);
                 } else {
                     amount += (Number(element.montant) *  500);
@@ -156,8 +167,8 @@ const options = {
         return computed(() => {
             let amount = 0
             item?.staff_category.forEach(element => {
-                if (element.name == "GS_1_5") {
-                    if (element.name == "GS_1_5") {
+                if (element.name == employeeConnected.value?.category) {
+                    if (element.device == "XOF") {
                         amount += Number(element.montant);
                         } else {
                             amount += (Number(element.montant) *  500);
@@ -170,7 +181,12 @@ const options = {
     }
 
     const Total_Amount = (type) => {
-              return type.reduce((total, item) => total + calculate(item), 0);
+
+        return computed(() => {
+
+            return type.reduce((total, item) => total + calculate(item), 0);
+
+        }).value
     }
 
     const initial = (item) => {
@@ -179,9 +195,14 @@ const options = {
         Object.assign(user,item)
     }
 
-    const save = async() => {
+    const save = async(type) => {
 
-
+        user.total_t_w_f=calculate(type[0])
+        user.total_p_e_t=calculate(type[1])
+        user.total_f_i_a = calculate(type[2])
+        user.total_u =calculate(type[3])
+        user.total_p_c_a = calculate(type[4])
+        user.total_amount = Total_Amount(type)
 
      await window.axios.post(`/save`, user)
          .then(async(response) => {
@@ -222,6 +243,7 @@ const options = {
         save,
         calculate,
         separatorMillier,
-        initial
+        initial,
+        employeeConnected
     }
 }

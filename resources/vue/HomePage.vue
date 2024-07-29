@@ -5,11 +5,19 @@ const { employee, type, data } = defineProps([ 'employee', 'type','data' ])
 
 const useManager = useManagerStore();
 const isLoading = ref(false);
-const onSave = async () => {
-    isLoading.value = true
-    await save()
+const today = new Date();
+
+console.log(today.toISOString());
+const onSave = async (type) => {
+
+    let confirmS = confirm('are you sure you want to save')
+    if (confirmS) {
+        isLoading.value = true
+    await save(type)
     isLoading.value = false
     scrollTo(0,0)
+    }
+
  }
 const {
     Total_Amount,
@@ -53,19 +61,29 @@ onMounted(() => {
     if (data) {
         initial(data)
     }
+
+    if (employee) {
+
+        useManager.employeeConnected.value = employee
+
+        console.log(useManager.employeeConnected.value.role);
+    }
+    // employee
 });
 </script>
 
 <template>
     <!-- {{data }} -->
-    <!-- {{ employee }} -->
+    <!-- {{ useManager.employeeConnected.value}} -->
+    <!-- {{  employee.role}} -->
     <!-- {{ type[2] }} -->
-    <!-- {{ useManager.user }} -->
+    <!-- {{ useManager.user.total_p_e_t }} -->
     <div class="content">
-        <div class="row">
+        <div class="row" :class="{'colunm':data?.status}">
             <div class="col">
-                <form @submit.prevent="onSave()">
+                <form @submit.prevent="onSave(type)">
                     <div class="card">
+                        <h5> General Information </h5>
                         <div class="form-group">
                             <label for="category">Your category</label>
                             <input type="email" :value="employee?.category" id="category" name="category"
@@ -81,12 +99,21 @@ onMounted(() => {
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="number">Enter your departure date</label>
+                            <input type="date"
+                                v-model="useManager.user.depart_date"
+                                :min="today.toISOString().slice(0, 10)"
+                                :disabled="data?.status"
+                                name="date"
+                                placeholder="Enter your departure date" required>
+                        </div>
+                          <div class="form-group">
                             <label for="number">Number of child (limit 4)</label>
                             <input type="tel" @input="loadChild()" v-model.number="useManager.user.number_child" min="0"
                                 max="4" :disabled="data?.status" id="password" name="password"
                                 placeholder="Enter your password" required>
                         </div>
-                        <div class="contentchild">
+                        <div class="contentchild" v-if="useManager.user.children.length > 0">
                             <!-- {{ useManager.children }} -->
                             <h5>Children informations</h5>
                             <div class="rowinput" v-for="(item, index) in useManager.user.children" :key="index">
@@ -106,7 +133,7 @@ onMounted(() => {
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="login-button" >
+                    <button type="submit" v-if="!data?.status" class="login-button" :disabled="data?.status">
                         <span v-if="isLoading">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                 <path fill="currentColor"
@@ -125,12 +152,28 @@ onMounted(() => {
             </div>
             <div class="col">
                 <div class="card ">
+                    <h5> Summary </h5>
                     <ul class="items">
-                        <li class="item" v-for="(item, index) in type" :key="index">
-                            <span>{{ item?.name }}</span>
-                            <span>XOF {{ separatorMillier(calculate(item)) }}</span>
-                            <!-- {{ item?.staff_category }} -->
+                        <template v-if="data?.status">
+                            <li class="item" v-for="(item, index) in type" :key="index">
+                                <span>{{ item?.name }}</span>
+                                <span>XOF {{ separatorMillier(calculate(item)) }}</span>
+                                <!-- {{ item?.staff_category }} -->
+                            </li>
+                             <li class="item total">
+                            <span>Total</span>
+                            <span>XOF {{ separatorMillier(Total_Amount(type)) }}</span>
                         </li>
+                        </template>
+                        <template v-else>
+                           <template v-for="(item, index) in type" :key="index">
+                            <li class="item"  v-if="item.id == 1 || item.id ==3">
+                                <span>{{ item?.name }}</span>
+                                <span>XOF {{ separatorMillier(calculate(item)) }}</span>
+                                <!-- {{ item?.staff_category }} -->
+                            </li>
+                           </template>
+                        </template>
                         <!-- <li class="item">
                             <span>Personal effect Transportation</span>
                             <span>XOF {{ Total_P_E_T }}</span>
@@ -147,10 +190,7 @@ onMounted(() => {
                             <span>Paliative for change in allowance</span>
                             <span>XOF {{ Total_P_C_A }}</span>
                         </li> -->
-                        <li class="item total">
-                            <span>Total</span>
-                            <span>XOF {{ separatorMillier(Total_Amount(type)) }}</span>
-                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -162,8 +202,5 @@ onMounted(() => {
 
 <style lang="scss" >
 
-body{
-    // background-color: red;
-}
 
 </style>

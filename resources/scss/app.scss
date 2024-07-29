@@ -229,15 +229,24 @@ body {
             justify-content: center;
             gap: 5px;
             margin-inline: auto;
+            &.colunm{
+                flex-direction: column-reverse;
+                margin-inline: auto;
+                align-items: center;
+            }
             .col{
                 width: 50%;
                 .card{
                 min-height: 100px;
-                border-radius: $border-radius;
+                border-radius: 10px;
                 box-shadow: $shadow;
                 background-color: $white;
                 padding: 1rem 2rem ;
-
+                    h5{
+                        font-size: 15px;
+                        color: $primary-color;
+                        margin: 15px 0;
+                    }
                     &.styck{
                         position: sticky;
                         top: 60px;
@@ -280,11 +289,7 @@ body {
                 }
                 .contentchild{
                     width: 100%;
-                    h5{
-                        font-size: 15px;
-                        color: $primary-color;
-                        margin-top: 15px;
-                    }
+
                     .rowinput{
                         display: flex;
                         gap: 10px;
@@ -293,14 +298,14 @@ body {
                 }
 
                   .login-button {
-                    width: max-content;
-                    padding: 8px 30px;
+                    width: 100%;
+                    padding: 10px 30px;
                     background-color: $secondary-color;
                     margin-top: 10px;
                     color: $white;
                     box-shadow: 0px 0px 2px #ccc;
                     border: none;
-                    border-radius: $border-radius;
+                    border-radius: 10px;
                     font-size: 16px;
                     cursor: pointer;
                     transition: background-color 0.3s;

@@ -5,7 +5,7 @@
         <div class="name">{{ session('user')->firstName }}</div> <!-- Afficher le nom de l'utilisateur -->
         <form action="{{ route('logout') }}" method="POST" class="d-inline">
             @csrf
-            <button type="submit" class="btn btn-link nav-link">Déconnexion</button>
+            <button type="submit" class="btn btn-link nav-link">Logout</button>
         </form>
     </div>
 @endif

@@ -6,6 +6,7 @@ use App\Models\Employee;
 use App\Models\EmployeeChild;
 use App\Models\EmployeeInformaton;
 use App\Models\TypeAllowence;
+use App\Notifications\EmployeeValidate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -91,6 +92,14 @@ class WebController extends Controller
 
                 $employee = Auth::guard('employees')->user();
                 $infoExist = EmployeeInformaton::where('employees_id', $employee->employeeId)->first();
+
+                // return $employee;
+                // return $employee->supervisor;
+
+                // $supervisor =
+
+                // return $employee->supervisor;
+
                 if ($infoExist) {
                     return response()->json([
                         'message' => 'vous avez déja renseigné',
@@ -120,6 +129,10 @@ class WebController extends Controller
 
 
                 DB::commit();
+                if ($employee->supervisor) {
+                    // Envoyer une notification au supérieur
+                    $employee->supervisor->notify(new EmployeeValidate($employee));
+                }
                 return response()->json(
                     [
                         'message' => 'information enregistré',
@@ -138,7 +151,7 @@ class WebController extends Controller
 
             return response()->json(
                 [
-                    'message' => 'information enregistré',
+                    'message' => "une erreur s'est produite",
                     'data' => null,
                     'error' => $th->getMessage()
                 ],

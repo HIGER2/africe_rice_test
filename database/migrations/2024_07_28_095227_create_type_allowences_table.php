@@ -27,22 +27,333 @@ return new class extends Migration
             $table->string('type_allowences_name');
             $table->string('name');
             $table->bigInteger('montant');
+            $table->string('device');
             $table->timestamps();
         });
 
         // Définit les noms d'allowance
         $allowences = [
-            'Travel with Family',
-            'Personal effect Transportation',
-            'Family initial accommodation',
-            'Unforseen',
-            'Paliative for change in allowance',
+            (object)[
+                "value" => 'Travel with Family',
+                "cate" => [
+                    (object)[
+                        "value" => "GSS1",
+                        "montant" => 10000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS2",
+                        "montant" => 10000,
+                        "device" => "XOF"
+
+                    ],
+                    (object)[
+                        "value" => "GSS3",
+                        "montant" => 10000,
+                        "device" => "XOF"
+
+                    ],
+                    (object)[
+                        "value" => "GSS4",
+                        "montant" => 10000,
+                        "device" => "XOF"
+
+                    ],
+                    (object)[
+                        "value" => "GSS5",
+                        "montant" => 10000,
+                        "device" => "XOF"
+
+                    ],
+                    (object)[
+                        "value" => "GSS6",
+                        "montant" => 10000,
+                        "device" => "XOF"
+
+                    ],
+                    (object)[
+                        "value" => "GSS7",
+                        "montant" => 10000,
+                        "device" => "XOF"
+
+                    ],
+                    (object)[
+                        "value" => "GSS8",
+                        "montant" => 10000,
+                        "device" => "XOF"
+
+                    ],
+                    (object)[
+                        "value" => "GSS9",
+                        "montant" => 10000,
+                        "device" => "XOF"
+
+                    ],
+                    (object)[
+                        "value" => "APS",
+                        "montant" => 10000,
+                        "device" => "XOF"
+
+                    ],
+                    (object)[
+                        "value" => "PS",
+                        "montant" => 10000,
+                        "device" => "XOF"
+
+                    ],
+                ]
+            ],
+            (object)[
+                "value" => 'Personal effect Transportation',
+                "cate" => [
+                    (object)[
+                        "value" => "GSS1",
+                        "montant" => 30000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS2",
+                        "montant" => 30000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS3",
+                        "montant" => 30000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS4",
+                        "montant" => 30000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS5",
+                        "montant" => 30000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS6",
+                        "montant" => 100,
+                        "device" => "$"
+                    ],
+                    (object)[
+                        "value" => "GSS7",
+                        "montant" => 100,
+                        "device" => "$"
+                    ],
+                    (object)[
+                        "value" => "GSS8",
+                        "montant" => 100,
+                        "device" => "$"
+                    ],
+
+                    (object)[
+                        "value" => "GSS9",
+                        "montant" => 100,
+                        "device" => "$"
+                    ],
+                    (object)[
+                        "value" => "APS",
+                        "montant" => 250,
+                        "device" => "$"
+                    ],
+                    (object)[
+                        "value" => "PS",
+                        "montant" => 350,
+                        "device" => "$"
+                    ],
+                ]
+            ],
+            (object)[
+                "value" => 'Family initial accommodation',
+                "cate" => [
+                    (object)[
+                        "value" => "GSS1",
+                        "montant" => 15000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS2",
+                        "montant" => 15000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS3",
+                        "montant" => 15000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS4",
+                        "montant" => 15000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS5",
+                        "montant" => 15000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS6",
+                        "montant" => 15000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS7",
+                        "montant" => 15000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS8",
+                        "montant" => 15000,
+                        "device" => "XOF"
+                    ],
+
+                    (object)[
+                        "value" => "GSS9",
+                        "montant" => 15000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "APS",
+                        "montant" => 15000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "PS",
+                        "montant" => 15000,
+                        "device" => "XOF"
+                    ],
+                ]
+            ],
+            (object)[
+                "value" => 'Unforseen',
+                "cate" => [
+                    (object)[
+                        "value" => "GSS1",
+                        "montant" => 10000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS2",
+                        "montant" => 10000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS3",
+                        "montant" => 10000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS4",
+                        "montant" => 10000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS5",
+                        "montant" => 10000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS6",
+                        "montant" => 15000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS7",
+                        "montant" => 15000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS8",
+                        "montant" => 15000,
+                        "device" => "XOF"
+                    ],
+
+                    (object)[
+                        "value" => "GSS9",
+                        "montant" => 15000,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "APS",
+                        "montant" => 35,
+                        "device" => "$"
+                    ],
+                    (object)[
+                        "value" => "PS",
+                        "montant" => 40,
+                        "device" => "$"
+                    ],
+                ]
+            ],
+            (object)[
+                "value" => 'Paliative for change in allowance',
+                "cate" => [
+                    (object)[
+                        "value" => "GSS1",
+                        "montant" => 0,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS2",
+                        "montant" => 0,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS3",
+                        "montant" => 0,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS4",
+                        "montant" => 0,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS5",
+                        "montant" => 0,
+                        "device" => "XOF"
+                    ],
+                    (object)[
+                        "value" => "GSS6",
+                        "montant" => 350,
+                        "device" => "$"
+                    ],
+                    (object)[
+                        "value" => "GSS7",
+                        "montant" => 350,
+                        "device" => "$"
+                    ],
+                    (object)[
+                        "value" => "GSS8",
+                        "montant" => 350,
+                        "device" => "$"
+                    ],
+
+                    (object)[
+                        "value" => "GSS9",
+                        "montant" => 350,
+                        "device" => "$"
+                    ],
+                    (object)[
+                        "value" => "APS",
+                        "montant" => 600,
+                        "device" => "$"
+                    ],
+                    (object)[
+                        "value" => "PS",
+                        "montant" => 400,
+                        "device" => "$"
+                    ],
+                ]
+            ],
+
         ];
 
         // Insère les données dans la table type_allowences et récupère les IDs
         foreach ($allowences as $allowenceName) {
             $typeAllowenceId = DB::table('type_allowences')->insertGetId([
-                'name' => $allowenceName,
+                'name' => $allowenceName->value,
             ]);
 
             // Insère les données dans la table staff_category
@@ -52,14 +363,15 @@ return new class extends Migration
 
     protected function insertStaffCategories($typeAllowenceId, $allowenceName)
     {
-        $categories = ['GS_1_5', 'GS_6_9', 'APS', 'PS'];
+        // $categories =;
 
-        foreach ($categories as $categoryName) {
+        foreach ($allowenceName->cate as $categoryName) {
             DB::table('staff_categories')->insert([
                 'type_allowence_id' => $typeAllowenceId,
-                'type_allowences_name' => $allowenceName,
-                'montant' => 10000,
-                'name' => $categoryName,
+                'type_allowences_name' => $allowenceName->value,
+                'montant' => $categoryName->montant,
+                'device' => $categoryName->device,
+                'name' => $categoryName->value,
             ]);
         }
     }

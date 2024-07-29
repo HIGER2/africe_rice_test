@@ -21,6 +21,14 @@ return new class extends Migration
                 ->onUpdate('cascade');
             $table->string('status')->default(false);
             $table->string('marital_status');
+
+            $table->bigInteger('total_t_w_f')->nullable();
+            $table->bigInteger('total_p_e_t')->nullable();
+            $table->bigInteger('total_f_i_a')->nullable();
+            $table->bigInteger('total_u')->nullable();
+            $table->bigInteger('total_p_c_a')->nullable();
+            $table->bigInteger('total_amount')->nullable();
+            $table->date('depart_date')->nullable();
             $table->integer('number_child')->nullable()->default(0);
             $table->string('category')->nullable();
             $table->timestamps();
