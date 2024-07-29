@@ -141,7 +141,11 @@ const options = {
             let amount = 0
         item?.staff_category.forEach(element => {
             if (element.name == "GS_1_5") {
-                amount +=Number(element.montant);
+                if (element.name == "GS_1_5" || element.name == "GS_6_9") {
+                amount += Number(element.montant);
+                } else {
+                    amount += (Number(element.montant) *  500);
+                }
             }
         })
         return amount
@@ -153,7 +157,11 @@ const options = {
             let amount = 0
             item?.staff_category.forEach(element => {
                 if (element.name == "GS_1_5") {
-                    amount += Number(element.montant);
+                    if (element.name == "GS_1_5") {
+                        amount += Number(element.montant);
+                        } else {
+                            amount += (Number(element.montant) *  500);
+                        }
                 }
             });
 
