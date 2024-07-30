@@ -7,6 +7,7 @@ use App\Models\EmployeeChild;
 use App\Models\EmployeeInformaton;
 use App\Models\TypeAllowence;
 use App\Notifications\EmployeeValidate;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -42,6 +43,50 @@ class WebController extends Controller
             return redirect()->route('login');
             // return redirect()->route('login', compact('type', 'employee', 'formData'));
         }
+    }
+
+    public function destroy($id)
+    {
+        // Trouver l'employé et le supprimer
+        $employee = EmployeeInformaton::findOrFail($id);
+        $employee->delete();
+
+        // Rediriger vers la route d'accueil après suppression
+        return redirect()->route('home')->with('success', 'Employé supprimé avec succès');
+    }
+
+    public function handleAction($id, $action)
+    {
+
+        try {
+            // Trouvez le formulaire avec l'ID donné
+            $form = EmployeeInformaton::findOrFail($id);
+            // Exécutez l'action appropriée en fonction du paramètre $action
+            if ($action === 'approve') {
+                // Logique pour approuver le formulaire
+                $form->status = 'approved';
+                $form->save();
+                session::flash('message', 'Formulaire approuvé');
+            } elseif ($action === 'reject') {
+                // Logique pour rejeter le formulaire
+                $form->status = 'rejected';
+                $form->save();
+                session::flash('message', 'Formulaire rejeté');
+            } else {
+                session::flash('message', 'Action invalide');
+            }
+
+            // Rediriger vers une page d'affichage ou vers une autre vue
+            return redirect()->route('form.status', ['action' => $action]);
+            // ->with('message', $message);
+        } catch (\Throwable $th) {
+        }
+    }
+
+    public function showStatus($action)
+    {
+        // Cette méthode est appelée pour afficher le message
+        return view('form_status', ['action' => $action]);
     }
 
     public function login(Request $request)
@@ -97,7 +142,14 @@ class WebController extends Controller
                 // return $employee->supervisor;
 
                 // $supervisor =
+                // Carbon::setLocale('fr');
+                // // Convertir et formater la date
+                // $infoExist->depart_date = Carbon::parse($infoExist->depart_date)->translatedFormat('d F Y');
 
+                // if ($employee->supervisor) {
+                //     // Envoyer une notification au supérieur
+                //     $employee->supervisor->notify(new EmployeeValidate($employee, $infoExist));
+                // }
                 // return $employee->supervisor;
 
                 if ($infoExist) {
@@ -109,7 +161,7 @@ class WebController extends Controller
 
 
                 $information = $request->except('child');
-                $information['status'] = true;
+                $information['status_input'] = true;
                 $information['category'] = $employee->category;
                 $information['employees_id'] = $employee->employeeId;
                 $response = EmployeeInformaton::create($information);
@@ -127,12 +179,17 @@ class WebController extends Controller
                 $response->children = $children;
                 Session::put('formData', $response);
 
+                $response->depart_date = Carbon::parse($response->depart_date)->translatedFormat('d F Y');
 
-                DB::commit();
+                Carbon::setLocale('fr');
+                // Convertir et formater la date
+
                 if ($employee->supervisor) {
                     // Envoyer une notification au supérieur
-                    $employee->supervisor->notify(new EmployeeValidate($employee));
+                    $employee->supervisor->notify(new EmployeeValidate($employee, $response));
                 }
+
+                DB::commit();
                 return response()->json(
                     [
                         'message' => 'information enregistré',
@@ -148,7 +205,7 @@ class WebController extends Controller
 
             return view('home', compact('employee', 'type'));
         } catch (\Throwable $th) {
-
+            DB::rollBack();
             return response()->json(
                 [
                     'message' => "une erreur s'est produite",

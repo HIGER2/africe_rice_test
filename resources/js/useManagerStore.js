@@ -214,7 +214,7 @@ const options = {
                 });
              setTimeout(() => {
              location.reload()
-             }, 1000);
+             }, 500);
 
             //  console.log(response);
             })
@@ -225,6 +225,26 @@ const options = {
               });
              console.log(error?.response?.data?.message);
             //  console.log(error?.response?.data?.data?.message);
+            })
+            .finally(() => {
+            })
+            ;
+    }
+
+
+    const destroy = async(id) => {
+
+
+
+     await window.axios.get(`/destroy/${id}`)
+         .then(async(response) => {
+             setTimeout(() => {
+             location.reload()
+             }, 100);
+             console.log(response);
+            })
+         .catch(error => {
+
             })
             .finally(() => {
             })
@@ -244,6 +264,7 @@ const options = {
         calculate,
         separatorMillier,
         initial,
-        employeeConnected
+        employeeConnected,
+        destroy
     }
 }

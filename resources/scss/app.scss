@@ -344,3 +344,82 @@ body {
         }
     }
 }
+
+.formstatus{
+    width: 100%;
+    .container{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .card{
+            min-height: 100px;
+            width: 400px;
+            border-radius: 10px;
+            box-shadow: $shadow;
+            background-color: $white;
+            padding: 1rem 2rem ;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            .ico{
+                width: 80px;
+                height: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: rgba(0, 128, 0,0.1);
+                color: green;
+                border-radius: 50%;
+                &.reject{
+                    background-color: rgba(255, 0, 0,0.1);
+                    color: red;
+                }
+            }
+                h5{
+                    font-size: 15px;
+                    color: $primary-color;
+                    margin: 15px 0;
+                }
+                &.styck{
+                    position: sticky;
+                    top: 60px;
+            background-color: RED;
+                }
+            }
+    }
+}
+
+.test{
+    margin-top: 1rem;
+    background-color: red;
+    padding: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.status{
+    width: max-content;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 13px;
+     &.pennding {
+        background-color: rgb(255, 165, 0, 0.1);
+        color: #ffa500 !important;
+        box-shadow: 0px 0px 2px #ffa500;
+    }
+
+    &.approuve {
+        background-color: #28dd701a;
+        color: #047131 !important;
+        box-shadow: 0px 0px 2px #28dd70;
+
+    }
+
+     &.reject {
+        background-color: rgb(255, 213, 213);
+        color: red !important;
+        box-shadow: 0px 0px 2px red;
+    }
+}

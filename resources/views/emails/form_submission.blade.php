@@ -1,18 +1,22 @@
-{{-- resources/views/emails/form_submission.blade.php --}}
-
 @component('mail::message')
 # Nouveau formulaire soumis
 
 Bonjour,
 
-L'utilisateur **{{ $user->firstName." ".$user->lastName }}** a soumis un nouveau formulaire.
-{{--
-@component('mail::button', ['url' => $url])
-Voir les détails
-@endcomponent --}}
+L'utilisateur **{{ $user->firstName." ".$user->lastName }}**
+ a soumis un nouveau demande de départ pour le **{{$form->depart_date}}**.
 
+
+@component('mail::button', ['url' => route('form.action', ['id' => $form->id, 'action' => 'approve']), 'color' => 'green'])
+Approuver
+@endcomponent
+
+@component('mail::button', ['url' => route('form.action', ['id' => $form->id, 'action' => 'reject']), 'color' => 'red'])
+Rejeter
+@endcomponent
+{{--
 Merci de vérifier.
 
 Cordialement,<br>
-{{ config('app.name') }}
+{{ config('app.name') }} --}}
 @endcomponent

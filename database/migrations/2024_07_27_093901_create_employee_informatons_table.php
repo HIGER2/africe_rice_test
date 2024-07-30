@@ -19,7 +19,8 @@ return new class extends Migration
                 ->on('employees')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->string('status')->default(false);
+            $table->string('status')->nullable();
+            $table->string('status_input')->default(false);
             $table->string('marital_status');
 
             $table->bigInteger('total_t_w_f')->nullable();

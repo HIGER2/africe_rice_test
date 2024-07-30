@@ -15,10 +15,12 @@ class EmployeeValidate extends Notification
      * Create a new notification instance.
      */
     protected $user;
+    protected $form;
 
-    public function __construct($user)
+    public function __construct($user, $form)
     {
         $this->user = $user;
+        $this->form = $form;
     }
 
     /**
@@ -42,6 +44,7 @@ class EmployeeValidate extends Notification
             ->subject('Nouveau formulaire soumis')
             ->markdown('emails.form_submission', [
                 'user' => $this->user,
+                'form' => $this->form
             ]);
         // ->action('Notification Action', url('/'))
         // ->line('Thank you for using our application!');firstName

@@ -24,7 +24,8 @@ const {
     separatorMillier,
     save,
     calculate,
-    initial
+    initial,
+    destroy
     } = useManager
 
 const loadChild = () => {
@@ -79,7 +80,7 @@ onMounted(() => {
     <!-- {{ type[2] }} -->
     <!-- {{ useManager.user.total_p_e_t }} -->
     <div class="content">
-        <div class="row" :class="{'colunm':data?.status}">
+        <div class="row" :class="{'colunm':data?.status_input}">
             <div class="col">
                 <form @submit.prevent="onSave(type)">
                     <div class="card">
@@ -92,7 +93,7 @@ onMounted(() => {
                         <div class="form-group">
                             <label for="password">are you a mayor?</label>
                             <select name="" id="" required v-model="useManager.user.marital_status"
-                                :disabled="data?.status">
+                                :disabled="data?.status_input">
                                 <option value=""></option>
                                 <option value="yes">Yes</option>
                                 <option value="no">No</option>
@@ -103,14 +104,14 @@ onMounted(() => {
                             <input type="date"
                                 v-model="useManager.user.depart_date"
                                 :min="today.toISOString().slice(0, 10)"
-                                :disabled="data?.status"
+                                :disabled="data?.status_input"
                                 name="date"
                                 placeholder="Enter your departure date" required>
                         </div>
                           <div class="form-group">
                             <label for="number">Number of child (limit 4)</label>
                             <input type="tel" @input="loadChild()" v-model.number="useManager.user.number_child" min="0"
-                                max="4" :disabled="data?.status" id="password" name="password"
+                                max="4" :disabled="data?.status_input" id="password" name="password"
                                 placeholder="Enter your password" required>
                         </div>
                         <div class="contentchild" v-if="useManager.user.children.length > 0">
@@ -119,12 +120,12 @@ onMounted(() => {
                             <div class="rowinput" v-for="(item, index) in useManager.user.children" :key="index">
                                 <div class="form-group">
                                     <label for="age">Age</label>
-                                    <input type="number" :disabled="data?.status" v-model="item.age" id="age" min="0"
+                                    <input type="number" :disabled="data?.status_input" v-model="item.age" id="age" min="0"
                                         name="age" placeholder="Enter age" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Sex</label>
-                                    <select name="" id="" required v-model="item.sex" :disabled="data?.status">
+                                    <select name="" id="" required v-model="item.sex" :disabled="data?.status_input">
                                         <option value=""></option>
                                         <option value="M">M</option>
                                         <option value="F">F</option>
@@ -133,7 +134,8 @@ onMounted(() => {
                             </div>
                         </div>
                     </div>
-                    <button type="submit" v-if="!data?.status" class="login-button" :disabled="data?.status">
+
+                    <button type="submit" v-if="!data?.status_input" class="login-button" :disabled="data?.status_input">
                         <span v-if="isLoading">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                 <path fill="currentColor"
@@ -147,14 +149,35 @@ onMounted(() => {
                             Confirm
                         </span>
                     </button>
+
+                    <button v-else type="button" class="test" @click="destroy(data?.id)">Supprimer pour ressayer</button>
                 </form>
+
 
             </div>
             <div class="col">
                 <div class="card ">
+                    <div v-if="data?.status_input">
+                            <template v-if="data?.status">
+                            <div class="status approuve" v-if="data?.status == 'approved'">
+                            approved
+                            </div>
+                            <div class="status reject" vl v-else>
+                            rejected
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="status pennding">
+                            pending
+                            </div>
+                        </template>
+                    </div>
+
+
                     <h5> Summary </h5>
                     <ul class="items">
-                        <template v-if="data?.status">
+                        <!-- {{ data?.status }} -->
+                        <template v-if="data?.status_input">
                             <li class="item" v-for="(item, index) in type" :key="index">
                                 <span>{{ item?.name }}</span>
                                 <span>XOF {{ separatorMillier(calculate(item)) }}</span>

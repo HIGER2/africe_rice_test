@@ -13,6 +13,12 @@ Route::get('/login', function () {
 });
 
 
+Route::get('/destroy/{id}', [WebController::class, 'destroy'])->name('employee.destroy');
+
+
+
+Route::get('/form-status/{action}', [WebController::class, 'showStatus'])->name('form.status');
+Route::get('/form-action/{id}/{action}', [WebController::class, 'handleAction'])->name('form.action');
 Route::post('/login', [WebController::class, 'login'])->name('login');
 Route::post('/logout', [WebController::class, 'logout'])->name('logout');
 Route::post('/save', [WebController::class, 'save'])->name('save');

@@ -15,6 +15,7 @@ class EmployeeInformaton extends Model
         "depart_date",
         'category',
         'status',
+        "status_input",
         'total_t_w_f',
         'total_p_e_t',
         'total_f_i_a',
