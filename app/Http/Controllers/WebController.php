@@ -62,6 +62,12 @@ class WebController extends Controller
             // Trouvez le formulaire avec l'ID donné
             $form = EmployeeInformaton::findOrFail($id);
             // Exécutez l'action appropriée en fonction du paramètre $action
+
+            if (!$form) {
+                // Génère une erreur 404 avec un message personnalisé
+                return  abort(404, 'Le formulaire demandé n\'existe pas.');
+            }
+
             if ($action === 'approve') {
                 // Logique pour approuver le formulaire
                 $form->status = 'approved';
