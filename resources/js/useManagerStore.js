@@ -114,7 +114,7 @@ const options = {
                         let nbH = 0;
                         user.children.forEach(element => {
                             if (element.age && element.sex) {
-                                if (element.age > 24) {
+                                if (element.age > 23) {
                                 room ++;
                             } else {
                                 if (element.sex == 'F') {

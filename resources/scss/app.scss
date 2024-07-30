@@ -91,6 +91,12 @@ body {
     justify-content: space-between;
     box-shadow: $shadow;
 
+
+    @media only screen and (max-width: 792px){
+        width: 100%;
+    }
+
+
     button{
          width: max-content;
         padding: 8px 20px;
@@ -122,7 +128,10 @@ body {
   }
 .container {
   width: 100%;
-    padding:1rem;
+padding:1rem;
+@media only screen and (max-width: 792px){
+    width: 100%;
+}
   .login-form {
     width: 100%;
     padding: 1rem;
@@ -130,13 +139,19 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-
+    @media only screen and (max-width: 792px){
+    width: 100%;
+    padding: 0;
+    }
     .card{
         border-radius: $border-radius;
         box-shadow: $shadow;
         background-color: $white;
         padding: 2rem;
         width: 380px;
+        @media only screen and (max-width: 792px){
+            width: 100%;
+        }
     }
     h2 {
       font-size: 20px;
@@ -217,11 +232,23 @@ body {
 
 .home{
     width: 100%;
+     @media only screen and (max-width: 792px){
+            width: 100%;
+    }
     .content{
         width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
+        .head{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+         @media only screen and (max-width: 792px){
+            width: 100%;
+        }
         .row{
             width: 800px;
             display: flex;
@@ -229,6 +256,12 @@ body {
             justify-content: center;
             gap: 5px;
             margin-inline: auto;
+            @media only screen and (max-width: 792px){
+                width: 100%;
+                // flex-wrap: wrap;
+                flex-wrap: wrap-reverse;
+                gap: 10px;
+            }
             &.colunm{
                 flex-direction: column-reverse;
                 margin-inline: auto;
@@ -236,16 +269,26 @@ body {
             }
             .col{
                 width: 50%;
+                @media only screen and (max-width: 792px){
+                width: 100%;
+                }
                 .card{
                 min-height: 100px;
                 border-radius: 10px;
                 box-shadow: $shadow;
                 background-color: $white;
                 padding: 1rem 2rem ;
+                @media only screen and (max-width: 792px){
+                width: 100%;
+                padding: 1rem;
+                }
                     h5{
                         font-size: 15px;
                         color: $primary-color;
                         margin: 15px 0;
+                         @media only screen and (max-width: 792px){
+                            font-size: 13px;
+                        }
                     }
                     &.styck{
                         position: sticky;
@@ -260,7 +303,9 @@ body {
                     // width: 40%;
                 }
                 form {
-
+                @media only screen and (max-width: 792px){
+                    width: 100%;
+                }
                 .form-group {
                     margin-bottom: 15px;
                     text-align: left;
@@ -272,6 +317,9 @@ body {
                     margin-bottom: 5px;
                     font-weight: 500;
                     font-size: 13px;
+                     @media only screen and (max-width: 792px){
+                        font-size: 12px;
+                        }
                     }
 
                     select,input {
@@ -323,6 +371,9 @@ body {
                         padding: 10px 0;
                         font-size: 14px;
                         color: $primary-color;
+                        @media only screen and (max-width: 792px){
+                            font-size: 12px;
+                        }
                         &.total{
                             border-top: 1px solid $input-border-color;
                             margin-top: 15px;
@@ -347,6 +398,10 @@ body {
 
 .formstatus{
     width: 100%;
+    @media only screen and (max-width: 792px){
+        width: 100%;
+
+    }
     .container{
         width: 100%;
         display: flex;
@@ -404,6 +459,7 @@ body {
     padding: 5px 15px;
     border-radius: 20px;
     font-size: 13px;
+
      &.pennding {
         background-color: rgb(255, 165, 0, 0.1);
         color: #ffa500 !important;
@@ -423,3 +479,5 @@ body {
         box-shadow: 0px 0px 2px red;
     }
 }
+
+

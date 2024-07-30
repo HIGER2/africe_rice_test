@@ -30,6 +30,6 @@ class Employee extends Authenticatable
 
     public function supervisor()
     {
-        return $this->belongsTo(Supervisor::class, 'supervisorId', 'id'); // Remplacez 'superior_id' par le nom de la colonne qui stocke l'ID du supérieur
+        return $this->belongsTo(Employee::class, 'supervisorId');
     }
 }

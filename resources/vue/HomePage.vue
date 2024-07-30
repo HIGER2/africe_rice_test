@@ -80,7 +80,7 @@ onMounted(() => {
     <!-- {{ type[2] }} -->
     <!-- {{ useManager.user.total_p_e_t }} -->
     <div class="content">
-        <div class="row" :class="{'colunm':data?.status_input}">
+        <div class="row">
             <div class="col">
                 <form @submit.prevent="onSave(type)">
                     <div class="card">
@@ -91,7 +91,7 @@ onMounted(() => {
                                 placeholder="Your category" disabled>
                         </div>
                         <div class="form-group">
-                            <label for="password">are you a mayor?</label>
+                            <label for="password">are you married ?</label>
                             <select name="" id="" required v-model="useManager.user.marital_status"
                                 :disabled="data?.status_input">
                                 <option value=""></option>
@@ -121,6 +121,7 @@ onMounted(() => {
                                 <div class="form-group">
                                     <label for="age">Age</label>
                                     <input type="number" :disabled="data?.status_input" v-model="item.age" id="age" min="0"
+                                    max="23"
                                         name="age" placeholder="Enter age" required>
                                 </div>
                                 <div class="form-group">
@@ -157,6 +158,9 @@ onMounted(() => {
             </div>
             <div class="col">
                 <div class="card ">
+                   <div class="head">
+                    <h5> Summary </h5>
+
                     <div v-if="data?.status_input">
                             <template v-if="data?.status">
                             <div class="status approuve" v-if="data?.status == 'approved'">
@@ -172,9 +176,7 @@ onMounted(() => {
                             </div>
                         </template>
                     </div>
-
-
-                    <h5> Summary </h5>
+                   </div>
                     <ul class="items">
                         <!-- {{ data?.status }} -->
                         <template v-if="data?.status_input">
@@ -218,7 +220,6 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
