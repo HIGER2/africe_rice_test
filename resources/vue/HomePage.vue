@@ -31,7 +31,6 @@ const {
 const loadChild = () => {
     let child = Number(useManager.user.number_child);
 
-    console.log(child);
     if (!isNaN(child) && isFinite(child)) {
         if (child <= 4) {
             const numberOfChildren = useManager.user.number_child;
@@ -60,6 +59,17 @@ const loadChild = () => {
 
 }
 
+const limit_age = (index) => {
+
+    let age = Number(useManager.user.children[index].age);
+    if (!isNaN(age) && isFinite(age)) {
+        if (age > 23) {
+        useManager.user.children[index].age= ""
+        }
+    } else {
+        useManager.user.children[index].age= ""
+    }
+}
 onUpdated(() => {
 
     // alert('u')
@@ -135,7 +145,9 @@ onMounted(() => {
                             <div class="rowinput" v-for="(item, index) in useManager.user.children" :key="index">
                                 <div class="form-group">
                                     <label for="age">Age (limit 23 ans)</label>
-                                    <input type="number" :disabled="data?.status_input" v-model="item.age" id="age" min="0"
+                                    <input type="number"
+                                    @input="limit_age(index)"
+                                    :disabled="data?.status_input" v-model="item.age" id="age" min="0"
                                     max="23"
                                         name="age" placeholder="Enter age" required>
                                 </div>

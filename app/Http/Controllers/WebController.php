@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class WebController extends Controller
@@ -72,14 +73,14 @@ class WebController extends Controller
                 // Logique pour approuver le formulaire
                 $form->status = 'approved';
                 $form->save();
-                session::flash('message', 'Formulaire approuvé');
+                // session::flash('message', 'Formulaire approuvé');
             } elseif ($action === 'reject') {
                 // Logique pour rejeter le formulaire
                 $form->status = 'rejected';
                 $form->save();
-                session::flash('message', 'Formulaire rejeté');
+                // session::flash('message', 'Formulaire rejeté');
             } else {
-                session::flash('message', 'Action invalide');
+                // session::flash('message', 'Action invalide');
             }
 
             // Rediriger vers une page d'affichage ou vers une autre vue
@@ -195,7 +196,9 @@ class WebController extends Controller
                     $employee->supervisor->notify(new EmployeeValidate($employee, $response));
                 }
 
+
                 DB::commit();
+                Log::info('Notification envoyée avec succès à ' . $employee->supervisor->email);
                 return response()->json(
                     [
                         'message' => 'information enregistré',
@@ -212,6 +215,7 @@ class WebController extends Controller
             return view('home', compact('employee', 'type'));
         } catch (\Throwable $th) {
             DB::rollBack();
+            Log::error('Erreur lors de l\'envoi de la notification : ' . $th->getMessage());
             return response()->json(
                 [
                     'message' => "une erreur s'est produite",
