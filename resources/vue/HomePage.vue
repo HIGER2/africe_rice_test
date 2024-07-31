@@ -127,7 +127,7 @@ onMounted(() => {
                             <label for="number">Number of children (limit 4)</label>
                             <input type="tel" @input="loadChild()" v-model.number="useManager.user.number_child" min="0"
                                 max="4" :disabled="data?.status_input" id="password" name="password"
-                                placeholder="Enter your password" required>
+                                placeholder="Number of children (limit 4)" required>
                         </div>
                         <div class="contentchild" v-if="useManager.user.children.length > 0">
                             <!-- {{ useManager.children }} -->
@@ -212,21 +212,9 @@ onMounted(() => {
                                 </small>
                                 </div>
                             </li>
-
-                            <li class="item">
-                                 <div class="goupeStep">
-                                    <div class="rond">2</div>
-                                    <div class="trait"></div>
-                                </div>
-                               <div class="element">
-                                <span>Personal effect Transportation</span>
-                                <span>XOF   {{separatorMillier(useManager.user.total_p_e_t)  }}</span>
-                               </div>
-                            </li>
-
-                            <li class="item ">
+                              <li class="item ">
                                 <div class="goupeStep">
-                                    <div class="rond">3</div>
+                                    <div class="rond">2</div>
                                     <div class="trait"></div>
                                 </div>
 
@@ -240,6 +228,19 @@ onMounted(() => {
                                         </small>
                                 </div>
                             </li>
+
+                            <li class="item">
+                                 <div class="goupeStep">
+                                    <div class="rond">3</div>
+                                    <div class="trait"></div>
+                                </div>
+                               <div class="element">
+                                <span>Personal effect Transportation</span>
+                                <span>XOF   {{separatorMillier(useManager.user.total_p_e_t)  }}</span>
+                               </div>
+                            </li>
+
+
 
 
 
@@ -278,7 +279,7 @@ onMounted(() => {
                                 <small class="info">
                                     {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
                                         +(spouse=${
-                                      useManager.user.marital_status == "yes"? separatorMillier(useManager.calculate_amount(type[0]?.staff_category)) : 0})
+                                        useManager.user.marital_status == "yes"? separatorMillier(useManager.calculate_amount(type[0]?.staff_category)) : 0})
 
                                         + (${useManager.user.children?.length}child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
                                     ` }}
@@ -296,6 +297,32 @@ onMounted(() => {
                                 </small>
                                 <!-- {{ item?.staff_category }} -->
                             </li>
+
+
+                            <li class="item rowItem">
+                                <div class="info">
+                                    <!-- {{type  }} -->
+                                    <span>Personal effect Transportation</span>
+                                    <span>XOF {{separatorMillier(useManager.calculate_amount(type[1]?.staff_category))  }}</span>
+                                </div>
+                            </li>
+                             <li class="item rowItem">
+                                <div class="info">
+                                    <!-- {{type  }} -->
+                                    <span>Unforseen</span>
+                                    <span>XOF {{separatorMillier(useManager.calculate_amount(type[3]?.staff_category))  }}</span>
+                                </div>
+                            </li>
+
+                            <li class="item rowItem">
+                                <div class="info">
+                                    <!-- {{type  }} -->
+                                    <span>Paliative for change in allowance</span>
+                                    <span>XOF {{separatorMillier(useManager.calculate_amount(type[4]?.staff_category))  }}</span>
+                                </div>
+                            </li>
+
+
 
                         </template>
                     </ul>
