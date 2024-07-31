@@ -21,6 +21,7 @@ class EmployeeInformaton extends Model
         'total_f_i_a',
         'total_u',
         'total_p_c_a',
+        "room",
         'total_amount',
     ];
 

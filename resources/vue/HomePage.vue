@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, onUpdated, ref } from "vue";
 import { useManagerStore } from "../js/useManagerStore"
 const { employee, type, data } = defineProps([ 'employee', 'type','data' ])
 
@@ -48,27 +48,40 @@ const loadChild = () => {
 
         } else {
             useManager.user.number_child = ""
+            useManager.user.children.length= 0
         }
 
 
     } else {
         useManager.user.number_child = ""
+        useManager.user.children.length= 0
     }
 
 
 }
-onMounted(() => {
-    // console.log(type);
-    if (data) {
+
+onUpdated(() => {
+
+    // alert('u')
+})
+
+if (data) {
         initial(data)
     }
 
     if (employee) {
-
         useManager.employeeConnected.value = employee
-
-        console.log(useManager.employeeConnected.value.role);
     }
+onMounted(() => {
+    // console.log(type);
+    // alert('r')
+    // if (data) {
+    //     initial(data)
+    // }
+
+    // if (employee) {
+    //     useManager.employeeConnected.value = employee
+    // }
     // employee
 });
 </script>
@@ -84,21 +97,7 @@ onMounted(() => {
             <div class="col">
                 <form @submit.prevent="onSave(type)">
                     <div class="card">
-                        <h5> General Information </h5>
-                        <div class="form-group">
-                            <label for="category">Your category</label>
-                            <input type="email" :value="employee?.category" id="category" name="category"
-                                placeholder="Your category" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="password">are you married ?</label>
-                            <select name="" id="" required v-model="useManager.user.marital_status"
-                                :disabled="data?.status_input">
-                                <option value=""></option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
-                        </div>
+                        <h5> General information </h5>
                         <div class="form-group">
                             <label for="number">Enter your departure date</label>
                             <input type="date"
@@ -108,8 +107,24 @@ onMounted(() => {
                                 name="date"
                                 placeholder="Enter your departure date" required>
                         </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <input type="email" :value="employee?.category" id="category" name="category"
+                                placeholder="Your category" disabled>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Spouse</label>
+                            <select name="" id="" required v-model="useManager.user.marital_status"
+                                :disabled="data?.status_input">
+                                <option value=""></option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
                           <div class="form-group">
-                            <label for="number">Number of child (limit 4)</label>
+                            <label for="number">Number of children (limit 4)</label>
                             <input type="tel" @input="loadChild()" v-model.number="useManager.user.number_child" min="0"
                                 max="4" :disabled="data?.status_input" id="password" name="password"
                                 placeholder="Enter your password" required>
@@ -119,7 +134,7 @@ onMounted(() => {
                             <h5>Children informations</h5>
                             <div class="rowinput" v-for="(item, index) in useManager.user.children" :key="index">
                                 <div class="form-group">
-                                    <label for="age">Age</label>
+                                    <label for="age">Age (limit 23 ans)</label>
                                     <input type="number" :disabled="data?.status_input" v-model="item.age" id="age" min="0"
                                     max="23"
                                         name="age" placeholder="Enter age" required>
@@ -151,10 +166,8 @@ onMounted(() => {
                         </span>
                     </button>
 
-                    <button v-else type="button" class="test" @click="destroy(data?.id)">Supprimer pour ressayer</button>
+                    <!-- <button v-else type="button" class="test" @click="destroy(data?.id)">Supprimer pour ressayer</button> -->
                 </form>
-
-
             </div>
             <div class="col">
                 <div class="card ">
@@ -178,44 +191,113 @@ onMounted(() => {
                     </div>
                    </div>
                     <ul class="items">
-                        <!-- {{ data?.status }} -->
                         <template v-if="data?.status_input">
-                            <li class="item" v-for="(item, index) in type" :key="index">
-                                <span>{{ item?.name }}</span>
-                                <span>XOF {{ separatorMillier(calculate(item)) }}</span>
-                                <!-- {{ item?.staff_category }} -->
+                            <li class="item ">
+                                 <div class="goupeStep">
+                                    <div class="rond">1</div>
+                                    <div class="trait"></div>
+                                </div>
+                                <div class="element element2">
+                                <div class="li">
+                                    <span>Travel with Family</span>
+                                    <span>XOF {{separatorMillier(useManager.user.total_t_w_f)  }}</span>
+                                </div>
+                                <small class="info">
+                                    {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                                        +(spouse=${
+                                        useManager.user?.marital_status =="yes" ? separatorMillier(useManager.calculate_amount(type[0]?.staff_category)) : 0})
+
+                                        + (${useManager.user.children?.length}child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                                    ` }}
+                                </small>
+                                </div>
                             </li>
-                             <li class="item total">
+
+                            <li class="item">
+                                 <div class="goupeStep">
+                                    <div class="rond">2</div>
+                                    <div class="trait"></div>
+                                </div>
+                               <div class="element">
+                                <span>Personal effect Transportation</span>
+                                <span>XOF   {{separatorMillier(useManager.user.total_p_e_t)  }}</span>
+                               </div>
+                            </li>
+
+                            <li class="item ">
+                                <div class="goupeStep">
+                                    <div class="rond">3</div>
+                                    <div class="trait"></div>
+                                </div>
+
+                                <div class=" element element2">
+                                        <div class="li">
+                                            <span>Family initial accommodation</span>
+                                            <span>XOF {{separatorMillier( useManager.user.total_f_i_a)}}</span>
+                                        </div>
+                                        <small class="info">
+                                            {{ `(${useManager.user.room}room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_category)) }) x 7j` }}
+                                        </small>
+                                </div>
+                            </li>
+
+
+
+                            <li class="item ">
+                                <div class="goupeStep">
+                                    <div class="rond">4</div>
+                                    <div class="trait"></div>
+                                </div>
+                               <div class="element">
+                                    <span>Unforseen</span>
+                                    <span>XOF   {{separatorMillier(useManager.user.total_u)  }}</span>
+                               </div>
+                            </li>
+                            <li class="item ">
+                                <div class="goupeStep">
+                                <div class="rond">5</div>
+                                <div class="trait"></div>
+                            </div>
+                              <div class="element">
+                                  <span>Paliative for change in allowance</span>
+                                <span>XOF   {{separatorMillier(useManager.user.total_p_c_a)  }}</span>
+                              </div>
+                            </li>
+
+                        <li class="item total">
                             <span>Total</span>
-                            <span>XOF {{ separatorMillier(Total_Amount(type)) }}</span>
+                            <span>XOF   {{separatorMillier(useManager.user.total_amount)  }}</span>
                         </li>
                         </template>
                         <template v-else>
-                           <template v-for="(item, index) in type" :key="index">
-                            <li class="item"  v-if="item.id == 1 || item.id ==3">
-                                <span>{{ item?.name }}</span>
-                                <span>XOF {{ separatorMillier(calculate(item)) }}</span>
+                            <li class="item rowItem">
+                                <div class="info">
+                                    <span>Travel with Family</span>
+                                    <span>XOF {{separatorMillier(useManager.Total_T_W_F(type[0]))  }}</span>
+                                </div>
+                                <small class="info">
+                                    {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                                        +(spouse=${
+                                      useManager.user.marital_status == "yes"? separatorMillier(useManager.calculate_amount(type[0]?.staff_category)) : 0})
+
+                                        + (${useManager.user.children?.length}child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                                    ` }}
+                                </small>
+                            </li>
+                            <li class="item rowItem">
+                                <div class="info">
+                                    {{  }}
+                                    <span>Family initial accommodation</span>
+                                    <span>XOF {{separatorMillier(useManager.Total_F_I_A(type[2],useManager.user.children))  }}</span>
+                                </div>
+                                <!-- <img src="https://dashboard.quickshipper.app/icons/hor-line-thin.svg" alt=""> -->
+                                <small class="info">
+                                    {{ `(${useManager.Total_CHAMBRE(useManager.user.children)}room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_category)) }) x 7j` }}
+                                </small>
                                 <!-- {{ item?.staff_category }} -->
                             </li>
-                           </template>
-                        </template>
-                        <!-- <li class="item">
-                            <span>Personal effect Transportation</span>
-                            <span>XOF {{ Total_P_E_T }}</span>
-                        </li>
-                        <li class="item">
-                            <span>Family initial accommodation</span>
-                            <span>XOF {{ Total_F_I_A }}</span>
-                        </li>
-                        <li class="item">
-                            <span>Unforseen</span>
-                            <span>XOF {{ Total_U }}</span>
-                        </li>
-                        <li class="item">
-                            <span>Paliative for change in allowance</span>
-                            <span>XOF {{ Total_P_C_A }}</span>
-                        </li> -->
 
+                        </template>
                     </ul>
                 </div>
             </div>

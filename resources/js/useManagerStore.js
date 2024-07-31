@@ -10,6 +10,8 @@ export const useManagerStore = () => {
         "number_child": "",
         "depart_date":"",
         "children": [],
+        "room": 1,
+        "amount":0,
         "total_t_w_f" :0,
         "total_p_e_t" :0,
         "total_f_i_a" :0,
@@ -19,8 +21,31 @@ export const useManagerStore = () => {
     });
 
     // let employeeConnected.value?.category = "GSS1";
+    let chilExiste = [];
+    let nb_f = 0;
+    let nb_h = 0;
+    let nb_all = 0;
 
     let employeeConnected = ref();
+
+
+    const calculate_amount = (item) => {
+        let amount = 0
+        item.forEach(element => {
+            if (element.name == employeeConnected.value?.category) {
+
+                if (element.device == "XOF") {
+                    amount += element.montant
+
+                } else {
+                     amount += (Number(element.montant) *  500);
+                }
+
+                }
+            });
+
+        return amount
+    }
 
     const calculate = (item) => {
         let amount = 0
@@ -59,26 +84,23 @@ const options = {
 
     const Total_T_W_F = (item) => {
         // console.log(item);
-       return computed(() => {
-            let amount = 0
-            item?.staff_category.forEach(element => {
-                if (element.name == employeeConnected.value?.category) {
-                    amount += element.montant
 
-                    if (user.marital_status == 'yes') {
-                        amount +=Number(element.montant)
-                    }
+        return computed(() => {
+           let user_amount =calculate_amount(item?.staff_category)
+            let amount = user_amount
 
-                    if (user.number_child > 0) {
-                        amount +=(Number(element.montant) * Number(user.number_child))
-                    }
+            if (user.marital_status == "yes") {
+                amount +=user_amount
+            }
 
-                }
-            });
+             if (user.number_child > 0) {
+                amount += (Number(user.number_child)*user_amount)
+            }
 
             return amount
         }).value
     }
+
 
     const Total_P_E_T = (item) => {
 
@@ -100,82 +122,105 @@ const options = {
         }).value
     }
 
-     const Total_F_I_A = (item) => {
+
+
+    const Total_CHAMBRE = (children) => {
 
         return computed(() => {
-            let amount = 0
-        let room = 0;
-            // console.log(item?.staff_category);
-            item?.staff_category.forEach(element => {
-                if (element.name == employeeConnected.value?.category) {
-                    amount += (Number(element.montant) * 7);
-                    if (user.children.length > 0) {
-                        let nbF = 0;
-                        let nbH = 0;
-                        user.children.forEach(element => {
-                            if (element.age && element.sex) {
-                                if (element.age > 23) {
-                                room ++;
-                            } else {
-                                if (element.sex == 'F') {
-                                    nbF++
-                                    if (nbF < 2 ) {
-                                        room++
-                                    } else {
-                                        nbF = 0
-                                    }
-                                } else {
+            // let amount = calculate_amount(item?.staff_category)
+            let chambres = 1;
+            let enfants16a23 = 0
+            let enfantsMoins16  = 0
+            let enfantsMoins23 = 0
 
-                                    nbH++
-                                    if (nbH < 2 ) {
-                                        room++
-                                    } else {
-                                        nbH = 0
-                                    }
-                                }
-                            }
-                            }
+            if (children?.length > 0) {
+                console.log(children);
 
-
-
-                        });
+                enfantsMoins23 = children.filter((enfant) => {
+                    if (enfant.age && enfant.sex) {
+                        return enfant.age <= 23
                     }
-                    amount +=((Number(element.montant) * room) * 7)
-                }
-            });
+                });
 
-        return amount
+                if (enfantsMoins23.length > 0) {
+                    enfants16a23 = enfantsMoins23.filter(enfant => enfant.age >= 16 && enfant.age <= 23);
+                    enfantsMoins16 = enfantsMoins23.filter(enfant => enfant.age < 16);
+                }
+
+                // Attribuer des chambres aux enfants de moins de 16 ans, peu importe le sexe
+                if (enfantsMoins16.length > 0) {
+                    let groupe = 0;
+                    enfantsMoins16.forEach(element => {
+                        groupe++
+                        if (groupe < 2) {
+                            chambres++
+                        } else {
+                            groupe = 0
+                        }
+                    });
+                }
+
+                    // Attribuer des chambres aux enfants de 16 à 23 ans en fonction du sexe
+
+                if (enfants16a23.length > 0) {
+                    let groupeF=0;
+                    let groupeM=0;
+                    enfants16a23.forEach(element => {
+                        if (element?.sex && element?.age) {
+                            if (element.sex == "F") {
+                            groupeF++
+                            if (groupeF < 2) {
+                                chambres +=groupeF
+                            } else {
+                                groupeF= 0
+                            }
+                        }
+
+                        if (element.sex == "M") {
+                            groupeM++
+                            if (groupeM < 2) {
+
+                                chambres++
+                            } else {
+                                groupeM= 0
+                            }
+                        }
+                        }
+
+
+                    });
+                }
+
+
+            }
+            return chambres
         }).value
     }
+
+
+const Total_F_I_A = (item,children) => {
+        return computed(() => {
+            let amount = calculate_amount(item?.staff_category)
+
+            let chambres = Total_CHAMBRE(children)
+
+            return (chambres * amount) * 7
+        }).value
+    }
+
+
+
     const Total_U = (item) => {
         return computed(() => {
-            let amount = 0
-        item?.staff_category.forEach(element => {
-            if (element.name == employeeConnected.value?.category) {
-                if (element.name == employeeConnected.value?.category || element.name == "GS_6_9") {
-                amount += Number(element.montant);
-                } else {
-                    amount += (Number(element.montant) *  500);
-                }
-            }
-        })
+         let amount = calculate_amount(item?.staff_category)
+
         return amount
        }).value
     }
 
     const Total_P_C_A = (item) => {
         return computed(() => {
-            let amount = 0
-            item?.staff_category.forEach(element => {
-                if (element.name == employeeConnected.value?.category) {
-                    if (element.device == "XOF") {
-                        amount += Number(element.montant);
-                        } else {
-                            amount += (Number(element.montant) *  500);
-                        }
-                }
-            });
-
+         let amount = calculate_amount(item?.staff_category)
             return amount
         }).value
     }
@@ -199,10 +244,11 @@ const options = {
 
         user.total_t_w_f=calculate(type[0])
         user.total_p_e_t=calculate(type[1])
-        user.total_f_i_a = calculate(type[2])
+        user.total_f_i_a = Total_F_I_A(type[2],user.children)
         user.total_u =calculate(type[3])
         user.total_p_c_a = calculate(type[4])
         user.total_amount = Total_Amount(type)
+        user.room = Total_CHAMBRE(user.children)
 
      await window.axios.post(`/save`, user)
          .then(async(response) => {
@@ -259,7 +305,9 @@ const options = {
         Total_F_I_A,
         Total_U,
         Total_P_C_A,
+        calculate_amount,
         Total_Amount,
+        Total_CHAMBRE,
         save,
         calculate,
         separatorMillier,

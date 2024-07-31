@@ -21,6 +21,7 @@ return new class extends Migration
                 ->onUpdate('cascade');
             $table->string('status')->nullable();
             $table->string('status_input')->default(false);
+            $table->integer('room')->nullable()->default(0);
             $table->string('marital_status');
 
             $table->bigInteger('total_t_w_f')->nullable();
