@@ -27,7 +27,7 @@
                             <i class="uil uil-arrow-right"></i>
                         </button>
                     </form>
-                    <a href="/forgot-password" class="forgot-password">Forgot your password?</a>
+                    <a href="https://mycareer.africarice.org/auth/recovery" class="forgot-password">Forgot your password?</a>
                 </div>
         </div>
     </div>
