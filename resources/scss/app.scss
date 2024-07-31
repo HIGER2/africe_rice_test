@@ -386,13 +386,19 @@ padding:1rem;
                         width: 100%;
                         display: flex;
 
-                        // padding: 1rem 0;
                         font-size: 14px;
                         color: $primary-color;
                         gap: 5px;
                         align-items: flex-start;
-                        // border-top: 1px solid #e0e0e0;
+                        &.rowItem{
+                        border-top: 1px solid #e0e0e0;
+                        padding: 1rem 0;
+                        small{
+                            margin-top: 0px;
+                        }
+                        // background-color: red;
 
+                        }
                         &:nth-child(5){
                             // background-color: red;
                             .trait{

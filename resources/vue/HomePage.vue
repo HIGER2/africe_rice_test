@@ -166,7 +166,7 @@ onMounted(() => {
                         </span>
                     </button>
 
-                    <!-- <button v-else type="button" class="test" @click="destroy(data?.id)">Supprimer pour ressayer</button> -->
+                <button v-else type="button" class="test" @click="destroy(data?.id)">Supprimer pour réessayer</button>
                 </form>
             </div>
             <div class="col">
