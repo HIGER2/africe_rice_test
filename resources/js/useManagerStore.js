@@ -57,7 +57,7 @@ export const useManagerStore = () => {
           amount =  Total_P_E_T(item)
         }
         if (item?.id ==3) {
-           amount = Total_F_I_A(item)
+            amount = Total_F_I_A(item,user.children)
         }
         if (item?.id ==4) {
            amount = Total_U(item)
@@ -228,7 +228,6 @@ const Total_F_I_A = (item,children) => {
     const Total_Amount = (type) => {
 
         return computed(() => {
-
             return type.reduce((total, item) => total + calculate(item), 0);
 
         }).value

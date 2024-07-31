@@ -240,10 +240,6 @@ onMounted(() => {
                                </div>
                             </li>
 
-
-
-
-
                             <li class="item ">
                                 <div class="goupeStep">
                                     <div class="rond">4</div>
@@ -323,7 +319,10 @@ onMounted(() => {
                             </li>
 
 
-
+                        <li class="item total">
+                            <span>Total</span>
+                            <span>XOF   {{separatorMillier(useManager.Total_Amount(type))  }}</span>
+                        </li>
                         </template>
                     </ul>
                 </div>
