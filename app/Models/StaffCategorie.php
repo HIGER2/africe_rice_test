@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class StaffCategorie extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        "currency",
+        'amount',
+    ];
 }

@@ -22,8 +22,9 @@ Route::get('/form-action/{id}/{action}', [WebController::class, 'handleAction'])
 Route::post('/login', [WebController::class, 'login'])->name('login');
 Route::post('/logout', [WebController::class, 'logout'])->name('logout');
 Route::post('/save', [WebController::class, 'save'])->name('save');
-Route::get('/', [WebController::class, 'index'])
-    ->name('home');
+Route::get('/', [WebController::class, 'index'])->name('home');
+Route::get('/setting', [WebController::class, 'setting'])->name('setting');
+Route::post('/setting', [WebController::class, 'settingIndex'])->name('setting');
     // ->middleware('auth');
 
 

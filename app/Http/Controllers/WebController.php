@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use App\Models\EmployeeChild;
 use App\Models\EmployeeInformaton;
-use App\Models\TypeAllowence;
+use App\Models\TypeAllowance;
 use App\Notifications\EmployeeValidate;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,7 +31,7 @@ class WebController extends Controller
             $formData = EmployeeInformaton::with('children')
                 ->where('employees_id', $employee->employeeId)->first();
 
-            $type = TypeAllowence::with('staff_category')->get();
+            $type = TypeAllowance::with('staff_categories')->get();
 
             // Session::put('type', $type);
             // Session::put('employee', $employee);
@@ -45,6 +45,67 @@ class WebController extends Controller
             // return redirect()->route('login', compact('type', 'employee', 'formData'));
         }
     }
+
+    public function setting()
+    {
+
+        $type_allowence = TypeAllowance::get();
+        // $type_allowences = $type_allowence->staff_categories;
+        $staffCategories = [];
+        $selectedTypeAllowenceId = null;
+        $selectedStaffCategoriId = null;
+        $amount = null;
+        $currency = null;
+
+
+        return view('setting', compact('type_allowence', 'staffCategories', 'selectedTypeAllowenceId', 'selectedStaffCategoriId', 'amount', 'currency'));
+    }
+
+    public function settingIndex(Request $request)
+    {
+        $selectedTypeAllowenceId = $request->input('type_allowance_id');
+        $selectedStaffCategoriId = $request->input('staff_category_id');
+        $form_action = $request->input('form_action');
+
+
+        $type_allowence = TypeAllowance::get();
+        $find_allowence = TypeAllowance::find($selectedTypeAllowenceId);
+        $staffCategories = $find_allowence ? $find_allowence->staff_categories : [];
+
+        $amount = null;
+        $currency = null;
+        $findCategorie = null;
+
+
+        if ($selectedTypeAllowenceId && $selectedStaffCategoriId) {
+            $findCategorie =  $find_allowence->staff_categories->find($selectedStaffCategoriId);
+            if ($findCategorie) {
+                $amount = $findCategorie->amount;
+                $currency = $findCategorie->currency;
+            }
+        }
+        // Vérifiez si des catégories de personnel existent
+        // $hasStaffCategories = $staffCategories->isNotEmpty();
+
+        if ($form_action == "submit_final" && $findCategorie) {
+            try {
+                $findCategorie->amount = $request->amount;
+                $findCategorie->currency = $request->currency;
+                $findCategorie->save();
+                $amount = $findCategorie->amount;
+                $currency = $findCategorie->currency;
+                return view('setting', compact('type_allowence', 'staffCategories', 'selectedTypeAllowenceId', 'selectedStaffCategoriId', 'amount', 'currency'));
+
+                return redirect()->back()->with('success', 'Information updated successfully.');
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Failed to update information. Please try again.')
+                    ->with('errorDetails', $e->getMessage());
+            }
+        }
+        // Réinvoquez la vue avec les données nécessaires
+        return view('setting', compact('type_allowence', 'staffCategories', 'selectedTypeAllowenceId', 'selectedStaffCategoriId', 'amount', 'currency'));
+    }
+
 
     public function destroy($id)
     {

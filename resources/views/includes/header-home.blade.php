@@ -19,17 +19,24 @@
             <span>{{session('user')->matricule}}</span>
                 <form action="{{ route('logout') }}" method="POST" class="d-inline">
                     @csrf
-                <ul class="dropDown" >
-                    <li>
-                        <span>Change password</span>
-                        <i class="uil uil-arrow-up-right"></i>
-                    </li>
-                    <li>
-                        <button type="submit">Logout
+                    <ul class="dropDown" >
+                        <li>
+                            <span>Change password</span>
                             <i class="uil uil-arrow-up-right"></i>
-                        </button>
-                    </li>
-                </ul>
+                        </li>
+                        <li>
+                            <a href="{{route('setting')}}">
+                                <span>Setting</span>
+                                <i class="uil uil-arrow-up-right"></i>
+                            </a>
+
+                        </li>
+                        <li>
+                            <button type="submit">Logout
+                                <i class="uil uil-arrow-up-right"></i>
+                            </button>
+                        </li>
+                    </ul>
                 </form>
         </div>
     </div>

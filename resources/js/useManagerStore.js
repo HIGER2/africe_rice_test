@@ -32,14 +32,14 @@ export const useManagerStore = defineStore('manager',() => {
 
     const calculate_amount = (item) => {
         let amount = 0
-        item.forEach(element => {
+        item?.forEach(element => {
             if (element.name == employeeConnected.value?.category) {
 
-                if (element.device == "XOF") {
-                    amount += element.montant
+                if (element.currency == "XOF") {
+                    amount += element.amount
 
                 } else {
-                     amount += (Number(element.montant) *  500);
+                     amount += (Number(element.amount) *  500);
                 }
 
                 }
@@ -88,16 +88,16 @@ const options = {
 
         return computed(() => {
             let amount = 0
-            item?.staff_category.forEach(element => {
+            item?.staff_categories.forEach(element => {
                 if (element.name == employeeConnected.value?.category) {
-                    amount += element.montant
+                    amount += element.amount
 
                     if (user.marital_status == 'yes') {
-                        amount +=Number(element.montant)
+                        amount +=Number(element.amount)
                     }
 
                     if (user.number_child > 0) {
-                        amount +=(Number(element.montant) * Number(user.number_child))
+                        amount +=(Number(element.amount) * Number(user.number_child))
                     }
 
                 }
@@ -112,14 +112,14 @@ const options = {
 
         return computed(() => {
             let amount = 0
-        item?.staff_category.forEach(element => {
+        item?.staff_categories.forEach(element => {
 
             if (element.name == employeeConnected.value?.category) {
                 if (element.device == "XOF") {
-                amount += Number(element.montant);
+                amount += Number(element.amount);
 
                 } else {
-                    amount += (Number(element.montant) *  500);
+                    amount += (Number(element.amount) *  500);
                 }
             }
         });
@@ -133,7 +133,7 @@ const options = {
     const Total_CHAMBRE = (children) => {
 
         return computed(() => {
-            // let amount = calculate_amount(item?.staff_category)
+            // let amount = calculate_amount(item?.staff_categories)
             let chambres = 1;
             let enfants15a23 = 0
             let enfantsMoins15  = 0
@@ -221,7 +221,7 @@ const options = {
 
 const Total_F_I_A = (item,children) => {
         return computed(() => {
-            let amount = calculate_amount(item?.staff_category)
+            let amount = calculate_amount(item?.staff_categories)
 
             let chambres = Total_CHAMBRE(children)
 
@@ -233,7 +233,7 @@ const Total_F_I_A = (item,children) => {
 
     const Total_U = (item) => {
         return computed(() => {
-         let amount = calculate_amount(item?.staff_category)
+         let amount = calculate_amount(item?.staff_categories)
 
         return amount
        }).value
@@ -241,7 +241,7 @@ const Total_F_I_A = (item,children) => {
 
     const Total_P_C_A = (item) => {
         return computed(() => {
-         let amount = calculate_amount(item?.staff_category)
+         let amount = calculate_amount(item?.staff_categories)
             return amount
         }).value
     }

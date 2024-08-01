@@ -28,11 +28,11 @@ const {
                     <span>{{separatorMillier(useManager.Total_T_W_F(type[0]))}} XOF</span>
                 </div>
                 <small class="info">
-                    {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                    {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
                         +(spouse=${
-                        useManager.user.marital_status == "yes"? separatorMillier(useManager.calculate_amount(type[0]?.staff_category)) : 0})
+                        useManager.user.marital_status == "yes"? separatorMillier(useManager.calculate_amount(type[0]?.staff_categories)) : 0})
 
-                        + (${useManager.user.children?.length} child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                        + (${useManager.user.children?.length} child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
                     ` }}
                 </small>
             </li>
@@ -43,29 +43,29 @@ const {
                 </div>
                 <!-- <img src="https://dashboard.quickshipper.app/icons/hor-line-thin.svg" alt=""> -->
                 <small class="info">
-                    {{ `(${useManager.Total_CHAMBRE(useManager.user.children)} Room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_category)) }) x 7 days` }}
+                    {{ `(${useManager.Total_CHAMBRE(useManager.user.children)} Room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_categories)) }) x 7 days` }}
                 </small>
-                <!-- {{ item?.staff_category }} -->
+                <!-- {{ item?.staff_categories }} -->
             </li>
 
 
             <li class="item rowItem">
                 <div class="info">
                     <span>Personal effect Transportation</span>
-                    <span>{{separatorMillier(useManager.calculate_amount(type[1]?.staff_category))}} XOF</span>
+                    <span>{{separatorMillier(useManager.calculate_amount(type[1]?.staff_categories))}} XOF</span>
                 </div>
             </li>
                 <li class="item rowItem">
                 <div class="info">
                     <span>Unforseen</span>
-                    <span>{{separatorMillier(useManager.calculate_amount(type[3]?.staff_category))}} XOF</span>
+                    <span>{{separatorMillier(useManager.calculate_amount(type[3]?.staff_categories))}} XOF</span>
                 </div>
             </li>
 
             <li class="item rowItem">
                 <div class="info">
                     <span>Paliative for change in allowance</span>
-                    <span> {{separatorMillier(useManager.calculate_amount(type[4]?.staff_category))}} XOF</span>
+                    <span> {{separatorMillier(useManager.calculate_amount(type[4]?.staff_categories))}} XOF</span>
                 </div>
             </li>
 
@@ -86,11 +86,11 @@ const {
                     <span>{{separatorMillier(useManager.Total_T_W_F(type[0])/500)}} $</span>
                 </div>
                 <small class="info">
-                    {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                    {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
                         +(spouse=${
-                        useManager.user.marital_status == "yes"? separatorMillier(useManager.calculate_amount(type[0]?.staff_category)) : 0})
+                        useManager.user.marital_status == "yes"? separatorMillier(useManager.calculate_amount(type[0]?.staff_categories)) : 0})
 
-                        + (${useManager.user.children?.length} child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                        + (${useManager.user.children?.length} child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
                     ` }}
                 </small>
             </li>
@@ -101,29 +101,29 @@ const {
                 </div>
                 <!-- <img src="https://dashboard.quickshipper.app/icons/hor-line-thin.svg" alt=""> -->
                 <small class="info">
-                    {{ `(${useManager.Total_CHAMBRE(useManager.user.children)}room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_category)) }) x 7days` }}
+                    {{ `(${useManager.Total_CHAMBRE(useManager.user.children)}room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_categories)) }) x 7days` }}
                 </small>
-                <!-- {{ item?.staff_category }} -->
+                <!-- {{ item?.staff_categories }} -->
             </li>
 
 
             <li class="item rowItem">
                 <div class="info">
                     <span>Personal effect Transportation</span>
-                    <span> {{separatorMillier(useManager.calculate_amount(type[1]?.staff_category)/500)}} $</span>
+                    <span> {{separatorMillier(useManager.calculate_amount(type[1]?.staff_categories)/500)}} $</span>
                 </div>
             </li>
                 <li class="item rowItem">
                 <div class="info">
                     <span>Unforseen</span>
-                    <span> {{separatorMillier(useManager.calculate_amount(type[3]?.staff_category) / 500)}} $</span>
+                    <span> {{separatorMillier(useManager.calculate_amount(type[3]?.staff_categories) / 500)}} $</span>
                 </div>
             </li>
 
             <li class="item rowItem">
                 <div class="info">
                     <span>Paliative for change in allowance</span>
-                    <span> {{separatorMillier(useManager.calculate_amount(type[4]?.staff_category)/ 500)}} $</span>
+                    <span> {{separatorMillier(useManager.calculate_amount(type[4]?.staff_categories)/ 500)}} $</span>
                 </div>
             </li>
             <li class="item total">

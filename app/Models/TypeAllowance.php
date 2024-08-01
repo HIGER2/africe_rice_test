@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TypeAllowence extends Model
+class TypeAllowance extends Model
 {
     use HasFactory;
 
 
-    public function staff_category()
+    public function staff_categories()
     {
 
-        return  $this->hasMany(StaffCategorie::class, 'type_allowence_id', 'id');
+        return  $this->hasMany(StaffCategorie::class, 'type_allowance_id', 'id');
     }
 }

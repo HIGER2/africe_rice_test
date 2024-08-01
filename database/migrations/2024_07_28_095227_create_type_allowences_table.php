@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         // Crée la table type_allowences
-        Schema::create('type_allowences', function (Blueprint $table) {
+        Schema::create('type_allowances', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
@@ -23,11 +23,11 @@ return new class extends Migration
         // Crée la table staff_category
         Schema::create('staff_categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('type_allowence_id')->nullable()->index();
-            $table->string('type_allowences_name');
+            $table->foreignId('type_allowance_id')->nullable()->index();
+            $table->string('type_allowances_name');
             $table->string('name');
-            $table->bigInteger('montant');
-            $table->string('device');
+            $table->bigInteger('amount');
+            $table->string('currency');
             $table->timestamps();
         });
 
@@ -134,33 +134,33 @@ return new class extends Migration
                     (object)[
                         "value" => "GSS6",
                         "montant" => 100,
-                        "device" => "$"
+                        "device" => "USD"
                     ],
                     (object)[
                         "value" => "GSS7",
                         "montant" => 100,
-                        "device" => "$"
+                        "device" => "USD"
                     ],
                     (object)[
                         "value" => "GSS8",
                         "montant" => 100,
-                        "device" => "$"
+                        "device" => "USD"
                     ],
 
                     (object)[
                         "value" => "GSS9",
                         "montant" => 100,
-                        "device" => "$"
+                        "device" => "USD"
                     ],
                     (object)[
                         "value" => "APS",
                         "montant" => 250,
-                        "device" => "$"
+                        "device" => "USD"
                     ],
                     (object)[
                         "value" => "PS",
                         "montant" => 350,
-                        "device" => "$"
+                        "device" => "USD"
                     ],
                 ]
             ],
@@ -277,12 +277,12 @@ return new class extends Migration
                     (object)[
                         "value" => "APS",
                         "montant" => 35,
-                        "device" => "$"
+                        "device" => "USD"
                     ],
                     (object)[
                         "value" => "PS",
                         "montant" => 40,
-                        "device" => "$"
+                        "device" => "USD"
                     ],
                 ]
             ],
@@ -317,33 +317,33 @@ return new class extends Migration
                     (object)[
                         "value" => "GSS6",
                         "montant" => 350,
-                        "device" => "$"
+                        "device" => "USD"
                     ],
                     (object)[
                         "value" => "GSS7",
                         "montant" => 350,
-                        "device" => "$"
+                        "device" => "USD"
                     ],
                     (object)[
                         "value" => "GSS8",
                         "montant" => 350,
-                        "device" => "$"
+                        "device" => "USD"
                     ],
 
                     (object)[
                         "value" => "GSS9",
                         "montant" => 350,
-                        "device" => "$"
+                        "device" => "USD"
                     ],
                     (object)[
                         "value" => "APS",
                         "montant" => 600,
-                        "device" => "$"
+                        "device" => "USD"
                     ],
                     (object)[
                         "value" => "PS",
                         "montant" => 400,
-                        "device" => "$"
+                        "device" => "USD"
                     ],
                 ]
             ],
@@ -352,7 +352,7 @@ return new class extends Migration
 
         // Insère les données dans la table type_allowences et récupère les IDs
         foreach ($allowences as $allowenceName) {
-            $typeAllowenceId = DB::table('type_allowences')->insertGetId([
+            $typeAllowenceId = DB::table('type_allowances')->insertGetId([
                 'name' => $allowenceName->value,
             ]);
 
@@ -367,10 +367,10 @@ return new class extends Migration
 
         foreach ($allowenceName->cate as $categoryName) {
             DB::table('staff_categories')->insert([
-                'type_allowence_id' => $typeAllowenceId,
-                'type_allowences_name' => $allowenceName->value,
-                'montant' => $categoryName->montant,
-                'device' => $categoryName->device,
+                'type_allowance_id' => $typeAllowenceId,
+                'type_allowances_name' => $allowenceName->value,
+                'amount' => $categoryName->montant,
+                'currency' => $categoryName->device,
                 'name' => $categoryName->value,
             ]);
         }

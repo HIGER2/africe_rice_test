@@ -28,11 +28,11 @@ const {
                         <span> {{separatorMillier(useManager.user.total_t_w_f)  }} XOF</span>
                     </div>
                     <small class="info">
-                        {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                        {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
                             +(spouse=${
-                            useManager.user?.marital_status =="yes" ? separatorMillier(useManager.calculate_amount(type[0]?.staff_category)) : 0})
+                            useManager.user?.marital_status =="yes" ? separatorMillier(useManager.calculate_amount(type[0]?.staff_categories)) : 0})
 
-                            + (${useManager.user.children?.length} child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                            + (${useManager.user.children?.length} child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
                         ` }}
                     </small>
             </li>
@@ -43,7 +43,7 @@ const {
                             <span> {{separatorMillier( useManager.user.total_f_i_a)}} XOF</span>
                         </div>
                         <small class="info">
-                            {{ `(${useManager.user.room} Room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_category)) }) x 7 days` }}
+                            {{ `(${useManager.user.room} Room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_categories)) }) x 7 days` }}
                         </small>
                 </div>
             </li>
@@ -85,11 +85,11 @@ const {
                         <span> {{separatorMillier(useManager.user.total_t_w_f/500)}} $</span>
                     </div>
                     <small class="info">
-                        {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                        {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
                             +(spouse=${
-                            useManager.user?.marital_status =="yes" ? separatorMillier(useManager.calculate_amount(type[0]?.staff_category)) : 0})
+                            useManager.user?.marital_status =="yes" ? separatorMillier(useManager.calculate_amount(type[0]?.staff_categories)) : 0})
 
-                            + (${useManager.user.children?.length} child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                            + (${useManager.user.children?.length} child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
                         ` }}
                     </small>
             </li>
@@ -100,7 +100,7 @@ const {
                             <span> {{separatorMillier( useManager.user.total_f_i_a/500)}} $</span>
                         </div>
                         <small class="info">
-                            {{ `(${useManager.user.room} Room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_category)) }) x 7 days` }}
+                            {{ `(${useManager.user.room} Room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_categories)) }) x 7 days` }}
                         </small>
                 </div>
             </li>

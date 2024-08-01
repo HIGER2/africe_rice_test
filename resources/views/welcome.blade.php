@@ -28,7 +28,7 @@
                         </button>
                     </form>
                     <a href="https://mycareer.africarice.org/auth/recovery" class="forgot-password">Forgot your password?</a>
-                </div>
+            </div>
         </div>
-    </div>
+</div>
 @endsection

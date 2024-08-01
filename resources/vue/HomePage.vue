@@ -183,11 +183,11 @@ onMounted(() => {
                                     <span> {{separatorMillier(useManager.user.total_t_w_f)  }} XOF</span>
                                 </div>
                                 <small class="info">
-                                    {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                                    {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
                                         +(spouse=${
-                                        useManager.user?.marital_status =="yes" ? separatorMillier(useManager.calculate_amount(type[0]?.staff_category)) : 0})
+                                        useManager.user?.marital_status =="yes" ? separatorMillier(useManager.calculate_amount(type[0]?.staff_categories)) : 0})
 
-                                        + (${useManager.user.children?.length}child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                                        + (${useManager.user.children?.length}child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
                                     ` }}
                                 </small>
                                 </div>
@@ -204,7 +204,7 @@ onMounted(() => {
                                             <span> {{separatorMillier( useManager.user.total_f_i_a)}} XOF</span>
                                         </div>
                                         <small class="info">
-                                            {{ `(${useManager.user.room}room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_category)) }) x 7days` }}
+                                            {{ `(${useManager.user.room}room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_categories)) }) x 7days` }}
                                         </small>
                                 </div>
                             </li>
@@ -260,11 +260,11 @@ onMounted(() => {
                                     <span>XOF {{separatorMillier(useManager.Total_T_W_F(type[0]))  }}</span>
                                 </div>
                                 <small class="info">
-                                    {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                                    {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
                                         +(spouse=${
-                                        useManager.user.marital_status == "yes"? separatorMillier(useManager.calculate_amount(type[0]?.staff_category)) : 0})
+                                        useManager.user.marital_status == "yes"? separatorMillier(useManager.calculate_amount(type[0]?.staff_categories)) : 0})
 
-                                        + (${useManager.user.children?.length}child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
+                                        + (${useManager.user.children?.length}child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
                                     ` }}
                                 </small>
                             </li>
@@ -274,7 +274,7 @@ onMounted(() => {
                                     <span>XOF {{separatorMillier(useManager.Total_F_I_A(type[2],useManager.user.children))  }}</span>
                                 </div>
                                 <small class="info">
-                                    {{ `(${useManager.Total_CHAMBRE(useManager.user.children)}room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_category)) }) x 7days` }}
+                                    {{ `(${useManager.Total_CHAMBRE(useManager.user.children)}room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_categories)) }) x 7days` }}
                                 </small>
                             </li>
 
@@ -282,20 +282,20 @@ onMounted(() => {
                             <li class="item rowItem">
                                 <div class="info">
                                     <span>Personal effect Transportation</span>
-                                    <span>XOF {{separatorMillier(useManager.calculate_amount(type[1]?.staff_category))  }}</span>
+                                    <span>XOF {{separatorMillier(useManager.calculate_amount(type[1]?.staff_categories))  }}</span>
                                 </div>
                             </li>
                              <li class="item rowItem">
                                 <div class="info">
                                     <span>Unforseen</span>
-                                    <span>XOF {{separatorMillier(useManager.calculate_amount(type[3]?.staff_category))  }}</span>
+                                    <span>XOF {{separatorMillier(useManager.calculate_amount(type[3]?.staff_categories))  }}</span>
                                 </div>
                             </li>
 
                             <li class="item rowItem">
                                 <div class="info">
                                     <span>Paliative for change in allowance</span>
-                                    <span>XOF {{separatorMillier(useManager.calculate_amount(type[4]?.staff_category))  }}</span>
+                                    <span>XOF {{separatorMillier(useManager.calculate_amount(type[4]?.staff_categories))  }}</span>
                                 </div>
                             </li>
 
