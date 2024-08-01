@@ -1,10 +1,11 @@
 import { computed, reactive, ref } from "vue"
 import { toast } from 'vue3-toastify';
+import { defineStore } from 'pinia';
 
 
-export const useManagerStore = () => {
+export const useManagerStore = defineStore('manager',() => {
 
-
+    const test=ref(1)
     const user = reactive({
         "marital_status": "",
         "number_child": "",
@@ -86,16 +87,21 @@ const options = {
         // console.log(item);
 
         return computed(() => {
-           let user_amount =calculate_amount(item?.staff_category)
-            let amount = user_amount
+            let amount = 0
+            item?.staff_category.forEach(element => {
+                if (element.name == employeeConnected.value?.category) {
+                    amount += element.montant
 
-            if (user.marital_status == "yes") {
-                amount +=user_amount
-            }
+                    if (user.marital_status == 'yes') {
+                        amount +=Number(element.montant)
+                    }
 
-             if (user.number_child > 0) {
-                amount += (Number(user.number_child)*user_amount)
-            }
+                    if (user.number_child > 0) {
+                        amount +=(Number(element.montant) * Number(user.number_child))
+                    }
+
+                }
+            });
 
             return amount
         }).value
@@ -129,12 +135,18 @@ const options = {
         return computed(() => {
             // let amount = calculate_amount(item?.staff_category)
             let chambres = 1;
-            let enfants16a23 = 0
-            let enfantsMoins16  = 0
+            let enfants15a23 = 0
+            let enfantsMoins15  = 0
             let enfantsMoins23 = 0
+            let enfantsPlus23 = 0
 
             if (children?.length > 0) {
-                console.log(children);
+
+                enfantsPlus23 = children.filter((enfant) => {
+                    if (enfant.age && enfant.sex) {
+                        return enfant.age > 23
+                    }
+                });
 
                 enfantsMoins23 = children.filter((enfant) => {
                     if (enfant.age && enfant.sex) {
@@ -143,14 +155,17 @@ const options = {
                 });
 
                 if (enfantsMoins23.length > 0) {
-                    enfants16a23 = enfantsMoins23.filter(enfant => enfant.age >= 16 && enfant.age <= 23);
-                    enfantsMoins16 = enfantsMoins23.filter(enfant => enfant.age < 16);
+                    enfants15a23 = enfantsMoins23.filter(enfant => enfant.age >= 15 && enfant.age <= 23);
+                    enfantsMoins15 = enfantsMoins23.filter(enfant => enfant.age < 15);
                 }
 
-                // Attribuer des chambres aux enfants de moins de 16 ans, peu importe le sexe
-                if (enfantsMoins16.length > 0) {
+                // Attribuer des chambre aux enfants de plus de 23 ans
+
+
+                // Attribuer des chambres aux enfants de moins de 15 ans, peu importe le sexe
+                if (enfantsMoins15.length > 0) {
                     let groupe = 0;
-                    enfantsMoins16.forEach(element => {
+                    enfantsMoins15.forEach(element => {
                         groupe++
                         if (groupe < 2) {
                             chambres++
@@ -162,33 +177,39 @@ const options = {
 
                     // Attribuer des chambres aux enfants de 16 à 23 ans en fonction du sexe
 
-                if (enfants16a23.length > 0) {
+                if (enfants15a23.length > 0) {
                     let groupeF=0;
-                    let groupeM=0;
-                    enfants16a23.forEach(element => {
-                        if (element?.sex && element?.age) {
-                            if (element.sex == "F") {
-                            groupeF++
-                            if (groupeF < 2) {
-                                chambres +=groupeF
-                            } else {
-                                groupeF= 0
-                            }
-                        }
+                    let groupeM = 0;
+                    if (enfants15a23.length >=2) {
+                            chambres+=2
+                    }
+                    if (enfants15a23.length == 1) {
+                            chambres++
+                    }
+                    // enfants15a23.forEach(element => {
+                    //     if (element?.sex && element?.age) {
+                    //         if (element.sex == "F") {
+                    //         groupeF++
+                    //         if (groupeF < 2) {
+                    //             chambres +=groupeF
+                    //         } else {
+                    //             groupeF= 0
+                    //         }
+                    //     }
 
-                        if (element.sex == "M") {
-                            groupeM++
-                            if (groupeM < 2) {
+                    //     if (element.sex == "M") {
+                    //         groupeM++
+                    //         if (groupeM < 2) {
 
-                                chambres++
-                            } else {
-                                groupeM= 0
-                            }
-                        }
-                        }
+                    //             chambres++
+                    //         } else {
+                    //             groupeM= 0
+                    //         }
+                    //     }
+                    //     }
 
 
-                    });
+                    // });
                 }
 
 
@@ -312,6 +333,7 @@ const Total_F_I_A = (item,children) => {
         separatorMillier,
         initial,
         employeeConnected,
-        destroy
+        destroy,
+        test
     }
-}
+})

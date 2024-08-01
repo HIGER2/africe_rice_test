@@ -1,24 +1,14 @@
+
 <script setup>
 import { onMounted, onUpdated, ref } from "vue";
 import { useManagerStore } from "../js/useManagerStore"
+import FormComponent from "./FormComponent.vue";
+import DetailComponent from "./DetailComponent.vue";
+import DetailComponentValidate from "./DetailComponentValidate.vue";
 const { employee, type, data } = defineProps([ 'employee', 'type','data' ])
 
 const useManager = useManagerStore();
-const isLoading = ref(false);
-const today = new Date();
 
-console.log(today.toISOString());
-const onSave = async (type) => {
-
-    let confirmS = confirm('are you sure you want to save')
-    if (confirmS) {
-        isLoading.value = true
-    await save(type)
-    isLoading.value = false
-    scrollTo(0,0)
-    }
-
- }
 const {
     Total_Amount,
     separatorMillier,
@@ -28,48 +18,6 @@ const {
     destroy
     } = useManager
 
-const loadChild = () => {
-    let child = Number(useManager.user.number_child);
-
-    if (!isNaN(child) && isFinite(child)) {
-        if (child <= 4) {
-            const numberOfChildren = useManager.user.number_child;
-            if (useManager.user.children.length > numberOfChildren) {
-                useManager.user.children = useManager.user.children.slice(0, numberOfChildren);
-            } else {
-                for (let index = 0; index < useManager.user.number_child; index++) {
-                    useManager.user.children.push({
-                        "age": '',
-                        "sex": ""
-                    })
-                }
-            }
-
-        } else {
-            useManager.user.number_child = ""
-            useManager.user.children.length= 0
-        }
-
-
-    } else {
-        useManager.user.number_child = ""
-        useManager.user.children.length= 0
-    }
-
-
-}
-
-const limit_age = (index) => {
-
-    let age = Number(useManager.user.children[index].age);
-    if (!isNaN(age) && isFinite(age)) {
-        if (age > 23) {
-        useManager.user.children[index].age= ""
-        }
-    } else {
-        useManager.user.children[index].age= ""
-    }
-}
 onUpdated(() => {
 
     // alert('u')
@@ -80,7 +28,7 @@ if (data) {
     }
 
     if (employee) {
-        useManager.employeeConnected.value = employee
+        useManager.employeeConnected = employee
     }
 onMounted(() => {
     // console.log(type);
@@ -103,8 +51,14 @@ onMounted(() => {
     <!-- {{ type[2] }} -->
     <!-- {{ useManager.user.total_p_e_t }} -->
     <div class="content">
-        <div class="row">
-            <div class="col">
+        <div class="row" :class="{'active':useManager.user.children.length > 0}">
+                <FormComponent
+                :type="type"
+                :data="data"
+                :employee="employee"
+                />
+
+            <!-- <div class="col">
                 <form @submit.prevent="onSave(type)">
                     <div class="card">
                         <h5> General information </h5>
@@ -140,7 +94,6 @@ onMounted(() => {
                                 placeholder="Number of children (limit 4)" required>
                         </div>
                         <div class="contentchild" v-if="useManager.user.children.length > 0">
-                            <!-- {{ useManager.children }} -->
                             <h5>Children informations</h5>
                             <div class="rowinput" v-for="(item, index) in useManager.user.children" :key="index">
                                 <div class="form-group">
@@ -180,7 +133,7 @@ onMounted(() => {
 
                 <button v-else type="button" class="test" @click="destroy(data?.id)">Supprimer pour réessayer</button>
                 </form>
-            </div>
+            </div> -->
             <div class="col">
                 <div class="card ">
                    <div class="head">
@@ -202,7 +155,22 @@ onMounted(() => {
                         </template>
                     </div>
                    </div>
-                    <ul class="items">
+                   <div class="rate">
+                    <span>Exchange rate : 1 USD = 500 XOF </span>
+                   </div>
+                    <template v-if="data?.status_input">
+                    <DetailComponentValidate
+                    :type="type"
+                    :data="data"
+                    />
+                    </template>
+                    <template v-else>
+                    <DetailComponent
+                    :type="type"
+                    />
+                    </template>
+
+                    <!-- <ul class="items">
                         <template v-if="data?.status_input">
                             <li class="item ">
                                  <div class="goupeStep">
@@ -305,11 +273,9 @@ onMounted(() => {
                                     <span>Family initial accommodation</span>
                                     <span>XOF {{separatorMillier(useManager.Total_F_I_A(type[2],useManager.user.children))  }}</span>
                                 </div>
-                                <!-- <img src="https://dashboard.quickshipper.app/icons/hor-line-thin.svg" alt=""> -->
                                 <small class="info">
                                     {{ `(${useManager.Total_CHAMBRE(useManager.user.children)}room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_category)) }) x 7days` }}
                                 </small>
-                                <!-- {{ item?.staff_category }} -->
                             </li>
 
 
@@ -344,7 +310,7 @@ onMounted(() => {
                             </div>
                         </li>
                         </template>
-                    </ul>
+                    </ul> -->
                 </div>
             </div>
         </div>

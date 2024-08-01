@@ -342,16 +342,19 @@ padding:1rem;
             width: 100%;
         }
         .row{
-            width: 800px;
+            width: 95%;
             display: flex;
-            // align-items: flex-start;
             justify-content: center;
             gap: 5px;
             margin-inline: auto;
-            background-color: #fff;
-            padding: 1rem;
+            // background-color: #fff;
+            // padding: 1rem;
             border-radius: 10px;
-            box-shadow: $shadow;
+            // background-color: red;
+            &.active{
+            // align-items: flex-start;
+            }
+            // box-shadow: $shadow;
             @media only screen and (max-width: 792px){
                 width: 100%;
                 // flex-wrap: wrap;
@@ -364,7 +367,9 @@ padding:1rem;
                 align-items: center;
             }
             .col{
-                width: 50%;
+                background-color: #fff;
+                border-radius: 10px;
+                box-shadow: $shadow;
                 @media only screen and (max-width: 792px){
                 width: 100%;
                 }
@@ -387,17 +392,20 @@ padding:1rem;
                         }
                     }
                     &.styck{
-                        position: sticky;
-                        top: 60px;
-                background-color: RED;
+                        // position: sticky;
+                        // top: 60px;
+                        // background-color: RED;
                     }
                 }
                 &:first-child{
-                    // width: 50%;
-                    background-color: $background-color;
+                    width: 35%;
+                    // background-color: $background-color;
                     border-radius: 10px ;
                     padding:1rem 2rem;
-
+                    @media only screen and (max-width: 792px){
+                        position: relative;
+                        width: 100%;
+                    }
                     .card{
                         padding: 0;
                     }
@@ -407,8 +415,17 @@ padding:1rem;
                     }
                 }
                 &:last-child{
-                    // width: 40%;
+                    width: 70%;
+                    // display: none;
+
                     // background-color: red;
+                    position: sticky;
+                    top: 60px;
+                    @media only screen and (max-width: 792px){
+                        position: relative;
+                        top: 0;
+                        width: 100%;
+                    }
                     .card{
                         padding: 1rem;
                     }
@@ -456,7 +473,7 @@ padding:1rem;
                     }
                 }
 
-                  .login-button {
+                .login-button {
                     width: 100%;
                     padding: 10px 30px;
                     background-color: $secondary-color;
@@ -472,12 +489,30 @@ padding:1rem;
                 }
 
                 }
-                .items{
+                .row-items{
+                    display: flex;
                     width: 100%;
+                    @media only screen and (max-width: 792px){
+                    flex-direction: column;
+                    width: 100%;
+                    }
+                }
+                .items{
+                    width: 50%;
+                    padding: 10px;
+                    @media only screen and (max-width: 792px){
+                        position: relative;
+                        width: 100%;
+                    }
+                    &:first-child{
+                        border-right: 1px solid #e0e0e0;
+                    @media only screen and (max-width: 792px){
+                       border: none;
+                    }
+                    }
                     .item{
                         width: 100%;
                         display: flex;
-
                         font-size: 14px;
                         color: $primary-color;
                         gap: 5px;
