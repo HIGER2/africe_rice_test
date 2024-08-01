@@ -9,7 +9,7 @@
 @section("content")
 
 <section class="home">
-@include('includes.header')
+@include('includes.header-home')
  <div class="container">
     {{-- {{$formData}} --}}
          <div id="app">

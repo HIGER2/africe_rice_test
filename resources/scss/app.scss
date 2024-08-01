@@ -97,25 +97,117 @@ body {
     }
 
 
-    button{
-         width: max-content;
-        padding: 8px 20px;
-        background-color: $secondary-color;
-        color: $white;
-        box-shadow: 0px 0px 2px #ccc;
-        border: none;
-        border-radius: $border-radius;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        cursor: pointer;
-    }
+    // button{
+    //      width: max-content;
+    //     padding: 8px 20px;
+    //     background-color: $secondary-color;
+    //     color: $white;
+    //     box-shadow: 0px 0px 2px #ccc;
+    //     border: none;
+    //     border-radius: $border-radius;
+    //     font-size: 16px;
+    //     cursor: pointer;
+    //     transition: background-color 0.3s;
+    //     cursor: pointer;
+    // }
     .user{
         display: flex;
         align-items: center;
         background-color: red($color: #000000);
         gap: 10px;
     }
+    .logo {
+      width: 130px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin: 0;
+      color: $secondary-color;
+    }
+  }
+
+
+ .header-home {
+    width: 100%;
+    background-color: $white;
+    padding: 8px 20px;
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: $shadow;
+    z-index: 10;
+    .user{
+        cursor: pointer;
+        position: relative;
+        .info{
+        background-color: #dcfce7;
+        color: #166434;
+        padding: 8px 16px;
+        font-weight: 700;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: max-content;
+        position: relative;
+        border: 1px solid transparent;
+        transition: all .4s ease-in-out;
+        &.active{
+            border-color: #166434;
+            .dropDown{
+            transform: translateY(0);
+             visibility: visible;
+            opacity: 1;
+            }
+        }
+        .dropDown{
+            transition: all 0.1s ease-in-out;
+            position: absolute;
+            top: 170%;
+            transform: translateY(-200%);
+            visibility: hidden;
+            opacity: 0;
+            width: max-content;
+            left: 0;
+            z-index: -1;
+            background-color: $white;
+            padding: 5px 20px;
+            box-shadow: $shadow;
+            border-radius: 5px;
+            color: $primary-color;
+            li{
+                padding: 10px 0px;
+                gap: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                button{
+                    background-color: transparent;
+                    border: none;
+                    font-weight: 700;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    font-size: 12px;
+                    color: $primary-color;
+                    cursor: pointer;
+                }
+            }
+        }
+        }
+        span{
+        font-size: 12px;
+        }
+    }
+
+    @media only screen and (max-width: 792px){
+        width: 100%;
+    }
+
     .logo {
       width: 130px;
     }
@@ -494,9 +586,16 @@ padding:1rem;
                             justify-content: space-between;
                             padding: 15px 0;
                             text-transform: uppercase;
-                            span{
-                            font-weight: 800 !important;
+                            flex-direction: column;
+                            gap: 10px;
+                            .element{
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                font-weight: 600;
+                                color: $primary-color;
                             }
+
                         }
                         span{
                             &:last-child{

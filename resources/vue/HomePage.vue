@@ -144,7 +144,7 @@ onMounted(() => {
                             <h5>Children informations</h5>
                             <div class="rowinput" v-for="(item, index) in useManager.user.children" :key="index">
                                 <div class="form-group">
-                                    <label for="age">Age (limit 23 ans)</label>
+                                    <label for="age">Age (limit 23 years)</label>
                                     <input type="number"
                                     @input="limit_age(index)"
                                     :disabled="data?.status_input" v-model="item.age" id="age" min="0"
@@ -212,7 +212,7 @@ onMounted(() => {
                                 <div class="element element2">
                                 <div class="li">
                                     <span>Travel with Family</span>
-                                    <span>XOF {{separatorMillier(useManager.user.total_t_w_f)  }}</span>
+                                    <span> {{separatorMillier(useManager.user.total_t_w_f)  }} XOF</span>
                                 </div>
                                 <small class="info">
                                     {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_category))})
@@ -233,10 +233,10 @@ onMounted(() => {
                                 <div class=" element element2">
                                         <div class="li">
                                             <span>Family initial accommodation</span>
-                                            <span>XOF {{separatorMillier( useManager.user.total_f_i_a)}}</span>
+                                            <span> {{separatorMillier( useManager.user.total_f_i_a)}} XOF</span>
                                         </div>
                                         <small class="info">
-                                            {{ `(${useManager.user.room}room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_category)) }) x 7j` }}
+                                            {{ `(${useManager.user.room}room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_category)) }) x 7days` }}
                                         </small>
                                 </div>
                             </li>
@@ -248,7 +248,7 @@ onMounted(() => {
                                 </div>
                                <div class="element">
                                 <span>Personal effect Transportation</span>
-                                <span>XOF   {{separatorMillier(useManager.user.total_p_e_t)  }}</span>
+                                <span>   {{separatorMillier(useManager.user.total_p_e_t)  }} XOF</span>
                                </div>
                             </li>
 
@@ -259,7 +259,7 @@ onMounted(() => {
                                 </div>
                                <div class="element">
                                     <span>Unforseen</span>
-                                    <span>XOF   {{separatorMillier(useManager.user.total_u)  }}</span>
+                                    <span>   {{separatorMillier(useManager.user.total_u)  }} XOF</span>
                                </div>
                             </li>
                             <li class="item ">
@@ -269,14 +269,21 @@ onMounted(() => {
                             </div>
                               <div class="element">
                                   <span>Paliative for change in allowance</span>
-                                <span>XOF   {{separatorMillier(useManager.user.total_p_c_a)  }}</span>
+                                <span>   {{separatorMillier(useManager.user.total_p_c_a)  }} XOF</span>
                               </div>
                             </li>
 
                         <li class="item total">
-                            <span>Total</span>
-                            <span>XOF   {{separatorMillier(useManager.user.total_amount)  }}</span>
+                           <div class="element">
+                                <span>Total</span>
+                                <span>   {{separatorMillier(useManager.user.total_amount)  }} XOF</span>
+                           </div>
+                            <div class="element">
+                                <span>Total</span>
+                            <span>   {{separatorMillier(useManager.user.total_amount / 500)  }} $</span>
+                            </div>
                         </li>
+
                         </template>
                         <template v-else>
                             <li class="item rowItem">
@@ -295,13 +302,12 @@ onMounted(() => {
                             </li>
                             <li class="item rowItem">
                                 <div class="info">
-                                    {{  }}
                                     <span>Family initial accommodation</span>
                                     <span>XOF {{separatorMillier(useManager.Total_F_I_A(type[2],useManager.user.children))  }}</span>
                                 </div>
                                 <!-- <img src="https://dashboard.quickshipper.app/icons/hor-line-thin.svg" alt=""> -->
                                 <small class="info">
-                                    {{ `(${useManager.Total_CHAMBRE(useManager.user.children)}room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_category)) }) x 7j` }}
+                                    {{ `(${useManager.Total_CHAMBRE(useManager.user.children)}room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_category)) }) x 7days` }}
                                 </small>
                                 <!-- {{ item?.staff_category }} -->
                             </li>
@@ -309,14 +315,12 @@ onMounted(() => {
 
                             <li class="item rowItem">
                                 <div class="info">
-                                    <!-- {{type  }} -->
                                     <span>Personal effect Transportation</span>
                                     <span>XOF {{separatorMillier(useManager.calculate_amount(type[1]?.staff_category))  }}</span>
                                 </div>
                             </li>
                              <li class="item rowItem">
                                 <div class="info">
-                                    <!-- {{type  }} -->
                                     <span>Unforseen</span>
                                     <span>XOF {{separatorMillier(useManager.calculate_amount(type[3]?.staff_category))  }}</span>
                                 </div>
@@ -324,16 +328,20 @@ onMounted(() => {
 
                             <li class="item rowItem">
                                 <div class="info">
-                                    <!-- {{type  }} -->
                                     <span>Paliative for change in allowance</span>
                                     <span>XOF {{separatorMillier(useManager.calculate_amount(type[4]?.staff_category))  }}</span>
                                 </div>
                             </li>
 
-
                         <li class="item total">
-                            <span>Total</span>
-                            <span>XOF   {{separatorMillier(useManager.Total_Amount(type))  }}</span>
+                           <div class="element">
+                                <span>Total</span>
+                                <span>   {{separatorMillier(useManager.Total_Amount(type))   }} XOF</span>
+                           </div>
+                            <div class="element">
+                                <span>Total</span>
+                            <span>   {{separatorMillier(useManager.Total_Amount(type) / 500)   }} $</span>
+                            </div>
                         </li>
                         </template>
                     </ul>
