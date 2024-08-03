@@ -5,7 +5,9 @@ import { defineStore } from 'pinia';
 
 export const useManagerStore = defineStore('manager',() => {
 
-    const test=ref(1)
+    const test = ref(1)
+
+    let type_allowance = ref([]);
     const user = reactive({
         "marital_status": "",
         "number_child": "",
@@ -21,6 +23,8 @@ export const useManagerStore = defineStore('manager',() => {
         "total_amount" :0,
     });
 
+
+
     // let employeeConnected.value?.category = "GSS1";
     let chilExiste = [];
     let nb_f = 0;
@@ -28,8 +32,19 @@ export const useManagerStore = defineStore('manager',() => {
     let nb_all = 0;
 
     let employeeConnected = ref();
+    let currency = ref(0);
 
+    const editing = (target) => {
+        let childIndex =target.getAttribute('childIndex')
+        let parentIndex = target.getAttribute('parentIndex')
+        let keyIndex = target.getAttribute('keyIndex')
 
+        if (!target.value.trim() == "") {
+            type_allowance.value[ parentIndex ].staff_categories[ childIndex ][ keyIndex ] = target.value.trim()
+        }
+
+        // console.log(chiildIndex,parentIndex);
+    }
     const calculate_amount = (item) => {
         let amount = 0
         item?.forEach(element => {
@@ -39,7 +54,7 @@ export const useManagerStore = defineStore('manager',() => {
                     amount += element.amount
 
                 } else {
-                     amount += (Number(element.amount) *  500);
+                     amount += (Number(element.amount) *  currency.value);
                 }
 
                 }
@@ -119,7 +134,7 @@ const options = {
                 amount += Number(element.amount);
 
                 } else {
-                    amount += (Number(element.amount) *  500);
+                    amount += (Number(element.amount) *  currency.value);
                 }
             }
         });
@@ -270,10 +285,46 @@ const Total_F_I_A = (item,children) => {
         user.total_amount = Total_Amount(type)
         user.room = Total_CHAMBRE(user.children)
 
+             scrollTo(0,0)
+
      await window.axios.post(`/save`, user)
          .then(async(response) => {
 
              Object.assign(user,response?.data?.data)
+                toast.success('operation completed successfully', {
+                position: toast.POSITION.TOP_CENTER,
+                // transition:customAnimation
+                });
+
+             setTimeout(() => {
+             location.reload()
+             }, 500);
+
+            })
+         .catch(error => {
+              toast.error(error?.response?.data?.message, {
+                position: toast.POSITION.TOP_CENTER,
+                // transition:customAnimation
+              });
+             console.log(error?.response?.data?.message);
+            //  console.log(error?.response?.data?.data?.message);
+            })
+            .finally(() => {
+            })
+            ;
+    }
+
+
+    const saveTypeAllowance = async(item) => {
+        let data = {
+            currency: currency.value,
+            type_allowance:item
+        }
+     await window.axios.post(`/setting`, data)
+         .then(async(response) => {
+
+             console.log(response);
+            //  Object.assign(user,response?.data?.data)
                 toast.success('operation completed successfully', {
                 position: toast.POSITION.TOP_CENTER,
                 // transition:customAnimation
@@ -334,6 +385,10 @@ const Total_F_I_A = (item,children) => {
         initial,
         employeeConnected,
         destroy,
-        test
+        test,
+        type_allowance,
+        editing,
+        saveTypeAllowance,
+        currency
     }
 })

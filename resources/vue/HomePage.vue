@@ -5,7 +5,7 @@ import { useManagerStore } from "../js/useManagerStore"
 import FormComponent from "./FormComponent.vue";
 import DetailComponent from "./DetailComponent.vue";
 import DetailComponentValidate from "./DetailComponentValidate.vue";
-const { employee, type, data } = defineProps([ 'employee', 'type','data' ])
+const { employee, type, data ,currency } = defineProps([ 'employee', 'type','data' ,'currency'])
 
 const useManager = useManagerStore();
 
@@ -23,6 +23,8 @@ onUpdated(() => {
     // alert('u')
 })
 
+onMounted(() => {
+
 if (data) {
         initial(data)
     }
@@ -30,7 +32,10 @@ if (data) {
     if (employee) {
         useManager.employeeConnected = employee
     }
-onMounted(() => {
+
+    if (currency?.value) {
+        useManager.currency = currency?.value;
+    }
     // console.log(type);
     // alert('r')
     // if (data) {
@@ -45,7 +50,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <!-- {{data }} -->
+    <!-- {{useManager.currency }} -->
     <!-- {{ useManager.employeeConnected.value}} -->
     <!-- {{  employee.role}} -->
     <!-- {{ type[2] }} -->
@@ -156,7 +161,7 @@ onMounted(() => {
                     </div>
                    </div>
                    <div class="rate">
-                    <span>Exchange rate : 1 USD = 500 XOF </span>
+                        <span>Exchange rate : 1 USD = {{ useManager.currency }} XOF </span>
                    </div>
                     <template v-if="data?.status_input">
                     <DetailComponentValidate

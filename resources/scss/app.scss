@@ -174,16 +174,21 @@ body {
             left: 0;
             z-index: -1;
             background-color: $white;
-            padding: 5px 20px;
+            padding: 5px 5px;
             box-shadow: $shadow;
             border-radius: 5px;
             color: $primary-color;
             li{
-                padding: 10px 0px;
+                padding: 10px 10px;
                 gap: 12px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
+                border-radius: 5px;
+                transition: all .3s ease-in-out;
+                &:hover{
+                    background-color: $background-color;
+                }
                 button{
                     background-color: transparent;
                     border: none;
@@ -360,7 +365,7 @@ padding:1rem;
             border-radius: 10px;
             // background-color: red;
             &.active{
-            // align-items: flex-start;
+            align-items: flex-start;
             }
             // box-shadow: $shadow;
             @media only screen and (max-width: 792px){
@@ -378,6 +383,10 @@ padding:1rem;
                 background-color: #fff;
                 border-radius: 10px;
                 box-shadow: $shadow;
+                transition: all .4s ease-in-out;
+                // &:hover{
+                //     border:1px solid  $secondary-color;
+                // }
                 @media only screen and (max-width: 792px){
                 width: 100%;
                 }
@@ -387,6 +396,13 @@ padding:1rem;
                 // box-shadow: $shadow;
                 // background-color: $white;
                 padding: 1rem 2rem;
+
+                .rate{
+                    // background-color: red;
+                    text-align: right;
+                    font-size: 13px;
+                    font-weight: 600;
+                }
                 @media only screen and (max-width: 792px){
                 width: 100%;
                 padding: 1rem;
@@ -410,6 +426,7 @@ padding:1rem;
                     // background-color: $background-color;
                     border-radius: 10px ;
                     padding:1rem 2rem;
+                    border:1px solid  $secondary-color;
                     @media only screen and (max-width: 792px){
                         position: relative;
                         width: 100%;
@@ -742,13 +759,16 @@ padding:1rem;
 
 .setting{
     width: 100%;
+     @media only screen and (max-width: 792px){
+            width: 100%;
+        }
     .container{
         width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
         // min-height: 100;
-         h2 {
+        h2 {
         font-size: 12px;
         font-weight: 800;
         text-transform: uppercase;
@@ -756,71 +776,185 @@ padding:1rem;
         margin: 10px 0;
         color: $primary-color;
         }
-         form {
+        h5{
+            margin: 10px 0;
+            font-size: 13px;
+            color: $primary-color;
+        }
+        form {
+        width: 600px;
+        @media only screen and (max-width: 792px){
+            width: 100%;
+            overflow: hidden;
+
+        }
+
+            select,input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid $input-border-color;
+            border-radius: $border-radius;
+            font-size: 12px;
+            &:focus{
+                border:2px solid $secondary-color;
+            }
+
+            &:hover{
+                cursor: cell;
+            }
+            }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+            margin: 20px 0px;
+            width: 100%;
+            label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 13px;
                 @media only screen and (max-width: 792px){
-                    width: 100%;
+                font-size: 12px;
                 }
-                .form-group {
-                    margin-bottom: 15px;
-                    text-align: left;
-                    margin: 20px 0px;
-                    width: 100%;
-                    label {
-                    display: block;
-                    font-weight: bold;
-                    margin-bottom: 5px;
-                    font-weight: 500;
-                    font-size: 13px;
-                     @media only screen and (max-width: 792px){
-                        font-size: 12px;
-                        }
-                    }
+            }
 
-                    select,input {
-                    width: 100%;
-                    padding: 10px;
-                    border: 1px solid $input-border-color;
-                    border-radius: $border-radius;
-                    font-size: 12px;
-                    }
 
-                    span {
-                    font-size: 12px;
-                    color: $primary-color;
-                    }
-                }
-                .contentchild{
-                    width: 100%;
 
-                    .rowinput{
-                        display: flex;
-                        gap: 10px;
-                        width: 100%;
-                    }
-                }
+            span {
+            font-size: 12px;
+            color: $primary-color;
+            }
+        }
+        .contentchild{
+            width: 100%;
 
-                .login-button {
-                    width: 100%;
-                    padding: 10px 30px;
-                    background-color: $secondary-color;
-                    margin-top: 10px;
-                    color: $white;
-                    box-shadow: 0px 0px 2px #ccc;
-                    border: none;
-                    border-radius: 10px;
-                    font-size: 16px;
-                    cursor: pointer;
-                    transition: background-color 0.3s;
-                    cursor: pointer;
-                }
+            .rowinput{
+                display: flex;
+                gap: 10px;
+                width: 100%;
+            }
+        }
 
-                }
+        .login-button {
+            width: 100%;
+            padding: 10px 30px;
+            background-color: $secondary-color;
+            margin-top: 10px;
+            color: $white;
+            box-shadow: 0px 0px 2px #ccc;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        }
+        .savebutton{
+            width: max-content;
+            padding: 13px 50px;
+            // margin: 1rem 0;
+            background-color: $secondary-color;
+            border-radius: 10px;
+            border: none;
+            color: $white;
+            font-weight: 600;
+            display: block;
+            cursor: pointer;
+            margin-left: auto;
+            margin-top:1rem;
+        }
         .card{
         border-radius: 10px;
         box-shadow: $shadow;
         background-color: $white;
-        padding: 2rem;
-        width: 380px;
+        padding: 1rem;
+        width: 100%;
+        height: 450px;
+        cursor: cell;
+        @media only screen and (max-width: 792px){
+            width: 100%;
+            // background-color: red;
+        }
+        .content-table{
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            @media only screen and (max-width: 792px){
+            width: max-content;
+            overflow-x: scroll;
+            }
+        }
+        table {
+        width: 100%;
+        border-collapse: collapse;
+        justify-content: space-between;
+        // border-bottom: 1px solid $primary-color;
+        thead {
+            th {
+                padding: 20px 10px;
+                font-size: 12px;
+                text-align: left;
+                // color: $text_ligth;
+                // background-color:$treeth ;
+                // border: 1px solid $primary-color;
+            }
+
+        }
+
+
+    tr {
+            // border: 1px solid $primary-color;
+            width: 100%;
+            border-bottom: 1px solid $input-border-color;
+
+        td {
+            padding: 15px 15px;
+            font-size: 14px;
+            text-align: left;
+            font-weight: 300;
+            // width: calc(100% / 7);
+            // border: 1px solid red;
+            &:first-child{
+                // background-color: red;
+                // align-items: flex-start;
+                // text-align-last: unset;
+                vertical-align: top;
+            }
+            &.staff{
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .element{
+                display: flex;
+                align-items: center;
+                width: 100%;
+                div{
+                    width: calc(100% / 3);
+                    padding:0 2px;
+                      @media only screen and (max-width: 792px){
+                        width: max-content;
+                        overflow-x: scroll;
+                        }
+                    &:hover{
+                        cursor: cell;
+                    }
+                    &:focus{
+                        border-color: $secondary-color;
+                        border-width: 2px;
+                    }
+                }
+            }
+
+        }
+    }
+
+
+
+    }
 
 
         p {

@@ -31,6 +31,15 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('currency', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('value');
+            $table->timestamps();
+        });
+
+        DB::table('currency')->insert([
+            'value' => 500,
+        ]);
         // Définit les noms d'allowance
         $allowences = [
             (object)[

@@ -20,6 +20,13 @@
                 <form action="{{ route('logout') }}" method="POST" class="d-inline">
                     @csrf
                     <ul class="dropDown" >
+                         <li>
+                            <a href="{{route('home')}}">
+                                <span>Home</span>
+                                <i class="uil uil-arrow-up-right"></i>
+                            </a>
+
+                        </li>
                         <li>
                             <span>Change password</span>
                             <i class="uil uil-arrow-up-right"></i>

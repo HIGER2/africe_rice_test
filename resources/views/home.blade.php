@@ -14,6 +14,7 @@
     {{-- {{$formData}} --}}
          <div id="app">
              <home-page
+             :currency="{{json_encode($currency)}}"
              :type="{{json_encode($type)}}"
              :employee="{{json_encode($employee)}}"
              :data="{{json_encode($formData)}}"

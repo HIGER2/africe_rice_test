@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Currency;
 use App\Models\Employee;
 use App\Models\EmployeeChild;
 use App\Models\EmployeeInformaton;
@@ -32,6 +33,7 @@ class WebController extends Controller
                 ->where('employees_id', $employee->employeeId)->first();
 
             $type = TypeAllowance::with('staff_categories')->get();
+            $currency = Currency::first();
 
             // Session::put('type', $type);
             // Session::put('employee', $employee);
@@ -39,7 +41,7 @@ class WebController extends Controller
 
             // return view('home', compact('type', 'employee', 'formData'));
 
-            return view('home', compact('employee', 'type', 'formData'));
+            return view('home', compact('employee', 'type', 'formData', 'currency'));
         } else {
             return redirect()->route('login');
             // return redirect()->route('login', compact('type', 'employee', 'formData'));
@@ -49,61 +51,129 @@ class WebController extends Controller
     public function setting()
     {
 
-        $type_allowence = TypeAllowance::get();
+        if (!Auth::guard('employees')->check()) {
+            return redirect()->route('login');
+        }
+
+        $type_allowence = TypeAllowance::with('staff_categories')->get();
+        $currency = Currency::first();
         // $type_allowences = $type_allowence->staff_categories;
         $staffCategories = [];
         $selectedTypeAllowenceId = null;
         $selectedStaffCategoriId = null;
         $amount = null;
-        $currency = null;
 
+        // $dataSetting = (object)[
+        //     // "currency" => $currency['value'],
+        //     "type_allowence" => $type_allowence
+        // ];
 
-        return view('setting', compact('type_allowence', 'staffCategories', 'selectedTypeAllowenceId', 'selectedStaffCategoriId', 'amount', 'currency'));
+        return view('setting', compact('type_allowence', 'currency', 'staffCategories', 'selectedTypeAllowenceId', 'selectedStaffCategoriId', 'amount', 'currency'));
     }
 
+
+
+    public function recursive($data)
+    {
+
+        if ($data) {
+        }
+    }
     public function settingIndex(Request $request)
     {
-        $selectedTypeAllowenceId = $request->input('type_allowance_id');
-        $selectedStaffCategoriId = $request->input('staff_category_id');
-        $form_action = $request->input('form_action');
+        try {
+
+            DB::beginTransaction();
 
 
-        $type_allowence = TypeAllowance::get();
-        $find_allowence = TypeAllowance::find($selectedTypeAllowenceId);
-        $staffCategories = $find_allowence ? $find_allowence->staff_categories : [];
-
-        $amount = null;
-        $currency = null;
-        $findCategorie = null;
+            // return $request->all();
+            $data = $request->type_allowance;
+            $currency = Currency::first();
 
 
-        if ($selectedTypeAllowenceId && $selectedStaffCategoriId) {
-            $findCategorie =  $find_allowence->staff_categories->find($selectedStaffCategoriId);
-            if ($findCategorie) {
-                $amount = $findCategorie->amount;
-                $currency = $findCategorie->currency;
+            $find_allowence = "";
+
+            // return $dat  a;
+            $response = [];
+            foreach ($data as $value) {
+                // return $value['id'];
+                $find_allowence = TypeAllowance::find($value['id']);
+                // return $find_allowence->staff_categories;
+
+                if ($find_allowence) {
+                    foreach ($value['staff_categories'] as $value2) {
+                        $staffCategory =  $find_allowence->staff_categories->find($value2['id']);
+                        if ($staffCategory) {
+                            $staffCategory->update($value2);
+                            $response[] = $find_allowence;
+                        }
+                    }
+                }
             }
-        }
-        // Vérifiez si des catégories de personnel existent
-        // $hasStaffCategories = $staffCategories->isNotEmpty();
 
-        if ($form_action == "submit_final" && $findCategorie) {
-            try {
-                $findCategorie->amount = $request->amount;
-                $findCategorie->currency = $request->currency;
-                $findCategorie->save();
-                $amount = $findCategorie->amount;
-                $currency = $findCategorie->currency;
-                return view('setting', compact('type_allowence', 'staffCategories', 'selectedTypeAllowenceId', 'selectedStaffCategoriId', 'amount', 'currency'));
-
-                return redirect()->back()->with('success', 'Information updated successfully.');
-            } catch (\Exception $e) {
-                return redirect()->back()->with('error', 'Failed to update information. Please try again.')
-                    ->with('errorDetails', $e->getMessage());
+            if ($request->currency != $currency->value) {
+                $currency->update(['value' => $request->currency]);
             }
+
+
+            // return view('setting', compact('type_allowence', 'staffCategories', 'selectedTypeAllowenceId', 'selectedStaffCategoriId', 'amount', 'currency'));
+
+
+            DB::commit();
+            return response()->json([
+                'message' => "ok",
+                "data" => $request->currency
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => "ok",
+                "error" => $th,
+            ], 500);
+            //throw $th;;
         }
+        // if (!Auth::guard('employees')->check()) {
+        //     return redirect()->route('login');
+        // }
+        // $selectedTypeAllowenceId = $request->input('type_allowance_id');
+        // $selectedStaffCategoriId = $request->input('staff_category_id');
+        // $form_action = $request->input('form_action');
+
+
+        // $type_allowence = TypeAllowance::with('staff_categories')->get();
+        // $find_allowence = TypeAllowance::find($selectedTypeAllowenceId);
+        // $staffCategories = $find_allowence ? $find_allowence->staff_categories : [];
+
+        // $amount = null;
+        // $currency = null;
+        // $findCategorie = null;
+
+
+        // if ($selectedTypeAllowenceId && $selectedStaffCategoriId) {
+        //     $findCategorie =  $find_allowence->staff_categories->find($selectedStaffCategoriId);
+        //     if ($findCategorie) {
+        //         $amount = $findCategorie->amount;
+        //         $currency = $findCategorie->currency;
+        //     }
+        // }
+        // // Vérifiez si des catégories de personnel existent
+        // // $hasStaffCategories = $staffCategories->isNotEmpty();
+
+        // if ($form_action == "submit_final" && $findCategorie) {
+        //     try {
+        //         $findCategorie->amount = $request->amount;
+        //         $findCategorie->currency = $request->currency;
+        //         $findCategorie->save();
+        //         $amount = $findCategorie->amount;
+        //         $currency = $findCategorie->currency;
+        //         return view('setting', compact('type_allowence', 'staffCategories', 'selectedTypeAllowenceId', 'selectedStaffCategoriId', 'amount', 'currency'));
+
+        //         return redirect()->back()->with('success', 'Information updated successfully.');
+        //     } catch (\Exception $e) {
+        //         return redirect()->back()->with('error', 'Failed to update information. Please try again.')
+        //             ->with('errorDetails', $e->getMessage());
+        //     }
+        // }
         // Réinvoquez la vue avec les données nécessaires
-        return view('setting', compact('type_allowence', 'staffCategories', 'selectedTypeAllowenceId', 'selectedStaffCategoriId', 'amount', 'currency'));
     }
 
 
