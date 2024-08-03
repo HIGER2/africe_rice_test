@@ -768,6 +768,11 @@ padding:1rem;
         align-items: center;
         justify-content: center;
         // min-height: 100;
+        @media only screen and (max-width: 792px){
+            width: 100%;
+            display: block;
+            overflow: hidden;
+        }
         h2 {
         font-size: 12px;
         font-weight: 800;
@@ -782,11 +787,11 @@ padding:1rem;
             color: $primary-color;
         }
         form {
-        width: 600px;
+        // transform: scale(1);
+        // width: 400px;
         @media only screen and (max-width: 792px){
             width: 100%;
             overflow: hidden;
-
         }
 
             select,input {
@@ -853,7 +858,7 @@ padding:1rem;
 
         }
         .savebutton{
-            width: max-content;
+            width: 100%;
             padding: 13px 50px;
             // margin: 1rem 0;
             background-color: $secondary-color;
@@ -865,6 +870,8 @@ padding:1rem;
             cursor: pointer;
             margin-left: auto;
             margin-top:1rem;
+            position: sticky;
+            bottom: 1%;
         }
         .card{
         border-radius: 10px;
@@ -883,14 +890,15 @@ padding:1rem;
             height: 100%;
             overflow-y: auto;
             @media only screen and (max-width: 792px){
-            width: max-content;
+            width: 100%;
             overflow-x: scroll;
             }
         }
         table {
-        width: 100%;
+        width: max-content;
         border-collapse: collapse;
         justify-content: space-between;
+        // text-wrap: nowrap;
         // border-bottom: 1px solid $primary-color;
         thead {
             th {
@@ -922,6 +930,7 @@ padding:1rem;
                 // align-items: flex-start;
                 // text-align-last: unset;
                 vertical-align: top;
+                width: max-content;
             }
             &.staff{
                 display: flex;
@@ -936,8 +945,9 @@ padding:1rem;
                     width: calc(100% / 3);
                     padding:0 2px;
                       @media only screen and (max-width: 792px){
-                        width: max-content;
-                        overflow-x: scroll;
+                        width: 100%;
+                        // width: max-content;
+                        // overflow-x: scroll;
                         }
                     &:hover{
                         cursor: cell;
