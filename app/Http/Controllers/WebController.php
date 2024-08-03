@@ -6,6 +6,7 @@ use App\Models\Currency;
 use App\Models\Employee;
 use App\Models\EmployeeChild;
 use App\Models\EmployeeInformaton;
+use App\Models\ExchangeRate;
 use App\Models\TypeAllowance;
 use App\Notifications\EmployeeValidate;
 use Carbon\Carbon;
@@ -33,7 +34,7 @@ class WebController extends Controller
                 ->where('employees_id', $employee->employeeId)->first();
 
             $type = TypeAllowance::with('staff_categories')->get();
-            $currency = Currency::first();
+            $currency = ExchangeRate::first();
 
             // Session::put('type', $type);
             // Session::put('employee', $employee);
@@ -56,7 +57,7 @@ class WebController extends Controller
         }
 
         $type_allowence = TypeAllowance::with('staff_categories')->get();
-        $currency = Currency::first();
+        $currency = ExchangeRate::first();
         // $type_allowences = $type_allowence->staff_categories;
         $staffCategories = [];
         $selectedTypeAllowenceId = null;
@@ -88,7 +89,7 @@ class WebController extends Controller
 
             // return $request->all();
             $data = $request->type_allowance;
-            $currency = Currency::first();
+            $currency = ExchangeRate::first();
 
 
             $find_allowence = "";

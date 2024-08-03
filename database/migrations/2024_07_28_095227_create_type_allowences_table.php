@@ -31,13 +31,13 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('currency', function (Blueprint $table) {
+        Schema::create('exchange_rates', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('value');
             $table->timestamps();
         });
 
-        DB::table('currency')->insert([
+        DB::table('exchange_rates')->insert([
             'value' => 500,
         ]);
         // Définit les noms d'allowance
