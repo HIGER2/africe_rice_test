@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
 
-        let button = document.querySelector("#dropDown")
+    let button = document.querySelector("#dropDown")
 
         button.addEventListener("click", (event) => {
                 event.stopPropagation(); // Empêche la propagation de l'événement de clic au document
@@ -27,5 +27,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
 
     })
+
+    function confirmSubmit() {
+            // Afficher une alerte de confirmation
+            return confirm('Are you sure you want to submit the form?');
+        }
 
 });

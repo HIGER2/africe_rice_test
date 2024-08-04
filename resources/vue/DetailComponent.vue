@@ -28,7 +28,7 @@ const {
                     <span>{{separatorMillier(useManager.Total_T_W_F(type[0]))}} XOF</span>
                 </div>
                 <small class="info">
-                    {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
+                    {{ `(Staff=${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
                         +(spouse=${
                         useManager.user.marital_status == "yes"? separatorMillier(useManager.calculate_amount(type[0]?.staff_categories)) : 0})
 
@@ -43,7 +43,7 @@ const {
                 </div>
                 <!-- <img src="https://dashboard.quickshipper.app/icons/hor-line-thin.svg" alt=""> -->
                 <small class="info">
-                    {{ `(${useManager.Total_CHAMBRE(useManager.user.children)} Room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_categories)) }) x 7 days` }}
+                    {{ `(${useManager.Total_CHAMBRE(useManager.user.children)} Rooms x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_categories)) }) x 7 days` }}
                 </small>
                 <!-- {{ item?.staff_categories }} -->
             </li>
@@ -86,7 +86,7 @@ const {
                     <span>{{separatorMillier(useManager.Total_T_W_F(type[0])/useManager.currency)}} $</span>
                 </div>
                 <small class="info">
-                    {{ `(you=${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
+                    {{ `(Staff=${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
                         +(spouse=${
                         useManager.user.marital_status == "yes"? separatorMillier(useManager.calculate_amount(type[0]?.staff_categories)) : 0})
 
@@ -101,7 +101,7 @@ const {
                 </div>
                 <!-- <img src="https://dashboard.quickshipper.app/icons/hor-line-thin.svg" alt=""> -->
                 <small class="info">
-                    {{ `(${useManager.Total_CHAMBRE(useManager.user.children)} Room x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_categories)) }) x 7 days` }}
+                    {{ `(${useManager.Total_CHAMBRE(useManager.user.children)} Rooms x ${separatorMillier(useManager.calculate_amount(type[2]?.staff_categories)) }) x 7 days` }}
                 </small>
                 <!-- {{ item?.staff_categories }} -->
             </li>

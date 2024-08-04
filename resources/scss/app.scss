@@ -66,6 +66,26 @@ body {
 //   height: 100vh;
 }
 
+   .alert {
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+    .alert-success {
+        color: #166434;
+        background-color: #dcfce7;
+        border-color: #d6e9c6;
+    }
+
+    .alert-danger {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+
 .alert{
     padding: 10px;
     font-weight: 400;
@@ -756,215 +776,96 @@ padding:1rem;
 
 
 
-
 .setting{
     width: 100%;
-     @media only screen and (max-width: 792px){
+    @media only screen and (max-width: 792px){
             width: 100%;
-        }
+            }
     .container{
         width: 100%;
         display: flex;
-        align-items: center;
-        justify-content: center;
-        // min-height: 100;
+        gap: 1rem;
+        align-items: flex-start;
+        margin-inline: auto;
         @media only screen and (max-width: 792px){
             width: 100%;
-            display: block;
-            overflow: hidden;
-        }
+            flex-direction: column;
+            }
+    // min-height: 100;
         h2 {
         font-size: 12px;
         font-weight: 800;
-        text-transform: uppercase;
-        text-align: center;
-        margin: 10px 0;
         color: $primary-color;
+        margin-bottom: 10px;
         }
-        h5{
-            margin: 10px 0;
-            font-size: 13px;
-            color: $primary-color;
-        }
-        form {
-        // transform: scale(1);
-        // width: 400px;
-        @media only screen and (max-width: 792px){
-            width: 100%;
-            overflow: hidden;
-        }
-
-            select,input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid $input-border-color;
-            border-radius: $border-radius;
-            font-size: 12px;
-            &:focus{
-                border:2px solid $secondary-color;
-            }
-
-            &:hover{
-                cursor: cell;
-            }
-            }
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-            margin: 20px 0px;
-            width: 100%;
-            label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-            font-weight: 500;
-            font-size: 13px;
+            form {
                 @media only screen and (max-width: 792px){
-                font-size: 12px;
+                    width: 100%;
+                    top: 60px;
+                    position: sticky;
+                    // z-index: -1;
                 }
-            }
+                .form-group {
+                    margin-bottom: 15px;
+                    text-align: left;
+                    margin: 20px 0px;
+                    width: 100%;
+                    label {
+                    display: block;
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                    font-weight: 500;
+                    font-size: 13px;
+                     @media only screen and (max-width: 792px){
+                        font-size: 12px;
+                        }
+                    }
 
+                    select,input {
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid $input-border-color;
+                    border-radius: $border-radius;
+                    font-size: 12px;
+                    }
 
+                    span {
+                    font-size: 12px;
+                    color: $primary-color;
+                    }
+                }
+                .contentchild{
+                    width: 100%;
 
-            span {
-            font-size: 12px;
-            color: $primary-color;
-            }
-        }
-        .contentchild{
-            width: 100%;
+                    .rowinput{
+                        display: flex;
+                        gap: 10px;
+                        width: 100%;
+                    }
+                }
 
-            .rowinput{
-                display: flex;
-                gap: 10px;
-                width: 100%;
-            }
-        }
+                .login-button {
+                    width: 100%;
+                    padding: 10px 30px;
+                    background-color: $secondary-color;
+                    margin-top: 10px;
+                    color: $white;
+                    box-shadow: 0px 0px 2px #ccc;
+                    border: none;
+                    border-radius: 10px;
+                    font-size: 16px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                    cursor: pointer;
+                }
 
-        .login-button {
-            width: 100%;
-            padding: 10px 30px;
-            background-color: $secondary-color;
-            margin-top: 10px;
-            color: $white;
-            box-shadow: 0px 0px 2px #ccc;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            cursor: pointer;
-        }
-
-        }
-        .savebutton{
-            width: 100%;
-            padding: 13px 50px;
-            // margin: 1rem 0;
-            background-color: $secondary-color;
-            border-radius: 10px;
-            border: none;
-            color: $white;
-            font-weight: 600;
-            display: block;
-            cursor: pointer;
-            margin-left: auto;
-            margin-top:1rem;
-            position: sticky;
-            bottom: 1%;
-        }
+                }
         .card{
         border-radius: 10px;
         box-shadow: $shadow;
         background-color: $white;
-        padding: 1rem;
-        width: 100%;
-        height: 450px;
-        cursor: cell;
-        @media only screen and (max-width: 792px){
-            width: 100%;
-            // background-color: red;
-        }
-        .content-table{
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            @media only screen and (max-width: 792px){
-            width: 100%;
-            overflow-x: scroll;
-            }
-        }
-        table {
-        width: max-content;
-        border-collapse: collapse;
-        justify-content: space-between;
-        // text-wrap: nowrap;
-        // border-bottom: 1px solid $primary-color;
-        thead {
-            th {
-                padding: 20px 10px;
-                font-size: 12px;
-                text-align: left;
-                // color: $text_ligth;
-                // background-color:$treeth ;
-                // border: 1px solid $primary-color;
-            }
-
-        }
-
-
-    tr {
-            // border: 1px solid $primary-color;
-            width: 100%;
-            border-bottom: 1px solid $input-border-color;
-
-        td {
-            padding: 15px 15px;
-            font-size: 14px;
-            text-align: left;
-            font-weight: 300;
-            // width: calc(100% / 7);
-            // border: 1px solid red;
-            &:first-child{
-                // background-color: red;
-                // align-items: flex-start;
-                // text-align-last: unset;
-                vertical-align: top;
-                width: max-content;
-            }
-            &.staff{
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-            }
-            .element{
-                display: flex;
-                align-items: center;
-                width: 100%;
-                div{
-                    width: calc(100% / 3);
-                    padding:0 2px;
-                      @media only screen and (max-width: 792px){
-                        width: 100%;
-                        // width: max-content;
-                        // overflow-x: scroll;
-                        }
-                    &:hover{
-                        cursor: cell;
-                    }
-                    &:focus{
-                        border-color: $secondary-color;
-                        border-width: 2px;
-                    }
-                }
-            }
-
-        }
-    }
-
-
-
-    }
+        padding: 2rem;
+        width: 380px;
 
 
         p {
@@ -978,6 +879,58 @@ padding:1rem;
             width: 100%;
         }
 
+        }
+
+        .contentTable{
+        flex-grow: 1;
+        border-radius: 10px;
+        box-shadow: $shadow;
+        background-color: $white;
+        padding: 2rem;
+          @media only screen and (max-width: 792px){
+            width: 100%;
+            overflow-x: scroll;
+            z-index: 1;
+            }
+            .parentContent{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                // gap: 10px;
+                h6{
+                    font-size: 12px;
+                }
+            }
+            .content{
+                width: 100%;
+                display: flex;
+                // align-items: flex-start;
+                padding: 1rem 0;
+                 @media only screen and (max-width: 792px){
+                        width: 100%;
+                    flex-direction: column;
+                        }
+                .elementContent{
+                    display: flex;
+                    // flex-direction: column;
+                    gap: 10px;
+                    // border: 1px solid;
+                    border: 1px solid $input-border-color;
+                    padding: 10px;
+                    font-size: 13px;
+                    width: calc(100% / 4);
+                    justify-content: space-between;
+                    align-items: center;
+                     @media only screen and (max-width: 792px){
+                        width: 100%;
+                        }
+                    span{
+                        // width: calc(100% / 3);
+                        font-size: 12px;
+                    }
+                    // background-color: red;
+                }
+            }
         }
     }
 }

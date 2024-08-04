@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Collection;
 use App\Models\Currency;
 use App\Models\Employee;
 use App\Models\EmployeeChild;
 use App\Models\EmployeeInformaton;
 use App\Models\ExchangeRate;
+use App\Models\StaffCategorie;
 use App\Models\TypeAllowance;
 use App\Notifications\EmployeeValidate;
 use Carbon\Carbon;
@@ -16,11 +18,58 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class WebController extends Controller
 {
     //
 
+    public function newTypeAllowance($type_allowence)
+    {
+        $newTypeAllowance = collect();
+
+        foreach ($type_allowence as $data) {
+            $GSS1A5 = $data->staff_categories->slice(0, 5)->values();
+            $GSS6A9 = $data->staff_categories->slice(5, 4)->values();
+            $APS = $data->staff_categories->get(9);
+            $PS = $data->staff_categories->get(10);
+
+            // dd($GSS6A9);
+            $newTypeAllowance->push((object)[
+                "id" => $data->id,
+                "type" => $data->name,
+                "staff_categories" => [
+                    (object)[
+                        "id" => "GSS1-GSS5",
+                        "name" => "GSS1-GSS5",
+                        "amount" => $GSS1A5[0]->amount,
+                        "currency" => $GSS1A5[0]->currency
+                    ],
+                    (object)[
+                        "id" => "GSS6-GSS9",
+                        "name" => "GSS6-GSS9",
+                        "amount" => $GSS6A9[0]->amount,
+                        "currency" => $GSS6A9[0]->currency
+                    ],
+                    (object)[
+                        "id" => $APS->id,
+                        "name" => "APS",
+                        "amount" => $APS->amount,
+                        "currency" => $APS->currency
+                    ],
+
+                    (object)[
+                        "id" => $PS->id,
+                        "name" => "PS",
+                        "amount" => $PS->amount,
+                        "currency" => $PS->currency
+                    ],
+                ]
+            ]);
+        }
+
+        return  $newTypeAllowance;
+    }
     public function index()
     {
 
@@ -52,24 +101,187 @@ class WebController extends Controller
     public function setting()
     {
 
-        if (!Auth::guard('employees')->check()) {
-            return redirect()->route('login');
-        }
+        $type_allowence = TypeAllowance::get();
+        $rate = ExchangeRate::first();
 
-        $type_allowence = TypeAllowance::with('staff_categories')->get();
-        $currency = ExchangeRate::first();
         // $type_allowences = $type_allowence->staff_categories;
-        $staffCategories = [];
+        $staffCategories = collect();
         $selectedTypeAllowenceId = null;
         $selectedStaffCategoriId = null;
         $amount = null;
+        $currency = null;
+        $newTypeAllowance = $this->newTypeAllowance($type_allowence);
+        // Créer une nouvelle collection
 
-        // $dataSetting = (object)[
-        //     // "currency" => $currency['value'],
-        //     "type_allowence" => $type_allowence
-        // ];
 
-        return view('setting', compact('type_allowence', 'currency', 'staffCategories', 'selectedTypeAllowenceId', 'selectedStaffCategoriId', 'amount', 'currency'));
+        return view('setting', compact(
+            'type_allowence',
+            'newTypeAllowance',
+            'staffCategories',
+            'selectedTypeAllowenceId',
+            'selectedStaffCategoriId',
+            'amount',
+            'currency',
+            'rate'
+        ));
+    }
+
+
+    public function settingIndex(Request $request)
+    {
+
+
+
+        $type_allowence = TypeAllowance::get();
+        $rate = ExchangeRate::first();
+
+        $selectedTypeAllowenceId = $request->input('type_allowance_id');
+        $selectedStaffCategoriId = $request->input('staff_category_id');
+        $form_action = $request->input('form_action');
+        $newTypeAllowance = $this->newTypeAllowance($type_allowence);
+
+        // $find_allowence = TypeAllowance::find($selectedTypeAllowenceId);
+        // $staffCategories = $find_allowence ? $find_allowence->staff_categories : [];
+
+        $amount = null;
+        $currency = null;
+        $findCategorie = null;
+
+        $staffCategories = collect();
+
+        // selectionner les staff categorie d'un type
+        if ($selectedTypeAllowenceId) {
+
+            $found = $newTypeAllowance->firstWhere('id', $selectedTypeAllowenceId);
+            $staffCategories = $staffCategories->collapse()->merge($found->staff_categories);
+        }
+
+        if ($selectedTypeAllowenceId &&  $selectedStaffCategoriId) {
+
+            $found = $newTypeAllowance->firstWhere('id', $selectedTypeAllowenceId);
+
+            $categorie  = collect($found->staff_categories)->firstWhere('id', $selectedStaffCategoriId);
+            if ($categorie) {
+                $currency = $categorie->currency;
+                $amount = $categorie->amount;
+            }
+
+            // dd();
+        }
+
+
+
+        if ($form_action == "submit_final") {
+
+
+
+            $validator = Validator::make($request->all(), [
+                'currency' => 'required',
+                'amount' => 'required|numeric',
+                'staff_category_id' => 'required',
+            ]);
+
+            // $request->validate([
+            //     'currency' => 'required',
+            //     'amount' => 'required',
+            //     'staff_category_id' => 'required',
+            // ], [
+            //     'currency.required' => 'The currency field is required.',
+            //     'amount.required' => 'The amount field is required.',
+            //     'staff_category_id.required'
+            //     => 'The staff field is required.',
+            // ]);
+            try {
+
+                if ($request->rate != "" && ($request->rate  != $rate->value)) {
+
+                    $rate->update(['value' => $request->rate]);
+
+                    $succes = 'Rate updated successfully.';
+                    return view('setting', compact(
+                        'newTypeAllowance',
+                        'type_allowence',
+                        'staffCategories',
+                        'selectedTypeAllowenceId',
+                        'selectedStaffCategoriId',
+                        'amount',
+                        'currency',
+                        'rate',
+                        'succes'
+
+                    ));
+                }
+
+                if ($validator->validated()) {
+                    $findNew = $newTypeAllowance->firstWhere('id', $selectedTypeAllowenceId);
+
+                    $find_allowence = TypeAllowance::find($selectedTypeAllowenceId);
+                    $staffCategory = "";
+                    if ($selectedStaffCategoriId == "GSS6-GSS9") {
+                        $GSS6A9 = $find_allowence->staff_categories->slice(5, 4)->values();
+                        foreach ($GSS6A9 as $category) {
+                            $staffCategory = StaffCategorie::where('id', $category->id)->first();
+                            if ($staffCategory) {
+                                $staffCategory->amount = $request->amount;
+                                $staffCategory->currency = $request->currency;
+                                $staffCategory->save(); // Enregistrer les modifications
+                            }
+                        }
+                    } else if ($selectedStaffCategoriId == "GSS1-GSS5") {
+                        $GSS1A5 = $find_allowence->staff_categories->slice(0, 5)->values();
+                        foreach ($GSS1A5 as $category) {
+                            $staffCategory = StaffCategorie::where('id', $category->id)->first();
+                            if ($staffCategory) {
+                                $staffCategory->amount = $request->amount;
+                                $staffCategory->currency = $request->currency;
+                                $staffCategory->save(); // Enregistrer les modifications
+
+                            }
+                        }
+                    } else {
+                        $staffCategory = StaffCategorie::where('id', $selectedStaffCategoriId)->first();
+                        if ($staffCategory) {
+                            $staffCategory->amount = $request->amount;
+                            $staffCategory->currency = $request->currency;
+                            $staffCategory->save(); // Enregistrer les modifications
+
+                        }
+                    }
+
+                    $type_allowence = TypeAllowance::get();
+                    $newTypeAllowance = $this->newTypeAllowance($type_allowence);
+
+                    $currency = $request->currency;
+                    $amount = $request->amount;
+
+                    // session::flash('succes', 'Information updated successfully.');
+                    $succes = 'Information updated successfully.';
+                    return view('setting', compact(
+                        'newTypeAllowance',
+                        'type_allowence',
+                        'staffCategories',
+                        'selectedTypeAllowenceId',
+                        'selectedStaffCategoriId',
+                        'amount',
+                        'currency',
+                        'rate',
+                        'succes'
+
+                    ));
+
+                    // return redirect()->back()->with('success', 'Information updated successfully.');
+                }
+
+                // return view('setting', compact('type_allowence', 'staffCategories', 'selectedTypeAllowenceId', 'selectedStaffCategoriId', 'amount', 'currency'));
+
+            } catch (\Exception $e) {
+                // return redirect()->back()->with('error', 'Failed to update information. Please try again.')
+                //     ->with('errorDetails', $e->getMessage());
+            }
+        }
+        // Réinvoquez la vue avec les données nécessaires
+
+        return view('setting', compact('rate', 'newTypeAllowance', 'type_allowence', 'staffCategories', 'selectedTypeAllowenceId', 'selectedStaffCategoriId', 'amount', 'currency'));
     }
 
 
@@ -79,102 +291,6 @@ class WebController extends Controller
 
         if ($data) {
         }
-    }
-    public function settingIndex(Request $request)
-    {
-        try {
-
-            DB::beginTransaction();
-
-
-            // return $request->all();
-            $data = $request->type_allowance;
-            $currency = ExchangeRate::first();
-
-
-            $find_allowence = "";
-
-            // return $dat  a;
-            $response = [];
-            foreach ($data as $value) {
-                // return $value['id'];
-                $find_allowence = TypeAllowance::find($value['id']);
-                // return $find_allowence->staff_categories;
-
-                if ($find_allowence) {
-                    foreach ($value['staff_categories'] as $value2) {
-                        $staffCategory =  $find_allowence->staff_categories->find($value2['id']);
-                        if ($staffCategory) {
-                            $staffCategory->update($value2);
-                            $response[] = $find_allowence;
-                        }
-                    }
-                }
-            }
-
-            if ($request->currency != $currency->value) {
-                $currency->update(['value' => $request->currency]);
-            }
-
-
-            // return view('setting', compact('type_allowence', 'staffCategories', 'selectedTypeAllowenceId', 'selectedStaffCategoriId', 'amount', 'currency'));
-
-
-            DB::commit();
-            return response()->json([
-                'message' => "ok",
-                "data" => $request->currency
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'message' => "ok",
-                "error" => $th,
-            ], 500);
-            //throw $th;;
-        }
-        // if (!Auth::guard('employees')->check()) {
-        //     return redirect()->route('login');
-        // }
-        // $selectedTypeAllowenceId = $request->input('type_allowance_id');
-        // $selectedStaffCategoriId = $request->input('staff_category_id');
-        // $form_action = $request->input('form_action');
-
-
-        // $type_allowence = TypeAllowance::with('staff_categories')->get();
-        // $find_allowence = TypeAllowance::find($selectedTypeAllowenceId);
-        // $staffCategories = $find_allowence ? $find_allowence->staff_categories : [];
-
-        // $amount = null;
-        // $currency = null;
-        // $findCategorie = null;
-
-
-        // if ($selectedTypeAllowenceId && $selectedStaffCategoriId) {
-        //     $findCategorie =  $find_allowence->staff_categories->find($selectedStaffCategoriId);
-        //     if ($findCategorie) {
-        //         $amount = $findCategorie->amount;
-        //         $currency = $findCategorie->currency;
-        //     }
-        // }
-        // // Vérifiez si des catégories de personnel existent
-        // // $hasStaffCategories = $staffCategories->isNotEmpty();
-
-        // if ($form_action == "submit_final" && $findCategorie) {
-        //     try {
-        //         $findCategorie->amount = $request->amount;
-        //         $findCategorie->currency = $request->currency;
-        //         $findCategorie->save();
-        //         $amount = $findCategorie->amount;
-        //         $currency = $findCategorie->currency;
-        //         return view('setting', compact('type_allowence', 'staffCategories', 'selectedTypeAllowenceId', 'selectedStaffCategoriId', 'amount', 'currency'));
-
-        //         return redirect()->back()->with('success', 'Information updated successfully.');
-        //     } catch (\Exception $e) {
-        //         return redirect()->back()->with('error', 'Failed to update information. Please try again.')
-        //             ->with('errorDetails', $e->getMessage());
-        //     }
-        // }
-        // Réinvoquez la vue avec les données nécessaires
     }
 
 
