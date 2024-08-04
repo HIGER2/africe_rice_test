@@ -41,13 +41,13 @@ class WebController extends Controller
                 "staff_categories" => [
                     (object)[
                         "id" => "GSS1-GSS5",
-                        "name" => "GSS1-GSS5",
+                        "name" => "GSS 1-5",
                         "amount" => $GSS1A5[0]->amount,
                         "currency" => $GSS1A5[0]->currency
                     ],
                     (object)[
                         "id" => "GSS6-GSS9",
-                        "name" => "GSS6-GSS9",
+                        "name" => "GSS 6-9",
                         "amount" => $GSS6A9[0]->amount,
                         "currency" => $GSS6A9[0]->currency
                     ],
