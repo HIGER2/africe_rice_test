@@ -81,8 +81,9 @@ class WebController extends Controller
             $employee = Auth::guard('employees')->user();
             $formData = EmployeeInformaton::with('children')
                 ->where('employees_id', $employee->employeeId)->first();
-
-            $type = TypeAllowance::with('staff_categories')->get();
+            $type = TypeAllowance::with('staff_categories')
+                ->where('id', '!=', 5)
+                ->get();
             $currency = ExchangeRate::first();
 
             // Session::put('type', $type);
@@ -119,7 +120,7 @@ class WebController extends Controller
     public function setting()
     {
 
-        $type_allowence = TypeAllowance::get();
+        $type_allowence = TypeAllowance::where('id', '!=', 5)->get();
         $rate = ExchangeRate::first();
 
         // $type_allowences = $type_allowence->staff_categories;
@@ -235,6 +236,7 @@ class WebController extends Controller
 
                     $find_allowence = TypeAllowance::find($selectedTypeAllowenceId);
                     $staffCategory = "";
+
                     if ($selectedStaffCategoriId == "GSS6-GSS9") {
                         $GSS6A9 = $find_allowence->staff_categories->slice(5, 4)->values();
                         foreach ($GSS6A9 as $category) {
@@ -266,7 +268,7 @@ class WebController extends Controller
                         }
                     }
 
-                    $type_allowence = TypeAllowance::get();
+                    $type_allowence = TypeAllowance::where('id', '!=', 5)->get();
                     $newTypeAllowance = $this->newTypeAllowance($type_allowence);
 
                     $currency = $request->currency;

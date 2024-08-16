@@ -14,12 +14,25 @@ let minDate = today.toISOString().split('T')[0];
 today.setDate(today.getDate() + 30);
 
 // Obtenir la date au format ISO (YYYY-MM-DD) pour l'attribut max
-let maxDate = today.toISOString().split('T')[0];
+let maxDate = today.toISOString().split('T')[ 0 ];
+
+let checkDate = () => {
+    if (useManager.user.taking_date != "") {
+        let newDate = today.toISOString().split('T')[ 0 ]
+        if (useManager.user.taking_date < newDate) {
+            useManager.user.taking_date = ""
+        }
+    }
+
+
+}
 // today.setDate(today.getDate() + 30);
 
 // Afficher la nouvelle date
 // console.log(today);
 // console.log(today.toISOString());
+
+
 const onSave = async (type) => {
 
     let confirmS = confirm('are you sure you want to save')
@@ -106,9 +119,10 @@ const count = () => {
                                 placeholder="Enter your departure date" required>
                         </div>
                         <div class="form-group">
-                            <label for="number">Date of taking up office</label>
+                            <label for="number">Date of taking up office (from 30 days)</label>
                             <input type="date"
                                 v-model="useManager.user.taking_date"
+                                @input="checkDate()"
                                 :min="maxDate"
                                 :disabled="data?.status_input"
                                 name="date"
@@ -148,7 +162,7 @@ const count = () => {
                                     @input="limit_age(index)"
                                     :disabled="data?.status_input" v-model="item.age" id="age" min="0"
                                     max="23"
-                                        name="age" placeholder="Enter age" required>
+                                    name="age" placeholder="Enter age" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Sex</label>

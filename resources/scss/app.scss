@@ -380,7 +380,7 @@ padding:1rem;
             justify-content: center;
             gap: 5px;
             margin-inline: auto;
-            // background-color: #fff;
+            // background-color: red;
             // padding: 1rem;
             border-radius: 10px;
             // background-color: red;
@@ -460,10 +460,7 @@ padding:1rem;
                     }
                 }
                 &:last-child{
-                    width: 70%;
-                    // display: none;
-
-                    // background-color: red;
+                    width: 40%;
                     position: sticky;
                     top: 60px;
                     @media only screen and (max-width: 792px){
@@ -473,6 +470,8 @@ padding:1rem;
                     }
                     .card{
                         padding: 1rem;
+                        // background-color: green;
+                        width: 100%;
                     }
                 }
                 form {
@@ -543,14 +542,14 @@ padding:1rem;
                     }
                 }
                 .items{
-                    width: 50%;
+                    width: 100%;
                     padding: 10px;
                     @media only screen and (max-width: 792px){
                         position: relative;
                         width: 100%;
                     }
                     &:first-child{
-                        border-right: 1px solid #e0e0e0;
+                        // border-right: 1px solid #e0e0e0;
                     @media only screen and (max-width: 792px){
                        border: none;
                     }
@@ -969,7 +968,6 @@ padding:1rem;
             width: 100%;
             display: flex;
             align-items: center;
-            // justify-content: space-between;
             margin: 15px 0;
             gap: 10px;
             .box{
@@ -979,6 +977,7 @@ padding:1rem;
                 padding: 10px;
                 border-radius: 10px;
                 display: flex;
+                font-size: 13px;
                 gap: 5px;
                 display: flex;
                 align-items: center;
@@ -1001,7 +1000,6 @@ padding:1rem;
                     width: 15px;
                     height: 15px;
                     border-radius: 50%;
-                    // background-color: blue;
                     color: $secondary-color;
                     display: grid;
                     place-items: center;

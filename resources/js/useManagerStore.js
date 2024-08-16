@@ -282,7 +282,7 @@ const Total_F_I_A = (item,children) => {
         user.total_p_e_t=calculate(type[1])
         user.total_f_i_a = Total_F_I_A(type[2],user.children)
         user.total_u =calculate(type[3])
-        user.total_p_c_a = calculate(type[4])
+        // user.total_p_c_a = calculate(type[4])
         user.total_amount = Total_Amount(type)
         user.room = Total_CHAMBRE(user.children)
 
@@ -297,9 +297,9 @@ const Total_F_I_A = (item,children) => {
                 // transition:customAnimation
                 });
 
-                // setTimeout(() => {
-                // location.reload()
-                // }, 500);
+                setTimeout(() => {
+                location.reload()
+                }, 500);
 
             })
          .catch(error => {
