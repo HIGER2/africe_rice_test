@@ -28,9 +28,7 @@
                         placeholder="Update exchange rate" >
                     </div>
                     <h2>Update amount Staff Category</h2>
-                         <!-- Display success messages -->
-
-
+                        <!-- Display success messages -->
                         <div class="form-group">
                             {{-- {{$type_allowence}} --}}
                             <label for="tA">Select Type of Allowance</label>
@@ -97,7 +95,8 @@
                     update
                 </button>
         </form>
-         <div class="contentTable">
+        <div class="contentTable">
+            {{-- <a href="/liste">voir la liste</a> --}}
             @foreach ($newTypeAllowance as $data )
             <div class="parentContent">
                 <h6>{{$data->type }}</h6>

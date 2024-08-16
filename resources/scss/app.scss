@@ -936,3 +936,222 @@ padding:1rem;
 }
 
 
+
+
+.liste{
+    width: 100%;
+        @media only screen and (max-width: 792px){
+            width: 100%;
+            }
+    .container{
+        width: 85%;
+        min-width: 800px;
+        // display: grid;
+        // place-items: center;
+        margin-inline: auto;
+        @media only screen and (max-width: 792px){
+            width: 100%;
+            }
+    // min-height: 100;
+        h2 {
+        font-size: 12px;
+        font-weight: 800;
+        color: $primary-color;
+        margin-bottom: 10px;
+        }
+       .card{
+            width: 100%;
+            h5{
+                font-size: 17px;
+                margin-bottom: 10px;
+            }
+        .boxItem{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            // justify-content: space-between;
+            margin: 15px 0;
+            gap: 10px;
+            .box{
+                // width: calc(100% / 3);
+                background-color: $white;
+                box-shadow: $shadow;
+                padding: 10px;
+                border-radius: 10px;
+                display: flex;
+                gap: 5px;
+                display: flex;
+                align-items: center;
+                &:nth-child(1){
+                        .ico{
+                            background-color: orange;
+                        }
+                    }
+                      &:nth-child(2){
+                        .ico{
+                            background-color: #047131;
+                        }
+                    }
+                    &:nth-child(3){
+                        .ico{
+                            background-color: red;
+                        }
+                    }
+                .ico{
+                    width: 15px;
+                    height: 15px;
+                    border-radius: 50%;
+                    // background-color: blue;
+                    color: $secondary-color;
+                    display: grid;
+                    place-items: center;
+
+                }
+            }
+        }
+        .contentTable {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: $shadow;
+            background-color: $white;
+            // width: max-content;
+            overflow: hidden;
+             .empty{
+                    text-align: center;
+                    padding: 1rem;
+                    width: 100%;
+                }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                justify-content: space-between;
+                color: $primary-color;
+                font-size: 12px;
+                thead {
+                    th {
+                        padding: 16px 20px;
+                        text-align: left;
+                        background-color:$background-color;
+                        // border-bottom: 1px solid $grey;
+                    }
+
+                }
+
+                tbody{
+                tr {
+                    cursor: pointer;
+                    border-bottom: 1px solid #e0e0e0;
+                    width: 100%;
+                        td {
+                            padding: 15px 20px;
+                            text-align: left;
+                            font-weight: 400;
+                            width: calc(100% / 7);
+
+                            .ico{
+                                width: 40px;
+                                height: 40px;
+                                background-color: #dcfce7;
+                                color: #166434;
+                                border-radius: 50%;
+                            }
+                            &.user{
+                                display: flex;
+                                align-items: center;
+                                gap: 5px;
+                                .info{
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 3px;
+                                    span{
+                                        &:first-child{
+                                            font-weight: 500;
+                                        }
+
+                                        &:last-child{
+                                        color: $text;
+                                        }
+                                    }
+                                }
+                            }
+
+                            &.id {
+                                text-transform: uppercase;
+
+                            }
+
+                        .element{
+
+                            &.element2{
+                                width: calc(100% - 1px);
+                            }
+                            .text-wrap{
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            }
+
+                            .btn{
+                                // width: ;
+                                // background-color: $treeth;
+                                padding:10px 15px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                border-radius: 5px;
+                                cursor: pointer;
+                                border: 1px solid #ccc;
+
+                            }
+                            .route{
+                                display: flex;
+                                flex-direction: column;
+                                row-gap: 20px;
+                                position: relative;
+                                .addresse{
+                                    font-style: normal;
+                                    font-weight: 400;
+                                    font-size: 14px;
+                                    line-height: 17px;
+                                    color: #000;
+                                    padding-left: 21px;
+                                    position: relative;
+                                    width: 150px;
+                                    &::before{
+                                        content: "";
+                                        display: block;
+                                        width: 10px;
+                                        height: 10px;
+                                        background: #fff;
+                                        border: 1px solid #b0b0b0;
+                                        border-radius: 50%;
+                                        position: absolute;
+                                        left: 0;
+                                        top: 2px;
+                                        z-index: 2;
+                                    }
+                                }
+                                img {
+                                    position: absolute;
+                                    left: 5px;
+                                    top: 9px;
+                                    z-index: 1;
+                                    height: 40px;
+                                }
+                            }
+
+                        }
+
+
+
+                        }
+                    }
+                }
+
+            }
+        }
+       }
+    }
+}
+
+

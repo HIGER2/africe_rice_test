@@ -8,15 +8,26 @@ const useManager = useManagerStore();
 const isLoading = ref(false);
 const today = new Date();
 
+let minDate = today.toISOString().split('T')[0];
+
+        // Ajouter 30 jours
+today.setDate(today.getDate() + 30);
+
+// Obtenir la date au format ISO (YYYY-MM-DD) pour l'attribut max
+let maxDate = today.toISOString().split('T')[0];
+// today.setDate(today.getDate() + 30);
+
+// Afficher la nouvelle date
+// console.log(today);
 // console.log(today.toISOString());
 const onSave = async (type) => {
 
     let confirmS = confirm('are you sure you want to save')
     if (confirmS) {
         isLoading.value = true
-    await save(type)
-    isLoading.value = false
-    scrollTo(0,0)
+        await save(type)
+        isLoading.value = false
+        scrollTo(0,0)
     }
 
  }
@@ -86,10 +97,19 @@ const count = () => {
                     <div class="card">
                         <h5 > General information </h5>
                         <div class="form-group">
-                            <label for="number">Enter your departure date</label>
+                            <label for="number">departure date</label>
                             <input type="date"
                                 v-model="useManager.user.depart_date"
-                                :min="today.toISOString().slice(0, 10)"
+                                :min="minDate"
+                                :disabled="data?.status_input"
+                                name="date"
+                                placeholder="Enter your departure date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="number">Date of taking up office</label>
+                            <input type="date"
+                                v-model="useManager.user.taking_date"
+                                :min="maxDate"
                                 :disabled="data?.status_input"
                                 name="date"
                                 placeholder="Enter your departure date" required>

@@ -9,6 +9,7 @@ class TypeAllowance extends Model
 {
     use HasFactory;
 
+    
 
     public function staff_categories()
     {

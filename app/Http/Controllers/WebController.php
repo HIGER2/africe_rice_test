@@ -98,6 +98,24 @@ class WebController extends Controller
         }
     }
 
+    public function showInformations()
+    {
+
+        if (Auth::guard('employees')->check()) {
+
+            $employee = Auth::guard('employees')->user();
+            $liste = EmployeeInformaton::with('employees')->get();
+            $all =  $liste->count();
+            $pending =  $liste->where('status', null)->count();
+            $approuve =  $liste->where('status', 'approved')->count();
+            $rejected =  $liste->where('status', 'rejected')->count();
+            return view('liste', compact('liste', 'pending', 'approuve', 'rejected', 'all'));
+        } else {
+            return redirect()->route('login');
+            // return redirect()->route('login', compact('type', 'employee', 'formData'));
+        }
+    }
+
     public function setting()
     {
 
@@ -304,6 +322,7 @@ class WebController extends Controller
         return redirect()->route('home')->with('success', 'Employé supprimé avec succès');
     }
 
+    // methode pour gerer le statut de la demande
     public function handleAction($id, $action)
     {
 
@@ -321,6 +340,12 @@ class WebController extends Controller
                 // Logique pour approuver le formulaire
                 $form->status = 'approved';
                 $form->save();
+                $employee = $form->employees;
+
+                if ($employee->supervisor) {
+                    // Envoyer une notification au supérieur
+                    $employee->supervisor->notify(new EmployeeValidate($employee, $form, 'form_validate'));
+                }
                 // session::flash('message', 'Formulaire approuvé');
             } elseif ($action === 'reject') {
                 // Logique pour rejeter le formulaire
@@ -338,12 +363,14 @@ class WebController extends Controller
         }
     }
 
+    // afficher le statut de la demande
     public function showStatus($action)
     {
         // Cette méthode est appelée pour afficher le message
         return view('form_status', ['action' => $action]);
     }
 
+    // methode de connexon
     public function login(Request $request)
     {
 
@@ -365,7 +392,37 @@ class WebController extends Controller
 
         $attemptWithNumero = Auth::guard('employees')->attempt(['email' => $request->input('email'), 'password' => $request->input('password')]);
 
+        if (!$attemptWithNumero) {
+            return back()->withErrors([
+                'message' => 'Les informations d\'identification ne correspondent pas.',
+            ]);
+        }
 
+
+        // if ($employee && Hash::check($request->input('password'), $employee->password)) {
+        //     // Authentification réussie
+        //     Auth::guard('employees')->login($employee);
+
+        //     return redirect()->intended('employees/dashboard');
+        // } else {
+        //     return back()->withErrors([
+        //         'message' => 'Les informations d\'identification ne correspondent pas.',
+        //     ]);
+        // }
+
+
+
+
+        // $attemptWithNumero = Auth::guard('employees')->attempt([
+        //     'email' => $request->input('email'),
+        //     'password' => $request->input('password'),
+        // ]);
+
+        // if (!$attemptWithNumero) {
+        //     return back()->withErrors([
+        //         'message' => 'Les informations d\'identification ne correspondent pas.',
+        //     ]);
+        // }
 
         // $request->session()->regenerate();
 
@@ -375,13 +432,112 @@ class WebController extends Controller
         // dd($employee->name);
         session::put('user', $employee);
 
-        if (!$attemptWithNumero) {
-            return back()->withErrors([
-                'message' => 'Les informations d\'identification ne correspondent pas.',
-            ]);
-        }
+
         return redirect()->route('home');
     }
+
+    // sauvegarder la demande de l'utilisateur
+    // public function save(Request $request)
+    // {
+
+    //     try {
+    //         DB::beginTransaction();
+    //         if (Auth::guard('employees')->check()) {
+
+    //             $employee = Auth::guard('employees')->user();
+    //             $infoExist = EmployeeInformaton::where('employees_id', $employee->employeeId)->first();
+
+    //             $dateMaxe = Carbon::now()->addDays(30)->toDateString();
+
+    //             if ($dateMaxe != $request->taking_date) {
+    //                 return response()->json([
+    //                     'message' => 'la date de prise de fonction doit etre au dela de 30 jours ',
+    //                     'data' => $infoExist
+    //                 ], 400);
+    //             }
+    //             // dd();
+    //             // if () {
+    //             //     # code...
+    //             // }
+    //             // return $employee;
+    //             // return $employee->supervisor;
+
+    //             // $supervisor =
+    //             // Carbon::setLocale('fr');
+    //             // // Convertir et formater la date
+    //             $infoExist->depart_date = Carbon::parse($infoExist->depart_date)->translatedFormat('d F Y');
+
+    //             if ($employee->supervisor) {
+    //                 // Envoyer une notification au supérieur
+    //                 $employee->supervisor->notify(new EmployeeValidate($employee, $infoExist));
+    //             }
+    //             // return $employee->supervisor;
+
+    //             if ($infoExist) {
+    //                 return response()->json([
+    //                     'message' => 'vous avez déja une demande en cours',
+    //                     'data' => $infoExist
+    //                 ], 401);
+    //             }
+
+
+    //             $information = $request->except('child');
+    //             $information['status_input'] = true;
+    //             $information['category'] = $employee->category;
+    //             $information['employees_id'] = $employee->employeeId;
+    //             $response = EmployeeInformaton::create($information);
+
+    //             $children = [];
+
+    //             // return $request->children;
+
+    //             if ($request->children) {
+    //                 foreach ($request->children as $data) {
+    //                     $data['employee_informatons_id'] = $response->id;
+    //                     $children[] = EmployeeChild::create($data);
+    //                 }
+    //             }
+    //             $response->children = $children;
+    //             Session::put('formData', $response);
+
+    //             $response->depart_date = Carbon::parse($response->depart_date)->translatedFormat('d F Y');
+
+    //             Carbon::setLocale('fr');
+    //             // Convertir et formater la date
+
+    //             if ($employee->supervisor) {
+    //                 // Envoyer une notification au supérieur
+    //                 $employee->supervisor->notify(new EmployeeValidate($employee, $response));
+    //             }
+
+    //             DB::commit();
+    //             // Log::info('Notification envoyée avec succès à ' . $employee->supervisor->email);
+    //             return response()->json(
+    //                 [
+    //                     'message' => 'information enregistré',
+    //                     'data' => $response,
+    //                     'error' => null
+    //                 ],
+    //                 200
+    //             );
+    //         } else {
+    //             return redirect()->route('login');
+    //         }
+
+    //         return view('home', compact('employee', 'type'));
+    //     } catch (\Throwable $th) {
+    //         DB::rollBack();
+    //         Log::error('Erreur lors de l\'envoi de la notification : ' . $th->getMessage());
+    //         return response()->json(
+    //             [
+    //                 'message' => "une erreur s'est produite",
+    //                 'data' => null,
+    //                 'error' => $th->getMessage()
+    //             ],
+    //             500
+    //         );
+    //     }
+    // }
 
     public function save(Request $request)
     {
@@ -393,6 +549,14 @@ class WebController extends Controller
                 $employee = Auth::guard('employees')->user();
                 $infoExist = EmployeeInformaton::where('employees_id', $employee->employeeId)->first();
 
+                $dateMaxe = Carbon::now()->addDays(30)->toDateString();
+
+                if ($dateMaxe != $request->taking_date) {
+                    return response()->json([
+                        'message' => 'la date de prise de fonction doit etre au dela de 30 jours ',
+                        'data' => $infoExist
+                    ], 400);
+                }
                 // return $employee;
                 // return $employee->supervisor;
 
@@ -441,12 +605,10 @@ class WebController extends Controller
 
                 if ($employee->supervisor) {
                     // Envoyer une notification au supérieur
-                    $employee->supervisor->notify(new EmployeeValidate($employee, $response));
+                    $employee->supervisor->notify(new EmployeeValidate($employee, $response, 'form_submission'));
                 }
 
-
                 DB::commit();
-                Log::info('Notification envoyée avec succès à ' . $employee->supervisor->email);
                 return response()->json(
                     [
                         'message' => 'information enregistré',
@@ -463,7 +625,6 @@ class WebController extends Controller
             return view('home', compact('employee', 'type'));
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Erreur lors de l\'envoi de la notification : ' . $th->getMessage());
             return response()->json(
                 [
                     'message' => "une erreur s'est produite",
@@ -475,6 +636,7 @@ class WebController extends Controller
         }
     }
 
+    // deconexion de lutilisateur
     public function logout()
     {
         // Déconnecter l'utilisateur du guard 'employees'

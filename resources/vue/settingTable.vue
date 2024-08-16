@@ -48,7 +48,7 @@ onMounted(() => {
                 <h5>Update Staff Category Amount</h5>
             <div class="card">
                 <div class="content-table">
-                      <table>
+                    <table>
                     <!-- <thead>
                         <tr>
                             <th>Type of Allowance</th>

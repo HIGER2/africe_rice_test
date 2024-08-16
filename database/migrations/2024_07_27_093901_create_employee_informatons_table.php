@@ -31,6 +31,7 @@ return new class extends Migration
             $table->bigInteger('total_p_c_a')->nullable();
             $table->bigInteger('total_amount')->nullable();
             $table->date('depart_date')->nullable();
+            $table->date('taking_date')->nullable();
             $table->integer('number_child')->nullable()->default(0);
             $table->string('category')->nullable();
             $table->timestamps();

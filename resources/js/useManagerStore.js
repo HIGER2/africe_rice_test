@@ -11,7 +11,8 @@ export const useManagerStore = defineStore('manager',() => {
     const user = reactive({
         "marital_status": "",
         "number_child": "",
-        "depart_date":"",
+        "depart_date": "",
+        "taking_date":"",
         "children": [],
         "room": 1,
         "amount":0,
@@ -296,9 +297,9 @@ const Total_F_I_A = (item,children) => {
                 // transition:customAnimation
                 });
 
-             setTimeout(() => {
-             location.reload()
-             }, 500);
+                // setTimeout(() => {
+                // location.reload()
+                // }, 500);
 
             })
          .catch(error => {

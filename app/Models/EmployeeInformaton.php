@@ -13,6 +13,7 @@ class EmployeeInformaton extends Model
         'marital_status',
         'number_child',
         "depart_date",
+        "taking_date",
         'category',
         'status',
         "status_input",
@@ -30,5 +31,11 @@ class EmployeeInformaton extends Model
     {
 
         return  $this->hasMany(EmployeeChild::class, 'employee_informatons_id', 'id');
+    }
+
+    public function employees()
+    {
+
+        return  $this->belongsTo(Employee::class, 'employees_id', 'employeeId');
     }
 }
