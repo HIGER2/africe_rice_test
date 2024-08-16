@@ -28,7 +28,7 @@
              <div class="box">
                 <div class="ico"></div>
                 <div>
-                    Requests approve
+                     Approved
                 </div>
                  <div>
                    ({{$approuve}})
@@ -37,7 +37,7 @@
              <div class="box">
                 <div class="ico"></div>
                 <div>
-                    Requests rejected
+                     Rejected
                 </div>
                  <div>
                     ({{$rejected}})
