@@ -79,8 +79,6 @@ class WebController extends Controller
     {
 
 
-        // dd("douma");
-
         if (Auth::guard('employees')->check()) {
 
             $employee = Auth::guard('employees')->user();
@@ -90,12 +88,6 @@ class WebController extends Controller
                 ->where('id', '!=', 5)
                 ->get();
             $currency = ExchangeRate::first();
-
-            // Session::put('type', $type);
-            // Session::put('employee', $employee);
-            // Session::put('formData', $infoGet);
-
-            // return view('home', compact('type', 'employee', 'formData'));
 
             return view('home', compact('employee', 'type', 'formData', 'currency'));
         } else {
@@ -345,8 +337,8 @@ class WebController extends Controller
 
             if ($action === 'approve') {
                 // Logique pour approuver le formulaire
-                $form->status = 'approved';
-                $form->save();
+                // $form->status = 'approved';
+                // $form->save();
                 $employee = $form->employees;
                 Carbon::setLocale('fr');
                 $depart_date = Carbon::parse($form->depart_date)->translatedFormat('l d F Y');
@@ -381,8 +373,8 @@ class WebController extends Controller
                 // session::flash('message', 'Formulaire approuvé');
             } elseif ($action === 'reject') {
                 // Logique pour rejeter le formulaire
-                $form->status = 'rejected';
-                $form->save();
+                // $form->status = 'rejected';
+                // $form->save();
                 // session::flash('message', 'Formulaire rejeté');
             } else {
                 // session::flash('message', 'Action invalide');

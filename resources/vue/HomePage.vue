@@ -145,6 +145,7 @@ if (data) {
                     <h5> Summary </h5>
 
                     <div v-if="data?.status_input">
+                        {{ data?.status }}
                             <template v-if="data?.status">
                             <div class="status approuve" v-if="data?.status == 'approved'">
                             approved
