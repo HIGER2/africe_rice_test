@@ -337,8 +337,8 @@ class WebController extends Controller
 
             if ($action === 'approve') {
                 // Logique pour approuver le formulaire
-                // $form->status = 'approved';
-                // $form->save();
+                $form->status = 'approved';
+                $form->save();
                 $employee = $form->employees;
                 Carbon::setLocale('fr');
                 $depart_date = Carbon::parse($form->depart_date)->translatedFormat('l d F Y');
@@ -373,8 +373,8 @@ class WebController extends Controller
                 // session::flash('message', 'Formulaire approuvé');
             } elseif ($action === 'reject') {
                 // Logique pour rejeter le formulaire
-                // $form->status = 'rejected';
-                // $form->save();
+                $form->status = 'rejected';
+                $form->save();
                 // session::flash('message', 'Formulaire rejeté');
             } else {
                 // session::flash('message', 'Action invalide');
