@@ -334,16 +334,15 @@ class WebController extends Controller
                 // Génère une erreur 404 avec un message personnalisé
                 return  abort(404, 'Le formulaire demandé n\'existe pas.');
             }
+            $employee = $form->employees;
 
             if ($action === 'approve') {
                 // Logique pour approuver le formulaire
                 $form->status = 'approved';
                 $form->save();
-                $employee = $form->employees;
                 Carbon::setLocale('fr');
                 $depart_date = Carbon::parse($form->depart_date)->translatedFormat('l d F Y');
                 $taking_date = Carbon::parse($form->taking_date)->translatedFormat('l d F Y');
-
                 $message = "la demande de l'utilisateur {$employee->firstName} {$employee->lastName} à été approuvée.Le montant à verser est de {$form->total_amount} CFA.\n La date de départ {$depart_date}\n.Prise de fonction {$taking_date}.
                     ";
                 $recipients = [
@@ -352,12 +351,12 @@ class WebController extends Controller
                         'message' => $message,
                     ],
                     (object)[
-                        'email' => 'user2@example.com',
-                        'message' => $message,
+                        'email' => $employee->supervisor->email,
+                        'message' => "vous avez approuvé la demande de départ de  {$employee->firstName} {$employee->lastName}",
                     ],
                     (object)[
-                        'email' => 'user3@example.com',
-                        'message' => $message,
+                        'email' => $employee->email,
+                        'message' => "votre demande a été approuvé",
                     ]
                 ]; // Liste des e-mails
                 // $data = ['message' => 'Ceci est un e-mail groupé envoyé à plusieurs utilisateurs.'];
@@ -366,15 +365,16 @@ class WebController extends Controller
                 }
 
 
-                // if ($employee->supervisor) {
-                //     // Envoyer une notification au supérieur
-                //     $employee->supervisor->notify(new EmployeeValidate($employee, $form, 'form_validate'));
-                // }
+
                 // session::flash('message', 'Formulaire approuvé');
             } elseif ($action === 'reject') {
                 // Logique pour rejeter le formulaire
                 $form->status = 'rejected';
                 $form->save();
+                if ($employee->supervisor) {
+                    // Envoyer une notification au supérieur
+                    $employee->supervisor->notify(new EmployeeValidate($employee, $form, 'form_validate'));
+                }
                 // session::flash('message', 'Formulaire rejeté');
             } else {
                 // session::flash('message', 'Action invalide');
