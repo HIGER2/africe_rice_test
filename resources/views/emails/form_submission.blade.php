@@ -1,4 +1,4 @@
-@component('mail::message')
+{{-- @component('mail::message')
 # Nouveau formulaire soumis
 
 Bonjour,
@@ -19,4 +19,4 @@ Merci de vérifier.
 
 Cordialement,<br>
 {{ config('app.name') }} --}}
-@endcomponent
+@endcomponent --}}
