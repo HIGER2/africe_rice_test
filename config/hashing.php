@@ -14,6 +14,7 @@ return [
     | Supported: "bcrypt", "argon", "argon2id"
     |
     */
+    'default' => env('HASH_DRIVER', 'bcrypt'),
 
     'driver' => env('HASH_DRIVER', 'bcrypt'),
 

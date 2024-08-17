@@ -10,7 +10,9 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-
+    protected $table = 'employees';
+    public $timestamps = false; // Désactiver les timestamps automatiques
+    protected $primaryKey = "employeeId";
     /**
      * The attributes that are mass assignable.
      *

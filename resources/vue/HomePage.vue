@@ -160,9 +160,9 @@ if (data) {
                         </template>
                     </div>
                    </div>
-                   <div class="rate">
+                   <!-- <div class="rate">
                         <span>Exchange rate : 1 USD = {{ useManager.currency }} XOF </span>
-                   </div>
+                   </div> -->
                     <template v-if="data?.status_input">
                     <DetailComponentValidate
                     :type="type"

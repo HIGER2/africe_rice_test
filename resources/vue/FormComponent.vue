@@ -16,11 +16,11 @@ today.setDate(today.getDate() + 30);
 // Obtenir la date au format ISO (YYYY-MM-DD) pour l'attribut max
 let maxDate = today.toISOString().split('T')[ 0 ];
 
-let checkDate = () => {
-    if (useManager.user.taking_date != "") {
+let checkDate = (key) => {
+    if (useManager.user[key] != "") {
         let newDate = today.toISOString().split('T')[ 0 ]
-        if (useManager.user.taking_date < newDate) {
-            useManager.user.taking_date = ""
+        if (useManager.user[key] < newDate) {
+            useManager.user[key] = ""
         }
     }
 
@@ -113,16 +113,17 @@ const count = () => {
                             <label for="number">departure date</label>
                             <input type="date"
                                 v-model="useManager.user.depart_date"
-                                :min="minDate"
+                                :min="maxDate"
+                                @input="checkDate('depart_date')"
                                 :disabled="data?.status_input"
                                 name="date"
                                 placeholder="Enter your departure date" required>
                         </div>
                         <div class="form-group">
-                            <label for="number">Date of taking up office (from 30 days)</label>
+                            <label for="number">Date of taking up office</label>
                             <input type="date"
                                 v-model="useManager.user.taking_date"
-                                @input="checkDate()"
+                                @input="checkDate('taking_date')"
                                 :min="maxDate"
                                 :disabled="data?.status_input"
                                 name="date"

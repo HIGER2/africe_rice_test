@@ -68,7 +68,7 @@
                         <th>Job title</th>
                         <th>departure date</th>
                         <th>Date of taking up office</th>
-                        <th>Tatal amount</th>
+                        {{-- <th>Tatal amount</th> --}}
                         <th>Status</th>
                         <th>submission date</th>
                     </tr>
@@ -88,7 +88,7 @@
                             <td>{{$data->employees->jobTitle}}</td>
                             <td>{{$data->depart_date}}</td>
                             <td>{{$data->taking_date}}</td>
-                            <td>{{$data->total_amount}}</td>
+                            {{-- <td>{{$data->total_amount}}</td> --}}
                             <td>
                                @if ($data->status == 'approved')
                                 <div class="status approuve" >

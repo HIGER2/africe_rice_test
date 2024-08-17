@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\GroupEmail;
 use Illuminate\Support\Collection;
 use App\Models\Currency;
 use App\Models\Employee;
@@ -12,11 +13,15 @@ use App\Models\StaffCategorie;
 use App\Models\TypeAllowance;
 use App\Notifications\EmployeeValidate;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
@@ -343,11 +348,36 @@ class WebController extends Controller
                 $form->status = 'approved';
                 $form->save();
                 $employee = $form->employees;
+                Carbon::setLocale('fr');
+                $depart_date = Carbon::parse($form->depart_date)->translatedFormat('l d F Y');
+                $taking_date = Carbon::parse($form->taking_date)->translatedFormat('l d F Y');
 
-                if ($employee->supervisor) {
-                    // Envoyer une notification au supérieur
-                    $employee->supervisor->notify(new EmployeeValidate($employee, $form, 'form_validate'));
+                $message = "la demande de l'utilisateur {$employee->firstName} {$employee->lastName} à été approuvée.Le montant à verser est de {$form->total_amount} CFA.\n La date de départ {$depart_date}\n.Prise de fonction {$taking_date}.
+                    ";
+                $recipients = [
+                    (object)[
+                        'email' => 'k.sams@cgiar.org',
+                        'message' => $message,
+                    ],
+                    (object)[
+                        'email' => 'user2@example.com',
+                        'message' => $message,
+                    ],
+                    (object)[
+                        'email' => 'user3@example.com',
+                        'message' => $message,
+                    ]
+                ]; // Liste des e-mails
+                // $data = ['message' => 'Ceci est un e-mail groupé envoyé à plusieurs utilisateurs.'];
+                foreach ($recipients as $data) {
+                    Mail::to($data->email)->send(new GroupEmail($data->message)); // Utiliser la file d'attente pour envoyer les e-mails
                 }
+
+
+                // if ($employee->supervisor) {
+                //     // Envoyer une notification au supérieur
+                //     $employee->supervisor->notify(new EmployeeValidate($employee, $form, 'form_validate'));
+                // }
                 // session::flash('message', 'Formulaire approuvé');
             } elseif ($action === 'reject') {
                 // Logique pour rejeter le formulaire
@@ -385,11 +415,37 @@ class WebController extends Controller
 
 
         $employee = Employee::where('email', $request->email)->first();
-
-        if (Hash::needsRehash($employee->password)) {
-            $employee->update([
-                "password" => Hash::make($request->password),
+        if (!$employee) {
+            return back()->withErrors([
+                'message' => 'invalid email.',
             ]);
+        }
+        if (Hash::needsRehash($employee->password)) {
+            $url = "https://mycareer.africarice.org/api/auth/login";
+            $options = [
+                'json' => [ // Utiliser 'json' pour envoyer les données sous forme JSON
+                    "email" => $request->email,
+                    "password" => $request->password
+                ],
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                ]
+            ];
+            $apiResponse = $this->fetchApi('POST', $url, $options);
+            if ($apiResponse->error) {
+                if ($apiResponse->response_body && $apiResponse->response_body == "Unauthorized") {
+                    return back()->withErrors([
+                        'message' => 'Les informations d\'identification ne correspondent pas.',
+                    ]);
+                }
+                // dd($apiResponse->response_body);
+            } else {
+                // auth by api and check if credentail is correcte
+                $employee->update([
+                    "password" => Hash::make($request->password),
+                ]);
+            }
         }
 
         $attemptWithNumero = Auth::guard('employees')->attempt(['email' => $request->input('email'), 'password' => $request->input('password')]);
@@ -400,41 +456,8 @@ class WebController extends Controller
             ]);
         }
 
-
-        // if ($employee && Hash::check($request->input('password'), $employee->password)) {
-        //     // Authentification réussie
-        //     Auth::guard('employees')->login($employee);
-
-        //     return redirect()->intended('employees/dashboard');
-        // } else {
-        //     return back()->withErrors([
-        //         'message' => 'Les informations d\'identification ne correspondent pas.',
-        //     ]);
-        // }
-
-
-
-
-        // $attemptWithNumero = Auth::guard('employees')->attempt([
-        //     'email' => $request->input('email'),
-        //     'password' => $request->input('password'),
-        // ]);
-
-        // if (!$attemptWithNumero) {
-        //     return back()->withErrors([
-        //         'message' => 'Les informations d\'identification ne correspondent pas.',
-        //     ]);
-        // }
-
-        // $request->session()->regenerate();
-
-        // dd(Auth::guard('employees')->user());
         $employee = Auth::guard('employees')->user();
-
-        // dd($employee->name);
         session::put('user', $employee);
-
-
         return redirect()->route('home');
     }
 
@@ -544,6 +567,7 @@ class WebController extends Controller
     public function save(Request $request)
     {
 
+
         try {
             DB::beginTransaction();
             if (Auth::guard('employees')->check()) {
@@ -553,26 +577,12 @@ class WebController extends Controller
 
                 $dateMaxe = Carbon::now()->addDays(30)->toDateString();
 
-                if ($dateMaxe != $request->taking_date) {
+                if ($dateMaxe > $request->taking_date || $dateMaxe > $request->depart_date) {
                     return response()->json([
                         'message' => 'la date de prise de fonction doit etre au dela de 30 jours ',
                         'data' => $infoExist
                     ], 400);
                 }
-                // return $employee;
-                // return $employee->supervisor;
-
-                // $supervisor =
-                // Carbon::setLocale('fr');
-                // // Convertir et formater la date
-                // $infoExist->depart_date = Carbon::parse($infoExist->depart_date)->translatedFormat('d F Y');
-
-                // if ($employee->supervisor) {
-                //     // Envoyer une notification au supérieur
-                //     $employee->supervisor->notify(new EmployeeValidate($employee, $infoExist));
-                // }
-                // return $employee->supervisor;
-
                 if ($infoExist) {
                     return response()->json([
                         'message' => 'vous avez déja renseigné',
@@ -649,5 +659,51 @@ class WebController extends Controller
         // session()->flush();
         // Rediriger l'utilisateur vers la page de connexion ou d'accueil
         return redirect()->route('login')->with('success', 'Déconnexion réussie');
+    }
+
+
+    public static function fetchApi(string $method, string $url, array $options = [])
+    {
+        $client = new Client([
+            'verify' => false, // Désactive la vérification SSL
+        ]);
+        try {
+            // Effectuer la requête à l'API avec Guzzle
+            $response = $client->request($method, $url, $options);
+            // Récupérer les données de la réponse et les décoder
+            // $data = json_decode($response->getBody(), true);
+            $data = json_decode($response->getBody()->getContents());
+
+            return (object)[
+                "data" => $data,
+                "error" => false
+            ];
+        } catch (ClientException $e) {
+            $response = $e->getResponse();
+            $body = $response ? $response->getBody()->getContents() : 'No response body';
+            return (object)[
+                "data" => null,
+                "error" => true,
+                "message" => $e->getMessage(),
+                "response_body" => $body
+            ];
+        } catch (RequestException $e) {
+            // Capturer les exceptions Guzzle
+            return (object)[
+                "data" => false,
+                "error" => $e->getMessage()
+            ];
+            // throw new \Exception("Erreur lors de la requête à l'API : " . $e->getMessage());
+        }
+    }
+
+
+
+    public function sendGroupEmails($data)
+    {
+
+        // foreach ($data as $value) {
+        // }
+        // return true;
     }
 }
