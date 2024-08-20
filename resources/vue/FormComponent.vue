@@ -23,7 +23,13 @@ let checkDate = (key) => {
             useManager.user[key] = ""
         }
     }
+    // alert("hu")
+    if ((useManager.user.depart_date !="" &&  useManager.user.taking_date !="") && (useManager.user.depart_date >= useManager.user.taking_date)) {
+            alert('the Date of taking up office  must be later than the departure date')
+            // useManager.user.depart_date= ""
+            useManager.user.taking_date= ""
 
+    }
 
 }
 // today.setDate(today.getDate() + 30);
@@ -86,20 +92,17 @@ const loadChild = () => {
 
 const limit_age = (index) => {
 
-    let age = Number(useManager.user.children[index].age);
+    let age = Number(useManager.user.children[ index ].age);
     if (!isNaN(age) && isFinite(age)) {
-        if (age > 23|| age < 1) {
-        useManager.user.children[index].age= ""
+        if (age > 23 || age < 1) {
+            useManager.user.children[ index ].age = ""
         }
     } else {
-        useManager.user.children[index].age= ""
+        useManager.user.children[ index ].age = ""
     }
-}
-
-
-const count = () => {
-
 };
+
+
 </script>
 
 <template>
@@ -108,7 +111,9 @@ const count = () => {
         {{ useManager.test }} -->
         <form @submit.prevent="onSave(type)">
                     <div class="card">
-                        <h5 > General information </h5>
+                        <h5 > Nouvelle demande </h5>
+                        <!-- <h5 > General information </h5> -->
+                        <!-- {{ data?.status_input }} -->
                         <div class="form-group">
                             <label for="number">departure date</label>
                             <input type="date"
@@ -191,7 +196,6 @@ const count = () => {
                             Confirm
                         </span>
                     </button>
-
                 <button v-else type="button" class="test" @click="destroy(data?.id)">Supprimer pour réessayer</button>
     </form>
     </div>

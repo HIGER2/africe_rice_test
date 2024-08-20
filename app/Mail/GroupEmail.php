@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class GroupEmail extends Mailable
+class GroupEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -17,13 +17,15 @@ class GroupEmail extends Mailable
      * Create a new message instance.
      */
     public $data;
+    public $view;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($data)
+    public function __construct($data, $view)
     {
         $this->data = $data;
+        $this->view = $view;
     }
 
     /**
@@ -49,7 +51,7 @@ class GroupEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.group',
+            markdown: "emails.{$this->view}",
             with: ['data' => $this->data], // Pass the data to the view
         );
     }

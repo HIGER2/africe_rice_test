@@ -6,9 +6,11 @@ use App\Mail\GroupEmail;
 use Illuminate\Support\Collection;
 use App\Models\Currency;
 use App\Models\Employee;
-use App\Models\EmployeeChild;
-use App\Models\EmployeeInformaton;
+use App\Models\StaffChild;
+use App\Models\StaffRequest;
 use App\Models\ExchangeRate;
+use App\Models\Payment;
+use App\Models\ServiceEmail;
 use App\Models\StaffCategorie;
 use App\Models\TypeAllowance;
 use App\Notifications\EmployeeValidate;
@@ -77,13 +79,14 @@ class WebController extends Controller
     }
     public function index()
     {
-
-
         if (Auth::guard('employees')->check()) {
 
             $employee = Auth::guard('employees')->user();
-            $formData = EmployeeInformaton::with('children')
-                ->where('employees_id', $employee->employeeId)->first();
+            $formData = StaffRequest::with('children')
+                ->with('payments')
+                ->where('employees_id', $employee->employeeId)
+                ->latest()
+                ->first();
             $type = TypeAllowance::with('staff_categories')
                 ->where('id', '!=', 5)
                 ->get();
@@ -102,7 +105,9 @@ class WebController extends Controller
         if (Auth::guard('employees')->check()) {
 
             $employee = Auth::guard('employees')->user();
-            $liste = EmployeeInformaton::with('employees')->get();
+            $liste = StaffRequest::with('employees')
+                ->orderBy('created_at', 'desc')
+                ->get();
             $all =  $liste->count();
             $pending =  $liste->where('status', null)->count();
             $approuve =  $liste->where('status', 'approved')->count();
@@ -112,6 +117,56 @@ class WebController extends Controller
             return redirect()->route('login');
             // return redirect()->route('login', compact('type', 'employee', 'formData'));
         }
+    }
+
+    private function getRequestApprouvedData()
+    {
+        $liste = StaffRequest::with('employees')
+            ->where('status', 'approved')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $all = $liste->count();
+        $pending = $liste->where('status', null)->count();
+        $approuve = $liste->where('status', 'approved')->count();
+        $rejected = $liste->where('status', 'rejected')->count();
+
+        return compact('liste', 'pending', 'approuve', 'rejected', 'all');
+    }
+
+    public function requestApprouved()
+    {
+        if (Auth::guard('employees')->check()) {
+            $employee = Auth::guard('employees')->user();
+            $data = $this->getRequestApprouvedData();
+            return view('request_approuve', $data);
+        } else {
+            return redirect()->route('login');
+            // return redirect()->route('login', compact('type', 'employee', 'formData'));
+        }
+    }
+
+    public function paymentConfirm($request_id)
+    {
+
+
+        if (!$request_id) {
+            return abort(404, 'Formulaire non trouvé.');
+        }
+
+        $employee = Auth::guard('employees')->user();
+        $staff_request = StaffRequest::findOrFail($request_id);
+        if ($staff_request && ($staff_request->payments->status_payment == "pending")) {
+            $staff_request->payments->status_payment = "paid";
+            $staff_request->payments->finance_id  = $employee->employeeId;
+            $staff_request->payments->date_payment = Carbon::now();
+            $staff_request->payments->save();
+        }
+
+        return redirect()->route('request.approve');
+
+        // $data = $this->getRequestApprouvedData();
+        // return view('request_approuve', $data);
     }
 
     public function setting()
@@ -145,10 +200,7 @@ class WebController extends Controller
 
     public function settingIndex(Request $request)
     {
-
-
-
-        $type_allowence = TypeAllowance::get();
+        $type_allowence = TypeAllowance::where('id', '!=', 5)->get();
         $rate = ExchangeRate::first();
 
         $selectedTypeAllowenceId = $request->input('type_allowance_id');
@@ -181,15 +233,10 @@ class WebController extends Controller
                 $currency = $categorie->currency;
                 $amount = $categorie->amount;
             }
-
-            // dd();
         }
 
 
-
         if ($form_action == "submit_final") {
-
-
 
             $validator = Validator::make($request->all(), [
                 'currency' => 'required',
@@ -301,21 +348,38 @@ class WebController extends Controller
         return view('setting', compact('rate', 'newTypeAllowance', 'type_allowence', 'staffCategories', 'selectedTypeAllowenceId', 'selectedStaffCategoriId', 'amount', 'currency'));
     }
 
-
-
-    public function recursive($data)
+    public function confirmAction($id, $action)
     {
+        try {
 
-        if ($data) {
+            // dd('dd');
+            $form = StaffRequest::findOrFail($id);
+
+            // Vérifie si l'action est valide
+            if (!in_array($action, ['approve', 'reject'])) {
+                return abort(400, 'Action non valide.');
+            }
+
+            // Afficher la page de confirmation
+            return view('confirmation', compact('form', 'action'));
+        } catch (\Exception $e) {
+            return abort(404, 'Formulaire non trouvé.');
         }
     }
 
 
     public function destroy($id)
     {
-        // Trouver l'employé et le supprimer
-        $employee = EmployeeInformaton::findOrFail($id);
-        $employee->delete();
+        // Trouver l'employé et le
+
+        $user =  Auth::guard('employees')->user();
+        //  $user->employees
+        // $user->information_employees->delete();
+        if ($user->staff_requests) {
+            $user->staff_requests->each(function ($staff_request) {
+                $staff_request->delete();
+            });
+        }
 
         // Rediriger vers la route d'accueil après suppression
         return redirect()->route('home')->with('success', 'Employé supprimé avec succès');
@@ -324,68 +388,178 @@ class WebController extends Controller
     // methode pour gerer le statut de la demande
     public function handleAction($id, $action)
     {
-
         try {
+
+            DB::beginTransaction();
+            $now = Carbon::now()->format('d-m-Y H:i:s');
+            Log::channel('custom_controller_log')->info('*************');
+            Log::channel('custom_controller_log')->info("demandeId:{$id} action:{$action} date:{$now}");
+            Log::channel('custom_controller_log')->info('*************');
+
             // Trouvez le formulaire avec l'ID donné
-            $form = EmployeeInformaton::findOrFail($id);
-            // Exécutez l'action appropriée en fonction du paramètre $action
+            $form = StaffRequest::findOrFail($id);
 
             if (!$form) {
-                // Génère une erreur 404 avec un message personnalisé
-                return  abort(404, 'Le formulaire demandé n\'existe pas.');
+                // dd('jje');
+                abort(404, 'Le formulaire demandé n\'existe pas.');
             }
+
+            if ($form->status != 'pending') {
+                abort(404, 'demande déja validée.');
+            }
+
             $employee = $form->employees;
+            Carbon::setLocale('fr');
+            $depart_date = Carbon::parse($form->depart_date)->translatedFormat('d l F Y');
+            $taking_date = Carbon::parse($form->taking_date)->translatedFormat('d l F Y');
 
             if ($action === 'approve') {
-                // Logique pour approuver le formulaire
                 $form->status = 'approved';
                 $form->save();
-                Carbon::setLocale('fr');
-                $depart_date = Carbon::parse($form->depart_date)->translatedFormat('l d F Y');
-                $taking_date = Carbon::parse($form->taking_date)->translatedFormat('l d F Y');
-                $message = "la demande de l'utilisateur {$employee->firstName} {$employee->lastName} à été approuvée.Le montant à verser est de {$form->total_amount} CFA.\n La date de départ {$depart_date}\n.Prise de fonction {$taking_date}.
-                    ";
-                $recipients = [
+                $form->taking_date = $taking_date;
+                $form->depart_date = $taking_date;
+                $payment = Payment::create([
+                    'staff_requests_id' => $form->id,
+                    'staff_id' => $form->employees->employeeId,
+                    'amount' => $form->total_amount
+                ]);
+
+                $servieEmail = ServiceEmail::get();
+                $recipiend = [
                     (object)[
                         'email' => 'k.sams@cgiar.org',
-                        'message' => $message,
+                        'message' => $form,
+                        'view' => 'finance_validate'
                     ],
                     (object)[
                         'email' => $employee->supervisor->email,
-                        'message' => "vous avez approuvé la demande de départ de  {$employee->firstName} {$employee->lastName}",
+                        'message' => "Hello,\n\nYou have approved the departure request of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
+                        'view' => 'group'
+                    ],
+                    (object)[
+                        'email' => 'k.sams@cgiar.org',
+                        'message' => "Hello,\n\nThe departure date for Bouaké for staff member **{$employee->firstName} {$employee->lastName}** is scheduled for **{$depart_date}**.\n\nThe taking up of office is scheduled for **{$taking_date}**.\n\nPlease prepare all the necessary administrative documents.",
+                        'view' => 'group'
                     ],
                     (object)[
                         'email' => $employee->email,
-                        'message' => "votre demande a été approuvé",
+                        'message' => "Hello,\n\nYour departure request for Bouaké on **{$depart_date}** has been approved.",
+                        'view' => 'group'
                     ]
-                ]; // Liste des e-mails
-                // $data = ['message' => 'Ceci est un e-mail groupé envoyé à plusieurs utilisateurs.'];
-                foreach ($recipients as $data) {
-                    Mail::to($data->email)->send(new GroupEmail($data->message)); // Utiliser la file d'attente pour envoyer les e-mails
+                ];
+
+                $messageService = [
+                    (object)[
+                        'data' => $form,
+                        'view' => 'finance_validate',
+                        'service' => 1
+                    ],
+                    (object)[
+                        'data' => "Hello,\n\nThe departure date for Bouaké for staff member **{$employee->firstName} {$employee->lastName}** is scheduled for **{$depart_date}**.\n\nThe taking up of office is scheduled for **{$taking_date}**.\n\nPlease prepare all the necessary administrative documents.",
+                        'view' => 'group',
+                        'service' => 2
+                    ],
+                    (object)[
+                        'data' => "Hello everyone,\n\n In the context of the departure for Bouaké, the staff member **{$employee->firstName} {$employee->lastName}** has had their departure request approved. Thus, the staff member will leave Abidjan on **{$depart_date}**.\n\n And will start their position on **{$taking_date}**.\n\n Please prepare the logistics for their departure as well as all the logistics related to their new position.",
+                        'view' => 'group',
+                        'service' => 3
+                    ],
+                ];
+
+                $backMessage = [
+                    (object)[
+                        'data' => "Hello,\n\nYou have approved the departure request of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
+                        'view' => 'group',
+                        'email' => $employee->supervisor->email,
+                    ],
+                    (object)[
+                        'data' => "Hello,\n\n Your departure request for Bouaké on **{$depart_date}** has been approved.",
+                        'view' => 'group',
+                        'email' => $employee->email,
+                    ],
+                ];
+
+                $recipients = [];
+                $emailData = "";
+                if ($servieEmail->count() > 0) {
+                    foreach ($servieEmail as $data) {
+                        foreach ($messageService as $value) {
+                            if ($data->service == $value->service) {
+                                $recipients[] = (object)[
+                                    "email" => $data->email,
+                                    "data" => $value->data,
+                                    "view" => $value->view
+                                ];
+                                break; // Ajouter un log ici peut être utile pour vérifier le processus.
+                            }
+                        }
+                    }
+                }
+                // dd($servieEmail);
+
+                if ($servieEmail->count() > 0) {
+                    $emailData = array_merge($recipients, $backMessage);
+                } else {
+                    $emailData = $backMessage;
                 }
 
 
+                // $data = $emailData[5]; // Par exemple, accéder au 6ème email
+                // Mail::to($data->email)->queue(new GroupEmail($data->data, $data->view));
+                $batchSize = 3; // Envoie par lots de 3 emails
+                // foreach (array_chunk($emailData, $batchSize) as $batch) {
+                //     foreach ($batch as $data) {
+                //         Mail::to($data->email)->queue(new GroupEmail($data->data, $data->view));
+                //     }
+                //     sleep(10); // Pause de 10 secondes entre chaque lot
+                // }
+                // foreach ($emailData as $data) {
+                //     Mail::to($data->email)->send(new GroupEmail($data->data, $data->view));
+                // }
 
-                // session::flash('message', 'Formulaire approuvé');
+                foreach ($emailData as $data) {
+                    Mail::to($data->email)->queue(new GroupEmail($data->data, $data->view));
+                }
             } elseif ($action === 'reject') {
                 // Logique pour rejeter le formulaire
                 $form->status = 'rejected';
+                $form->status_input = false;
                 $form->save();
-                if ($employee->supervisor) {
-                    // Envoyer une notification au supérieur
-                    $employee->supervisor->notify(new EmployeeValidate($employee, $form, 'form_validate'));
+
+                $recipients = [
+                    (object)[
+                        'email' => $employee->supervisor->email,
+                        'message' =>
+                        "Hello,\n\nYou have rejected the departure request of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
+                        'view' => 'group'
+                    ],
+                    (object)[
+                        'email' => $employee->email,
+                        'message' => "Hello,\n\nYour departure request for Bouaké on **{$form->depart_date}** has been rejected.",
+                        'view' => 'group'
+                    ]
+
+                ];
+
+                foreach ($recipients as $data) {
+                    Mail::to($data->email)->send(new GroupEmail($data->message, $data->view));
                 }
-                // session::flash('message', 'Formulaire rejeté');
             } else {
-                // session::flash('message', 'Action invalide');
+                // Action invalide
+                return abort(400, 'Action invalide.');
             }
 
             // Rediriger vers une page d'affichage ou vers une autre vue
+
+            DB::commit();
             return redirect()->route('form.status', ['action' => $action]);
-            // ->with('message', $message);
         } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error("Erreur lors du traitement de la demande : " . $th->getMessage());
+            return abort(500, 'Une erreur est survenue.');
         }
     }
+
 
     // afficher le statut de la demande
     public function showStatus($action)
@@ -453,109 +627,6 @@ class WebController extends Controller
         return redirect()->route('home');
     }
 
-    // sauvegarder la demande de l'utilisateur
-    // public function save(Request $request)
-    // {
-
-    //     try {
-    //         DB::beginTransaction();
-    //         if (Auth::guard('employees')->check()) {
-
-    //             $employee = Auth::guard('employees')->user();
-    //             $infoExist = EmployeeInformaton::where('employees_id', $employee->employeeId)->first();
-
-    //             $dateMaxe = Carbon::now()->addDays(30)->toDateString();
-
-    //             if ($dateMaxe != $request->taking_date) {
-    //                 return response()->json([
-    //                     'message' => 'la date de prise de fonction doit etre au dela de 30 jours ',
-    //                     'data' => $infoExist
-    //                 ], 400);
-    //             }
-    //             // dd();
-    //             // if () {
-    //             //     # code...
-    //             // }
-    //             // return $employee;
-    //             // return $employee->supervisor;
-
-    //             // $supervisor =
-    //             // Carbon::setLocale('fr');
-    //             // // Convertir et formater la date
-    //             $infoExist->depart_date = Carbon::parse($infoExist->depart_date)->translatedFormat('d F Y');
-
-    //             if ($employee->supervisor) {
-    //                 // Envoyer une notification au supérieur
-    //                 $employee->supervisor->notify(new EmployeeValidate($employee, $infoExist));
-    //             }
-    //             // return $employee->supervisor;
-
-    //             if ($infoExist) {
-    //                 return response()->json([
-    //                     'message' => 'vous avez déja une demande en cours',
-    //                     'data' => $infoExist
-    //                 ], 401);
-    //             }
-
-
-    //             $information = $request->except('child');
-    //             $information['status_input'] = true;
-    //             $information['category'] = $employee->category;
-    //             $information['employees_id'] = $employee->employeeId;
-    //             $response = EmployeeInformaton::create($information);
-
-    //             $children = [];
-
-    //             // return $request->children;
-
-    //             if ($request->children) {
-    //                 foreach ($request->children as $data) {
-    //                     $data['employee_informatons_id'] = $response->id;
-    //                     $children[] = EmployeeChild::create($data);
-    //                 }
-    //             }
-    //             $response->children = $children;
-    //             Session::put('formData', $response);
-
-    //             $response->depart_date = Carbon::parse($response->depart_date)->translatedFormat('d F Y');
-
-    //             Carbon::setLocale('fr');
-    //             // Convertir et formater la date
-
-    //             if ($employee->supervisor) {
-    //                 // Envoyer une notification au supérieur
-    //                 $employee->supervisor->notify(new EmployeeValidate($employee, $response));
-    //             }
-
-    //             DB::commit();
-    //             // Log::info('Notification envoyée avec succès à ' . $employee->supervisor->email);
-    //             return response()->json(
-    //                 [
-    //                     'message' => 'information enregistré',
-    //                     'data' => $response,
-    //                     'error' => null
-    //                 ],
-    //                 200
-    //             );
-    //         } else {
-    //             return redirect()->route('login');
-    //         }
-
-    //         return view('home', compact('employee', 'type'));
-    //     } catch (\Throwable $th) {
-    //         DB::rollBack();
-    //         Log::error('Erreur lors de l\'envoi de la notification : ' . $th->getMessage());
-    //         return response()->json(
-    //             [
-    //                 'message' => "une erreur s'est produite",
-    //                 'data' => null,
-    //                 'error' => $th->getMessage()
-    //             ],
-    //             500
-    //         );
-    //     }
-    // }
-
     public function save(Request $request)
     {
 
@@ -565,7 +636,7 @@ class WebController extends Controller
             if (Auth::guard('employees')->check()) {
 
                 $employee = Auth::guard('employees')->user();
-                $infoExist = EmployeeInformaton::where('employees_id', $employee->employeeId)->first();
+                $infoExist = StaffRequest::where('employees_id', $employee->employeeId)->first();
 
                 $dateMaxe = Carbon::now()->addDays(30)->toDateString();
 
@@ -575,43 +646,36 @@ class WebController extends Controller
                         'data' => $infoExist
                     ], 400);
                 }
-                if ($infoExist) {
-                    return response()->json([
-                        'message' => 'vous avez déja renseigné',
-                        'data' => $infoExist
-                    ], 401);
-                }
-
 
                 $information = $request->except('child');
                 $information['status_input'] = true;
+                $information['status'] = "pending";
                 $information['category'] = $employee->category;
                 $information['employees_id'] = $employee->employeeId;
-                $response = EmployeeInformaton::create($information);
+                $response = StaffRequest::create($information);
 
                 $children = [];
 
-                // return $request->children;
 
                 if ($request->children) {
                     foreach ($request->children as $data) {
                         $data['employee_informatons_id'] = $response->id;
-                        $children[] = EmployeeChild::create($data);
+                        $children[] = StaffChild::create($data);
                     }
                 }
                 $response->children = $children;
                 Session::put('formData', $response);
 
                 $response->depart_date = Carbon::parse($response->depart_date)->translatedFormat('d F Y');
+                $response->taking_date = Carbon::parse($response->taking_date)->translatedFormat('d F Y');
 
                 Carbon::setLocale('fr');
-                // Convertir et formater la date
 
                 if ($employee->supervisor) {
                     // Envoyer une notification au supérieur
                     $employee->supervisor->notify(new EmployeeValidate($employee, $response, 'form_submission'));
+                    $employee->notify(new EmployeeValidate($employee, $response, 'form_submission'));
                 }
-
                 DB::commit();
                 return response()->json(
                     [
@@ -690,12 +754,113 @@ class WebController extends Controller
     }
 
 
+    public function serviceEmail($id = null)
+    {
+        $emails = ServiceEmail::get();
 
-    public function sendGroupEmails($data)
+        $singleEmail = $emails->find($id);
+
+        $services = collect([
+            (object)[
+                "id" => 1,
+                "value" => "finance department",
+                "emails" => [],
+            ],
+            (object)[
+                "id" => 2,
+                "value" => "human resources department",
+                "emails" => [],
+            ],
+            (object)[
+                "id" => 3,
+                "value" => "operation department",
+                "emails" => [],
+            ],
+        ]);
+
+        $listeFilter = collect();
+        foreach ($services as $service) {
+            foreach ($emails as $email) {
+                if ($service->id == $email->service) {
+                    $service->emails[] = $email;
+                }
+            }
+            $listeFilter->push($service);
+        }
+        // dd($singleEmail);
+        return view('service_email', compact('singleEmail', 'services', 'listeFilter'));
+    }
+
+    public function serviceEmailSave(Request $request)
     {
 
-        // foreach ($data as $value) {
-        // }
-        // return true;
+        $request->validate([
+            'email' => 'required|email',
+            'service' => 'required',
+        ], [
+            'email.required' => 'Please add an email address.',
+            'email.email' => 'The email address must be a valid email format.',
+            'service.required' => 'Please select a service.',
+        ]);
+        $singleEmail = null;
+        $emailExiste = ServiceEmail::where('service', $request->service)
+            ->where('email', $request->email)->first();
+        $verif = ServiceEmail::where('service', $request->service)->count();
+
+
+        if ($emailExiste) {
+            return redirect()->back()->with('error', 'This email already exists for this department.');
+        }
+
+        $services = collect([
+            (object)[
+                "id" => 1,
+                "value" => "finance department",
+                "emails" => [],
+            ],
+            (object)[
+                "id" => 2,
+                "value" => "human resources department",
+                "emails" => [],
+            ],
+            (object)[
+                "id" => 3,
+                "value" => "operation department",
+                "emails" => [],
+            ],
+        ]);
+        if (isset($request->id)) {
+            $data = $request->except('_token');
+            ServiceEmail::where('id', $request->id)->update($data);
+        } else {
+            if ($verif >= 2) {
+                return redirect()->back()->with('error', 'The limit of two records has been reached. You cannot add more records.');
+            }
+            ServiceEmail::create($request->all());
+        }
+        $emails = ServiceEmail::get();
+
+        $listeFilter = collect();
+        foreach ($services as $service) {
+            foreach ($emails as $email) {
+                if ($service->id == $email->service) {
+                    $service->emails[] = $email;
+                }
+            }
+            $listeFilter->push($service);
+        }
+        // dd($singleEmail);
+        return view('service_email', compact('singleEmail', 'services', 'listeFilter'));
+    }
+
+    public function destroyEmail($id)
+    {
+        // Rechercher l'email par son ID
+        $email = ServiceEmail::findOrFail($id);
+
+        // Supprimer l'email
+        $email->delete();
+        // Rediriger vers la route d'accueil avec un message de succès
+        return redirect()->route('service.email.get')->with('success', 'Email supprimé avec succès');
     }
 }

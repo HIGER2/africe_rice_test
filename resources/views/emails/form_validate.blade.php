@@ -1,7 +1,7 @@
 @component('mail::message')
-# Nouveau formulaire soumis
+# New request submitted
 
-Bonjour,
+Hello,
 
 L'employé **{{ $user->firstName." ".$user->lastName }}**
  a soumis un nouveau demande de départ pour le **{{$form->depart_date}}**.

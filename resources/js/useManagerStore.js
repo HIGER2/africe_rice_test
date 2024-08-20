@@ -80,7 +80,7 @@ export const useManagerStore = defineStore('manager',() => {
            amount = Total_U(item)
         }
         if (item?.id ==5) {
-          amount =  Total_P_C_A(item)
+        //   amount =  Total_P_C_A(item)
         }
         return amount
     }
@@ -131,11 +131,11 @@ const options = {
         item?.staff_categories.forEach(element => {
 
             if (element.name == employeeConnected.value?.category) {
-                if (element.device == "XOF") {
+                if (element.currency == "XOF") {
                 amount += Number(element.amount);
 
                 } else {
-                    amount += (Number(element.amount) *  currency.value);
+                    amount += (Number(element.amount) *  Number(currency.value));
                 }
             }
         });
@@ -271,9 +271,11 @@ const Total_F_I_A = (item,children) => {
     }
 
     const initial = (item) => {
-
-        console.log(item);
         Object.assign(user,item)
+
+        // if (item.status_input) {
+        // Object.assign(user,item)
+        // }
     }
 
     const save = async(type) => {
@@ -286,7 +288,7 @@ const Total_F_I_A = (item,children) => {
         user.total_amount = Total_Amount(type)
         user.room = Total_CHAMBRE(user.children)
 
-             scrollTo(0,0)
+        scrollTo(0,0)
 
      await window.axios.post(`/save`, user)
          .then(async(response) => {

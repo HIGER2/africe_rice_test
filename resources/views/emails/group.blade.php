@@ -1,8 +1,7 @@
 @component('mail::message')
-# Bonjour,
 
-{{ $data }}
+{{$data}}
 
-Merci,<br>
+Thank you,<br>
 {{ config('app.name') }}
 @endcomponent

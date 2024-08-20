@@ -143,28 +143,45 @@ if (data) {
                 <div class="card ">
                    <div class="head">
                     <h5> Summary </h5>
+                        <!-- {{ data.payments }} -->
 
-                    <div v-if="data?.status_input">
-                        {{ data?.status }}
-                            <template v-if="data?.status">
-                            <div class="status approuve" v-if="data?.status == 'approved'">
-                            approved
-                            </div>
-                            <div class="status reject" vl v-else>
+                    <div class="headerStatut">
+                           <div class="status approuve" v-if="data?.status == 'approved'">
+                        approved
+                        </div>
+                        <div class="status reject"  v-else-if="data?.status == 'rejected'">
                             rejected
-                            </div>
-                        </template>
-                        <template v-else>
-                            <div class="status pennding">
+                        </div>
+                        <div class="status pennding"  v-else-if="data?.status == 'pending'">
                             pending
-                            </div>
-                        </template>
+                        </div>
+
+                       <template v-if="data?.payments">
+                        <div class="status approuve" v-if="data?.payments?.status_payment == 'paid'">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2m0 14H4v-6h16zm0-10H4V6h16z"/></svg>
+
+                            {{ data?.payments?.status_payment }}
+                        </div>
+                        <div class="status reject"  v-else-if="data?.payments?.status_payment == 'failed'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2m0 14H4v-6h16zm0-10H4V6h16z"/></svg>
+                            {{ data?.payments?.status_payment }}
+                        </div>
+                        <div class="status pennding"  v-else-if="data?.payments?.status_payment == 'pending'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2m0 14H4v-6h16zm0-10H4V6h16z"/></svg>
+                           payment {{ data?.payments?.status_payment }}
+                        </div>
+                       </template>
                     </div>
+
+
                    </div>
                    <!-- <div class="rate">
                         <span>Exchange rate : 1 USD = {{ useManager.currency }} XOF </span>
                    </div> -->
-                    <template v-if="data?.status_input">
+                   <DetailComponent
+                    :type="type"
+                    />
+                    <!-- <template v-if="data?.status_input">
                     <DetailComponentValidate
                     :type="type"
                     :data="data"
@@ -174,7 +191,7 @@ if (data) {
                     <DetailComponent
                     :type="type"
                     />
-                    </template>
+                    </template> -->
 
                     <!-- <ul class="items">
                         <template v-if="data?.status_input">

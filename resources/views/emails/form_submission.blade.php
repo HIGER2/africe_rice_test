@@ -1,22 +1,25 @@
 @component('mail::message')
-# Nouveau formulaire soumis
+# New request submitted
 
-Bonjour,
+Hello,
 
-L'utilisateur **{{ $user->firstName." ".$user->lastName }}**
- a soumis un nouveau demande de départ pour le **{{$form->depart_date}}**.
+The staff **{{ $user->firstName." ".$user->lastName }}** has submitted the departure form for Bouaké.
+The departure request is for **{{$form->depart_date}}**.
+The taking up of office is scheduled for **{{$form->taking_date}}**.
 
-
-@component('mail::button', ['url' => route('form.action', ['id' => $form->id, 'action' => 'approve']), 'color' => 'green'])
-Approuver
+@component('mail::button', ['url' => route('form.confirm', ['id' => $form->id, 'action' => 'approve']), 'color' => 'green'])
+Approve
 @endcomponent
 
-@component('mail::button', ['url' => route('form.action', ['id' => $form->id, 'action' => 'reject']), 'color' => 'red'])
-Rejeter
+@component('mail::button', ['url' => route('form.confirm', ['id' => $form->id, 'action' => 'reject']), 'color' => 'red'])
+Reject
 @endcomponent
+{{ config('app.name') }}
+
 {{--
-Merci de vérifier.
+Thank you for reviewing this.
 
-Cordialement,<br>
+Best regards,<br>
+
 {{ config('app.name') }} --}}
 @endcomponent

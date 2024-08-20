@@ -32,4 +32,8 @@ class Employee extends Authenticatable
     {
         return $this->belongsTo(Employee::class, 'supervisorId');
     }
+    public function staff_requests()
+    {
+        return  $this->hasMany(StaffRequest::class, 'employees_id', 'employeeId');
+    }
 }

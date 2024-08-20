@@ -16,7 +16,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="email">E-mail</label>
-                            <input type="email" id="email" value="test@cgiar.org" name="email" placeholder="Enter your CGIAR email address" required>
+                            <input type="email" id="email" value="k.sams@cgiar.org" name="email" placeholder="Enter your CGIAR email address" required>
                         </div>
                         <div class="form-group">
                             <label for="password">Password <span>(default is your RESNO)</span></label>

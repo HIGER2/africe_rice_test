@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EmployeeInformaton extends Model
+class StaffRequest extends Model
 {
     use HasFactory;
     protected  $fillable = [
@@ -26,16 +26,18 @@ class EmployeeInformaton extends Model
         'total_amount',
     ];
 
-
     public function children()
     {
+        return  $this->hasMany(StaffChild::class, 'staff_requests_id', 'id');
+    }
 
-        return  $this->hasMany(EmployeeChild::class, 'employee_informatons_id', 'id');
+    public function payments()
+    {
+        return  $this->hasOne(Payment::class, 'staff_requests_id', 'id');
     }
 
     public function employees()
     {
-
         return  $this->belongsTo(Employee::class, 'employees_id', 'employeeId');
     }
 }

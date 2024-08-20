@@ -7,7 +7,7 @@
         <form action="{{ route('setting') }}" method="post" onchange="this.form.submit()">
             @csrf
             <div class="card">
-                  @if (isset($succes))
+                @if (isset($succes))
                         <div class="alert alert-success">
                             {{ $succes }}
                         </div>

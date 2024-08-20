@@ -5,18 +5,9 @@
 <section class="liste">
     <div class="container">
         <div class="card">
-            <h5>All requests ({{$all}})</h5>
-            <div class="headers">
+            <h5>Total requests ({{$all}})</h5>
+        {{-- <div class="headers">
                 <div class="boxItem">
-                {{-- <div class="box">
-                    <div class="ico"></div>
-                    <div>
-                        All
-                    </div>
-                    <div>
-                        ({{$all}})
-                    </div>
-                </div> --}}
                 <div class="box">
                     <div class="ico"></div>
                     <div>
@@ -45,14 +36,14 @@
                     </div>
                 </div>
             </div>
-              <form action="{{ route('request.export') }}" method="GET">
+            <form action="{{ route('request.export') }}" method="GET">
                 @csrf
                 <button type="submit" class="btnexport">
                     Export
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm1.8 18H14l-2-3.4l-2 3.4H8.2l2.9-4.5L8.2 11H10l2 3.4l2-3.4h1.8l-2.9 4.5zM13 9V3.5L18.5 9z"/></svg>
                 </button>
             </form>
-            </div>
+        </div> --}}
 
         <div class="contentTable">
             {{-- {{$liste}} --}}
@@ -76,14 +67,16 @@
                     <tr>
                         <th>n°</th>
                         <th>employee</th>
-                        <th>Job title</th>
-                        <th>departure date</th>
-                        <th>Date of taking up office</th>
+                        {{-- <th>Job title</th> --}}
+                        {{-- <th>departure date</th> --}}
+                        {{-- <th>Date of taking up office</th> --}}
                         {{-- <th>Tatal amount</th> --}}
                         <th>Status Request</th>
+                        <th>Amount</th>
                         <th>Status Payment</th>
                         <th>Payment Date</th>
                         <th>submission date</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,9 +92,9 @@
                                     <span>{{$data->employees->lastName}}</span>
                                 </div>
                             </td>
-                            <td>{{$data->employees->jobTitle}}</td>
-                            <td>{{$data->depart_date}}</td>
-                            <td>{{$data->taking_date}}</td>
+                            {{-- <td>{{$data->employees->jobTitle}}</td> --}}
+                            {{-- <td>{{$data->depart_date}}</td> --}}
+                            {{-- <td>{{$data->taking_date}}</td> --}}
                             {{-- <td>{{$data->total_amount}}</td> --}}
                             <td>
                                @if ($data->status == 'approved')
@@ -118,9 +111,10 @@
                                     </div>
                                 @endif
                             </td>
+                            <td>{{number_format($data->total_amount,0,',', ' ')}} XOF</td>
                             <td>
                                 @if (isset($data->payments->status_payment) )
-                                    @if ($data->payments->status_payment == 'paid')
+                                @if ($data->payments->status_payment == 'paid')
                                     <div class="status approuve" >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2m0 14H4v-6h16zm0-10H4V6h16z"/></svg>
                                          paid
@@ -143,6 +137,14 @@
                             </td>
                             <td>{{ isset($data->payments->date_payment) ? $data->payments->date_payment : 'N/A' }}</td>
                             <td>{{$data->created_at}}</td>
+                            <td>
+                                <form id="confirm-form" action="{{ route('payment.confirm',['request_id'=>$data->id]) }}" method="POST">
+                                    @csrf
+                                    <button @disabled($data->payments->status_payment == 'paid' ? true : false) type="button"  onclick="confirmSubmit()" class="btnpayement">
+                                        Confirm Payment
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                  @endforeach
                 @endif
@@ -158,7 +160,11 @@
     </div>
 </section>
 
-  <script>
-
-    </script>
+<script>
+    function confirmSubmit() {
+        if (confirm("Are you sure you want to confirm this payment?")) {
+            document.getElementById('confirm-form').submit();
+        }
+    }
+</script>
 @endsection

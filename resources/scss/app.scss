@@ -137,7 +137,7 @@ body {
         gap: 10px;
     }
     .logo {
-      width: 130px;
+      width: 100px;
     }
 
     h1 {
@@ -178,20 +178,22 @@ body {
         &.active{
             border-color: #166434;
             .dropDown{
-            transform: translateY(0);
-             visibility: visible;
+            // transform: translateY(0);
+            transform: scale(1);
+            visibility: visible;
             opacity: 1;
             }
         }
         .dropDown{
             transition: all 0.1s ease-in-out;
             position: absolute;
-            top: 170%;
-            transform: translateY(-200%);
+            top: 150%;
+            transform: scale(0.8);
             visibility: hidden;
             opacity: 0;
             width: max-content;
-            left: 0;
+            min-width: 200px;
+            right: 0;
             z-index: -1;
             background-color: $white;
             padding: 5px 5px;
@@ -234,6 +236,8 @@ body {
             justify-content: space-between;
             align-items: center;
             width: 100%;
+            // background-color: red;
+            gap: 10px;
         }
     }
 
@@ -242,7 +246,7 @@ body {
     }
 
     .logo {
-      width: 130px;
+        width: 110px;
     }
 
     h1 {
@@ -365,6 +369,11 @@ padding:1rem;
         display: flex;
         align-items: center;
         justify-content: center;
+        .headerStatut{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
         .head{
             display: flex;
             align-items: center;
@@ -715,6 +724,30 @@ padding:1rem;
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            &.confirm{
+                display: flex;
+                p{
+                    text-align: center;
+                    font-weight: 400;
+                    color: $text;
+                    margin: 10px 0;
+                }
+                button{
+                    width: 100%;
+                    padding: 10px 30px;
+                    background-color: $secondary-color;
+                    margin-top: 10px;
+                    color: $white;
+                    box-shadow: 0px 0px 2px #ccc;
+                    border: none;
+                    border-radius: 10px;
+                    font-size: 16px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                    cursor: pointer;
+
+                }
+            }
             .ico{
                 width: 80px;
                 height: 80px;
@@ -753,17 +786,25 @@ padding:1rem;
 
 .status{
     width: max-content;
-    padding: 5px 15px;
+    padding: 5px 10px;
     border-radius: 20px;
-    font-size: 13px;
-
+    font-size: 12px;
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    svg{
+        // background-color: red;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
      &.pennding {
         background-color: rgb(255, 165, 0, 0.1);
         color: #ffa500 !important;
         box-shadow: 0px 0px 2px #ffa500;
     }
 
-    &.approuve {
+    &.approuve ,&.paid{
         background-color: #28dd701a;
         color: #047131 !important;
         box-shadow: 0px 0px 2px #28dd70;
@@ -940,6 +981,196 @@ padding:1rem;
 
 
 
+.config{
+    width: 100%;
+    @media only screen and (max-width: 792px){
+        width: 100%;
+    }
+    .container{
+        width: 100%;
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        justify-content: center;
+        h5{
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+        @media only screen and (max-width: 792px){
+            width: 100%;
+            flex-direction: column;
+        }
+    // min-height: 100;
+            form {
+                 position: sticky;
+                top: 60px;
+                @media only screen and (max-width: 792px){
+                    width: 100%;
+                    top: 60px;
+                    position: sticky;
+                    // z-index: -1;
+                }
+                .form-group {
+                    margin-bottom: 15px;
+                    text-align: left;
+                    margin: 20px 0px;
+                    width: 100%;
+                    label {
+                    display: block;
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                    font-weight: 500;
+                    font-size: 13px;
+                     @media only screen and (max-width: 792px){
+                        font-size: 12px;
+                        }
+                    }
+
+                    select,input {
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid $input-border-color;
+                    border-radius: $border-radius;
+                    font-size: 12px;
+                    }
+
+                    span {
+                    font-size: 12px;
+                    color: $primary-color;
+                    }
+                }
+                .contentchild{
+                    width: 100%;
+
+                    .rowinput{
+                        display: flex;
+                        gap: 10px;
+                        width: 100%;
+                    }
+                }
+
+                .login-button {
+                    width: 100%;
+                    padding: 10px 30px;
+                    background-color: $secondary-color;
+                    margin-top: 10px;
+                    color: $white;
+                    box-shadow: 0px 0px 2px #ccc;
+                    border: none;
+                    border-radius: 10px;
+                    font-size: 16px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                    cursor: pointer;
+                }
+
+                }
+            .card{
+            border-radius: 10px;
+            box-shadow: $shadow;
+            background-color: $white;
+            padding: 1rem 2rem;
+            width: 380px;
+               ;
+            p {
+            font-size: 13px;
+            color: $text;
+            margin: 10px;
+            font-weight: 400;
+            }
+
+            @media only screen and (max-width: 792px){
+                width: 100%;
+            }
+
+            }
+
+        .contentTable{
+        width: max-content;
+        min-width: 420px;
+        border-radius: 10px;
+        box-shadow: $shadow;
+        background-color: $white;
+        padding: 1rem 2rem;
+        @media only screen and (max-width: 792px){
+        width: 100% !important;
+        min-width: 100%;
+        z-index: 1;
+        }
+        .parentContent{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            margin-top: 1rem;
+            text-transform: capitalize;
+            // gap: 10px;
+                @media only screen and (max-width: 792px){
+                width: 100%;
+                }
+            h6{
+                font-size: 12px;
+                color: $primary-color;
+            }
+        }
+        .content{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            // align-items: flex-start;
+            // padding: 1rem 0;
+            background-color: $background-color;
+            padding: 0 5px;
+            margin-top: 10px;
+            box-shadow: $shadow;
+            border-radius: 10px;
+                @media only screen and (max-width: 792px){
+                    width: 100%;
+                    flex-direction: column;
+                    }
+            .elementContent{
+                gap: 10px;
+                border-bottom: 1px solid $input-border-color;
+                padding: 12px ;
+                font-size: 13px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                cursor: pointer;
+                text-transform: lowercase;
+                color: $text;
+                @media only screen and (max-width: 792px){
+                width: 100% !important;
+                }
+                &:last-child{
+                    border: none;
+                }
+                button{
+                    background-color: $secondary-color;
+                    color: $white;
+                    padding: 4px 5px;
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                    border-radius: 5px;
+                    border: none;
+                    cursor: pointer;
+                }
+                // background-color: red;
+
+                span{
+                    // width: calc(100% / 3);
+                    font-size: 12px;
+                }
+                // background-color: red;
+            }
+        }
+        }
+    }
+}
+
+
+
 
 .liste{
     width: 100%;
@@ -978,55 +1209,79 @@ padding:1rem;
                     font-size: 13px;
                     }
             }
-        .boxItem{
-            width: 100%;
+        .headers{
             display: flex;
             align-items: center;
-            margin: 15px 0;
-            gap: 10px;
+            justify-content: space-between;
             @media only screen and (max-width: 792px){
             width: 100% !important;
-            gap: 0;
+            flex-direction: column-reverse;
+            align-items: start;
+            margin-top: 20px;
             }
-            .box{
-                background-color: $white;
-                box-shadow: $shadow;
-                padding: 10px;
-                border-radius: 10px;
-                display: flex;
+            .btnexport{
+                width: max-content;
+                padding: 8px 15px;
+                background-color: $secondary-color;
+                border: none;
                 font-size: 13px;
-                gap: 2px;
+                border-radius: 5px;
+                display: flex;
                 align-items: center;
+                font-weight: 500;
+                color: $white;
+                cursor: pointer;
+            }
+            .boxItem{
+                width: 100%;
+                display: flex;
+                align-items: center;
+                margin: 15px 0;
+                gap: 10px;
                 @media only screen and (max-width: 792px){
-                    width: calc(100% / 3 - 5px);
-                    margin: 2px;
-                    font-size: 10px;
-                    font-weight: 600;
-                    justify-content: space-between;
-                    }
-                &:nth-child(1){
-                        .ico{
-                            background-color: orange;
+                width: 100% !important;
+                gap: 0;
+                }
+                .box{
+                    background-color: $white;
+                    box-shadow: $shadow;
+                    padding: 10px;
+                    border-radius: 10px;
+                    display: flex;
+                    font-size: 13px;
+                    gap: 2px;
+                    align-items: center;
+                    @media only screen and (max-width: 792px){
+                        width: calc(100% / 3 - 5px);
+                        margin: 2px;
+                        font-size: 10px;
+                        font-weight: 600;
+                        justify-content: space-between;
                         }
-                    }
-                      &:nth-child(2){
-                        .ico{
-                            background-color: #047131;
+                    &:nth-child(1){
+                            .ico{
+                                background-color: orange;
+                            }
                         }
-                    }
-                    &:nth-child(3){
-                        .ico{
-                            background-color: red;
+                        &:nth-child(2){
+                            .ico{
+                                background-color: #047131;
+                            }
                         }
-                    }
-                .ico{
-                    width: 10px;
-                    height: 10px;
-                    border-radius: 50%;
-                    color: $secondary-color;
-                    display: grid;
-                    place-items: center;
+                        &:nth-child(3){
+                            .ico{
+                                background-color: red;
+                            }
+                        }
+                    .ico{
+                        width: 10px;
+                        height: 10px;
+                        border-radius: 50%;
+                        color: $secondary-color;
+                        display: grid;
+                        place-items: center;
 
+                    }
                 }
             }
         }
@@ -1063,6 +1318,8 @@ padding:1rem;
                         padding: 16px 20px;
                         text-align: left;
                         background-color:$background-color;
+                        text-transform: capitalize;
+                        font-size: 11px;
                         // border-bottom: 1px solid $grey;
                     }
 
@@ -1075,10 +1332,20 @@ padding:1rem;
                     width: 100%;
                         td {
                             padding: 15px 20px;
-                            text-align: left;
+                            // text-align: left;
                             font-weight: 400;
-                            width: calc(100% / 7);
-                              @media only screen and (max-width: 792px){
+                            // width: calc(100% / 7);
+                            .btnpayement{
+                                width: max-content;
+                                border: none;
+                                background-color: $secondary-color;
+                                color: $white;
+                                border-radius: 5px;
+                                padding: 6px 7px;
+                                font-size: 12px;
+                                cursor: pointer;
+                            }
+                                @media only screen and (max-width: 792px){
                                 width: max-content;
                                 }
                             .ico{
@@ -1174,7 +1441,6 @@ padding:1rem;
                             }
 
                         }
-
 
 
                         }

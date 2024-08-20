@@ -11,7 +11,7 @@
 <section class="home">
 @include('includes.header-home')
  <div class="container">
-    {{-- {{$formData}} --}}
+    {{-- {{$formData->children->count()}} --}}
          <div id="app">
              <home-page
              :currency="{{json_encode($currency)}}"

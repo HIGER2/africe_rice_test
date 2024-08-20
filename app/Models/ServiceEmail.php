@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EmployeeChild extends Model
+class ServiceEmail extends Model
 {
     use HasFactory;
 
-    protected  $fillable = [
-        'employee_informatons_id',
-        'age',
-        'sex',
+    protected $fillable = [
+        "service",
+        'email',
+        'admin',
+        // autres colonnes...
     ];
 }
