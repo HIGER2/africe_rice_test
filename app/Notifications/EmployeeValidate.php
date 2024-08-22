@@ -16,11 +16,13 @@ class EmployeeValidate extends Notification
      */
     protected $user;
     protected $form;
+    protected $view;
 
-    public function __construct($user, $form)
+    public function __construct($user, $form, $view)
     {
         $this->user = $user;
         $this->form = $form;
+        $this->view = $view;
     }
 
     /**
@@ -42,7 +44,7 @@ class EmployeeValidate extends Notification
             // ->subject('Welcome to Our Platform')
             // ->line("The introduction to the notification.{$this->user->firstName}");
             ->subject('Nouveau formulaire soumis')
-            ->markdown('emails.form_submission', [
+            ->markdown('emails.' . $this->view, [
                 'user' => $this->user,
                 'form' => $this->form
             ]);

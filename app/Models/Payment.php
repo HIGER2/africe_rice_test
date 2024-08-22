@@ -5,13 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class StaffCategorie extends Model
+class Payment extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        "currency",
+        'staff_requests_id',
+        'finance_id',
+        'staff_id',
+        'status_payment',
         'amount',
-        "name"
+        'date_payment',
     ];
 }

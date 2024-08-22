@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class StaffCategorie extends Model
+class ExchangeRate extends Model
 {
     use HasFactory;
 
+    // protected $table = "currency";
     protected $fillable = [
-        "currency",
-        'amount',
-        "name"
+        'value'
     ];
 }

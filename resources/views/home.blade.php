@@ -9,11 +9,12 @@
 @section("content")
 
 <section class="home">
-@include('includes.header')
+@include('includes.header-home')
  <div class="container">
-    {{-- {{$formData}} --}}
+    {{-- {{$formData->children->count()}} --}}
          <div id="app">
              <home-page
+             :currency="{{json_encode($currency)}}"
              :type="{{json_encode($type)}}"
              :employee="{{json_encode($employee)}}"
              :data="{{json_encode($formData)}}"
