@@ -557,7 +557,7 @@ class WebController extends Controller
             } elseif ($action == 'reject') {
                 // Logique pour rejeter le formulaire
                 $form->status = 'rejected';
-                // $form->status_input = false;
+                $form->status_input = false;
                 $form->save();
 
                 $recipients = [
