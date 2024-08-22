@@ -552,7 +552,7 @@ class WebController extends Controller
                 // }
 
                 foreach ($emailData as $data) {
-                    Mail::to($data->email)->queue(new GroupEmail($data->data, $data->view));
+                    Mail::to($data->email)->send(new GroupEmail($data->data, $data->view));
                 }
             } elseif ($action == 'reject') {
                 // Logique pour rejeter le formulaire
