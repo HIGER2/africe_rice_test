@@ -35,7 +35,7 @@ return new class extends Migration
 
             $table->string('status_payment')->default('pending');
             $table->bigInteger('amount')->nullable();
-            $table->datetime('date_payment')->nullable();
+            $table->date('date_payment')->nullable();
             $table->timestamps();
         });
     }

@@ -29,10 +29,9 @@
                             <i class="uil uil-arrow-up-right"></i>
                         </a>
                     </li>
-                    <li>
-                        <span>Change password</span>
-                        <i class="uil uil-arrow-up-right"></i>
-                    </li>
+
+                     @if (session('user')->role == 'admin')
+
                     <li>
                         <a href="{{route('liste')}}">
                             <span>Requests list</span>
@@ -56,6 +55,11 @@
                             <span>Setting</span>
                             <i class="uil uil-arrow-up-right"></i>
                         </a>
+                    </li>
+                    @endif
+                     <li>
+                        <span>Change password</span>
+                        <i class="uil uil-arrow-up-right"></i>
                     </li>
                     <li>
                         <button type="submit">Logout

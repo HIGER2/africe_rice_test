@@ -109,7 +109,7 @@ class WebController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->get();
             $all =  $liste->count();
-            $pending =  $liste->where('status', null)->count();
+            $pending =  $liste->where('status', 'pending')->count();
             $approuve =  $liste->where('status', 'approved')->count();
             $rejected =  $liste->where('status', 'rejected')->count();
             return view('liste', compact('liste', 'pending', 'approuve', 'rejected', 'all'));
@@ -146,25 +146,31 @@ class WebController extends Controller
         }
     }
 
-    public function paymentConfirm($request_id)
+    public function paymentConfirm(Request $request)
     {
+        $request->validate([
+            'request_id' => "required",
+            'datepaiement' => "required",
+        ], [
+            "datepaiement.required" => "Please add an payement date."
+        ]);
 
+        // dd(Carbon::parse($request->datepaiement)->toDateString());
+        $employee = Auth::guard('employees')->user();
+        $staff_request = StaffRequest::find($request->request_id);
+        // dd($staff_request);
 
-        if (!$request_id) {
+        if (!isset($staff_request->payments)) {
             return abort(404, 'Formulaire non trouvé.');
         }
 
-        $employee = Auth::guard('employees')->user();
-        $staff_request = StaffRequest::findOrFail($request_id);
         if ($staff_request && ($staff_request->payments->status_payment == "pending")) {
             $staff_request->payments->status_payment = "paid";
             $staff_request->payments->finance_id  = $employee->employeeId;
-            $staff_request->payments->date_payment = Carbon::now();
+            $staff_request->payments->date_payment = Carbon::parse($request->datepaiement)->toDateString();
             $staff_request->payments->save();
         }
-
         return redirect()->route('request.approve');
-
         // $data = $this->getRequestApprouvedData();
         // return view('request_approuve', $data);
     }
@@ -373,12 +379,18 @@ class WebController extends Controller
         // Trouver l'employé et le
 
         $user =  Auth::guard('employees')->user();
+
         //  $user->employees
         // $user->information_employees->delete();
         if ($user->staff_requests) {
-            $user->staff_requests->each(function ($staff_request) {
-                $staff_request->delete();
-            });
+            $request = $user->staff_requests->where('id', $id)->first();
+            $request->status_input = false;
+            $request->save();
+
+            // $user->staff_requests->each(function ($staff_request) {
+            //     $staff_request->delete();
+            //     $staff_request->save();
+            // });
         }
 
         // Rediriger vers la route d'accueil après suppression
@@ -506,7 +518,6 @@ class WebController extends Controller
 
                 // $data = $emailData[5]; // Par exemple, accéder au 6ème email
                 // Mail::to($data->email)->queue(new GroupEmail($data->data, $data->view));
-                $batchSize = 3; // Envoie par lots de 3 emails
                 // foreach (array_chunk($emailData, $batchSize) as $batch) {
                 //     foreach ($batch as $data) {
                 //         Mail::to($data->email)->queue(new GroupEmail($data->data, $data->view));
@@ -520,10 +531,10 @@ class WebController extends Controller
                 foreach ($emailData as $data) {
                     Mail::to($data->email)->queue(new GroupEmail($data->data, $data->view));
                 }
-            } elseif ($action === 'reject') {
+            } elseif ($action == 'reject') {
                 // Logique pour rejeter le formulaire
                 $form->status = 'rejected';
-                $form->status_input = false;
+                // $form->status_input = false;
                 $form->save();
 
                 $recipients = [
@@ -674,7 +685,6 @@ class WebController extends Controller
                 if ($employee->supervisor) {
                     // Envoyer une notification au supérieur
                     $employee->supervisor->notify(new EmployeeValidate($employee, $response, 'form_submission'));
-                    $employee->notify(new EmployeeValidate($employee, $response, 'form_submission'));
                 }
                 DB::commit();
                 return response()->json(

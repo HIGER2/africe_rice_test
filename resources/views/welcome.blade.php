@@ -16,11 +16,11 @@
                         @csrf
                         <div class="form-group">
                             <label for="email">E-mail</label>
-                            <input type="email" id="email" value="k.sams@cgiar.org" name="email" placeholder="Enter your CGIAR email address" required>
+                            <input type="email" id="email" value="admintest@example.com" name="email" placeholder="Enter your CGIAR email address" required>
                         </div>
                         <div class="form-group">
                             <label for="password">Password <span>(default is your RESNO)</span></label>
-                            <input type="password" value="2204Lucio" id="password" name="password" placeholder="Enter your password" required>
+                            <input type="password" value="1234" id="password" name="password" placeholder="Enter your password" required>
                         </div>
                         <button type="submit" class="login-button">
                             Login

@@ -55,94 +55,25 @@ if (data) {
     <!-- {{  employee.role}} -->
     <!-- {{ type[2] }} -->
     <!-- {{ useManager.user.total_p_e_t }} -->
+      <!-- {{ data.status_input }} -->
     <div class="content">
         <div class="row" :class="{'active':useManager.user.children.length > 0}">
-                <FormComponent
-                :type="type"
-                :data="data"
-                :employee="employee"
-                />
 
-            <!-- <div class="col">
-                <form @submit.prevent="onSave(type)">
-                    <div class="card">
-                        <h5> General information </h5>
-                        <div class="form-group">
-                            <label for="number">Enter your departure date</label>
-                            <input type="date"
-                                v-model="useManager.user.depart_date"
-                                :min="today.toISOString().slice(0, 10)"
-                                :disabled="data?.status_input"
-                                name="date"
-                                placeholder="Enter your departure date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="category">Category</label>
-                            <input type="email" :value="employee?.category" id="category" name="category"
-                                placeholder="Your category" disabled>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password">Spouse</label>
-                            <select name="" id="" required v-model="useManager.user.marital_status"
-                                :disabled="data?.status_input">
-                                <option value=""></option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
-                        </div>
-
-                          <div class="form-group">
-                            <label for="number">Number of children (limit 4)</label>
-                            <input type="tel" @input="loadChild()" v-model.number="useManager.user.number_child" min="0"
-                                max="4" :disabled="data?.status_input" id="password" name="password"
-                                placeholder="Number of children (limit 4)" required>
-                        </div>
-                        <div class="contentchild" v-if="useManager.user.children.length > 0">
-                            <h5>Children informations</h5>
-                            <div class="rowinput" v-for="(item, index) in useManager.user.children" :key="index">
-                                <div class="form-group">
-                                    <label for="age">Age (limit 23 years)</label>
-                                    <input type="number"
-                                    @input="limit_age(index)"
-                                    :disabled="data?.status_input" v-model="item.age" id="age" min="0"
-                                    max="23"
-                                        name="age" placeholder="Enter age" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Sex</label>
-                                    <select name="" id="" required v-model="item.sex" :disabled="data?.status_input">
-                                        <option value=""></option>
-                                        <option value="M">M</option>
-                                        <option value="F">F</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" v-if="!data?.status_input" class="login-button" :disabled="data?.status_input">
-                        <span v-if="isLoading">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                                <path fill="currentColor"
-                                    d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z">
-                                    <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite"
-                                        type="rotate" values="0 12 12;360 12 12" />
-                                </path>
-                            </svg>
-                        </span>
-                        <span v-else>
-                            Confirm
-                        </span>
-                    </button>
-
-                <button v-else type="button" class="test" @click="destroy(data?.id)">Supprimer pour réessayer</button>
-                </form>
-            </div> -->
+            <template v-if="data?.status_input">
             <div class="col">
+                <h5> your request  </h5>
+
+
                 <div class="card ">
-                   <div class="head">
-                    <h5> Summary </h5>
+                    <!-- <div class="headercard">
+                        <div class="colelement">
+                            <span>Request : 67678</span>
+                            <span>10 janvier 2000</span>
+                        </div>
+                        <div class="colelement"></div>
+                    </div> -->
+                    <div class="head">
+                    <!-- <h5> Summary </h5> -->
                         <!-- {{ data.payments }} -->
 
                     <div class="headerStatut">
@@ -172,6 +103,9 @@ if (data) {
                         </div>
                        </template>
                     </div>
+                    <template v-if="data?.status =='rejected'">
+                        <button  class="btnnew" @click="destroy(data?.id)">add new request</button>
+                    </template>
 
 
                    </div>
@@ -180,6 +114,7 @@ if (data) {
                    </div> -->
                    <DetailComponent
                     :type="type"
+                    :data="data"
                     />
                     <!-- <template v-if="data?.status_input">
                     <DetailComponentValidate
@@ -336,6 +271,95 @@ if (data) {
                     </ul> -->
                 </div>
             </div>
+            </template>
+             <template v-else>
+                <div class="col">
+                <h5 >  add new request </h5>
+            <FormComponent
+                :type="type"
+                :data="data"
+                :employee="employee"
+                />
+                </div>
+             </template>
+
+            <!-- <div class="col">
+                <form @submit.prevent="onSave(type)">
+                    <div class="card">
+                        <h5> General information </h5>
+                        <div class="form-group">
+                            <label for="number">Enter your departure date</label>
+                            <input type="date"
+                                v-model="useManager.user.depart_date"
+                                :min="today.toISOString().slice(0, 10)"
+                                :disabled="data?.status_input"
+                                name="date"
+                                placeholder="Enter your departure date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <input type="email" :value="employee?.category" id="category" name="category"
+                                placeholder="Your category" disabled>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Spouse</label>
+                            <select name="" id="" required v-model="useManager.user.marital_status"
+                                :disabled="data?.status_input">
+                                <option value=""></option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+                          <div class="form-group">
+                            <label for="number">Number of children (limit 4)</label>
+                            <input type="tel" @input="loadChild()" v-model.number="useManager.user.number_child" min="0"
+                                max="4" :disabled="data?.status_input" id="password" name="password"
+                                placeholder="Number of children (limit 4)" required>
+                        </div>
+                        <div class="contentchild" v-if="useManager.user.children.length > 0">
+                            <h5>Children informations</h5>
+                            <div class="rowinput" v-for="(item, index) in useManager.user.children" :key="index">
+                                <div class="form-group">
+                                    <label for="age">Age (limit 23 years)</label>
+                                    <input type="number"
+                                    @input="limit_age(index)"
+                                    :disabled="data?.status_input" v-model="item.age" id="age" min="0"
+                                    max="23"
+                                        name="age" placeholder="Enter age" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Sex</label>
+                                    <select name="" id="" required v-model="item.sex" :disabled="data?.status_input">
+                                        <option value=""></option>
+                                        <option value="M">M</option>
+                                        <option value="F">F</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" v-if="!data?.status_input" class="login-button" :disabled="data?.status_input">
+                        <span v-if="isLoading">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z">
+                                    <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite"
+                                        type="rotate" values="0 12 12;360 12 12" />
+                                </path>
+                            </svg>
+                        </span>
+                        <span v-else>
+                            Confirm
+                        </span>
+                    </button>
+
+                <button v-else type="button" class="test" @click="destroy(data?.id)">Supprimer pour réessayer</button>
+                </form>
+            </div> -->
+
         </div>
     </div>
 </template>

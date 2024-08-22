@@ -43,7 +43,7 @@ Route::post('/service-email', [WebController::class, 'serviceEmailSave'])->name(
 Route::delete('/service-destroy/{id}', [WebController::class, 'destroyEmail'])->name('service.email.destroy');
 
 // ->middleware('auth');
-Route::post('/payment-confirm/{request_id}', [WebController::class, 'paymentConfirm'])->name('payment.confirm');
+Route::post('/payment-confirm', [WebController::class, 'paymentConfirm'])->name('payment.confirm');
 
 // Route::middleware(['auth'])->group(function () {
 // });

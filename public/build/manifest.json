@@ -6,7 +6,7 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-CM86Kqjy.js",
+    "file": "assets/app-BzRzTbfF.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -15,7 +15,7 @@
     ]
   },
   "resources/scss/app.scss": {
-    "file": "assets/app-B6ukgY3K.css",
+    "file": "assets/app-CXFpSGx9.css",
     "src": "resources/scss/app.scss",
     "isEntry": true
   }

@@ -138,12 +138,14 @@
                             <td>{{ isset($data->payments->date_payment) ? $data->payments->date_payment : 'N/A' }}</td>
                             <td>{{$data->created_at}}</td>
                             <td>
-                                <form id="confirm-form" action="{{ route('payment.confirm',['request_id'=>$data->id]) }}" method="POST">
-                                    @csrf
-                                    <button @disabled($data->payments->status_payment == 'paid' ? true : false) type="button"  onclick="confirmSubmit()" class="btnpayement">
-                                        Confirm Payment
-                                    </button>
-                                </form>
+                                @if ($data->payments->status_payment == 'paid')
+                                    <span>...</span>
+                                @else
+                                    <button @disabled($data->payments->status_payment == 'paid' ? true : false) onclick="get_data_id({{$data->id}})" data-bs-toggle="modal" data-bs-target="#exampleModal"  type="button"class="btnpayement">
+                                    Confirm Payment
+                                </button>
+                                @endif
+
                             </td>
                         </tr>
                  @endforeach
@@ -158,13 +160,30 @@
         </div>
         </div>
     </div>
+
+
+    <div class="modal" id="exampleModal" aria-hidden="true">
+        <div class="modal-content">
+            <div class="card">
+                <form id="confirm-form" action="{{ route('payment.confirm') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="request_id" id="data-id">
+                        <div class="groupe-form">
+                            <label for="date">Enter the payment date</label>
+                            <input type="date" name="datepaiement" id="date" required>
+                        </div>
+                        <button type="submit" onclick="return confirm('Are you sure you want to confirm this payment?')" class="btnpayement">
+                            Confirm
+                        </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </section>
 
 <script>
-    function confirmSubmit() {
-        if (confirm("Are you sure you want to confirm this payment?")) {
-            document.getElementById('confirm-form').submit();
-        }
+    function get_data_id(id) {
+        document.querySelector('#data-id').value = id;
     }
 </script>
 @endsection
