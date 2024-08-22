@@ -119,6 +119,29 @@ class WebController extends Controller
         }
     }
 
+    public function myRequest()
+    {
+
+        if (Auth::guard('employees')->check()) {
+
+            $employee = Auth::guard('employees')->user();
+
+            // dd($employee);
+            $liste = StaffRequest::with('employees')
+                ->where('employees_id', $employee->employeeId)
+                ->orderBy('created_at', 'desc')
+                ->get();
+            $all =  $liste->count();
+            $pending =  $liste->where('status', 'pending')->count();
+            $approuve =  $liste->where('status', 'approved')->count();
+            $rejected =  $liste->where('status', 'rejected')->count();
+            return view('my_request', compact('liste', 'pending', 'approuve', 'rejected', 'all'));
+        } else {
+            return redirect()->route('login');
+            // return redirect()->route('login', compact('type', 'employee', 'formData'));
+        }
+    }
+
     private function getRequestApprouvedData()
     {
         $liste = StaffRequest::with('employees')

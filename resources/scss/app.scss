@@ -369,27 +369,18 @@ padding:1rem;
         display: flex;
         align-items: center;
         justify-content: center;
+        .headerStatut{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
         .head{
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 10px;
-            .btnnew{
-                padding: 10px;
-                background-color: $secondary-color;
-                color: $white;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-            }
-            .headerStatut{
-            display: flex;
-            align-items: center;
-            gap: 10px;
-
-            }
         }
-        @media only screen and (max-width: 792px){
+         @media only screen and (max-width: 792px){
             width: 100%;
         }
         .row{
@@ -398,15 +389,14 @@ padding:1rem;
             justify-content: center;
             gap: 5px;
             margin-inline: auto;
+            // background-color: red;
+            // padding: 1rem;
             border-radius: 10px;
-            h5{
-                font-size: 14px;
-                color: $primary-color;
-                margin-bottom: 10px;
-            }
+            // background-color: red;
             &.active{
             align-items: flex-start;
             }
+            // box-shadow: $shadow;
             @media only screen and (max-width: 792px){
                 width: 100%;
                 // flex-wrap: wrap;
@@ -419,38 +409,23 @@ padding:1rem;
                 align-items: center;
             }
             .col{
-                // background-color: #fff;
+                background-color: #fff;
                 border-radius: 10px;
+                box-shadow: $shadow;
                 transition: all .4s ease-in-out;
-                width: 400px;
-                .headercard{
-                    width: 100%;
-                    height: 100px;
-                    background-color: $white;
-                    box-shadow: $shadow;
-                    // background-color: #dcfce7;
-                    // color: #166434;
-                    // background-color: $secondary-color;
-                    border-radius: 10px;
-                    margin: 10px;
-                    display: flex;
-                    align-items: center;
-                    padding: 10px;
-                    gap: 10px;
-                    .colelement{
-                        width: 50%;
-                        min-height: 1px;
-                    }
-                }
+                // &:hover{
+                //     border:1px solid  $secondary-color;
+                // }
                 @media only screen and (max-width: 792px){
                 width: 100%;
                 }
                 .card{
                 min-height: 100px;
                 border-radius: 10px;
-                background-color: $white;
-                box-shadow: $shadow;
-                padding: 1rem;
+                // box-shadow: $shadow;
+                // background-color: $white;
+                padding: 1rem 2rem;
+
                 .rate{
                     // background-color: red;
                     text-align: right;
@@ -476,17 +451,20 @@ padding:1rem;
                     }
                 }
                 &:first-child{
+                    width: 35%;
                     // background-color: $background-color;
-                    // border-radius: 10px ;
-                    h5{
-                        font-size: 1rem;
-                        text-transform: uppercase;
-                    }
+                    border-radius: 10px ;
+                    padding:1rem 2rem;
+                    border:1px solid  $secondary-color;
                     @media only screen and (max-width: 792px){
                         position: relative;
                         width: 100%;
                         position: sticky;
                         top: 60px;
+                    }
+                    .card{
+                        padding: 0;
+                        // background-color: green;
                     }
 
                     input{
@@ -494,14 +472,17 @@ padding:1rem;
                     }
                 }
                 &:last-child{
+                    width: 40%;
+
                     @media only screen and (max-width: 792px){
                         position: relative;
                         top: 0;
                         width: 100%;
                     }
                     .card{
+                        padding: 1rem;
+                        // background-color: green;
                         width: 100%;
-                        border:1px solid  $secondary-color;
                     }
                 }
                 form {
@@ -568,7 +549,6 @@ padding:1rem;
                 .row-items{
                     display: flex;
                     width: 100%;
-                    border-radius: 10px ;
                     @media only screen and (max-width: 792px){
                     flex-direction: column;
                     width: 100%;
@@ -1535,4 +1515,27 @@ padding:1rem;
     }
 }
 
+
+.my-request{
+    width: 100%;
+    .container{
+        width: 85%;
+        min-width: 800px;
+        // display: grid;
+        // place-items: center;
+        margin-inline: auto;
+        padding: 1rem;
+        .card-request{
+            display: flex;
+            align-items: center;
+            width: 100%;
+            .card{
+                width: calc(100% / 3 - 10px);
+                margin: 5px;
+                min-height: 10Px;
+                background-color: red;
+            }
+        }
+    }
+}
 

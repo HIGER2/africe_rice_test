@@ -25,7 +25,7 @@
                 <ul class="dropDown" >
                     <li>
                         <a href="{{route('home')}}">
-                            <span>Home</span>
+                            <span>My requests</span>
                             <i class="uil uil-arrow-up-right"></i>
                         </a>
                     </li>
