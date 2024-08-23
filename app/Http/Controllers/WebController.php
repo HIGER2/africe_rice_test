@@ -439,9 +439,9 @@ class WebController extends Controller
                 abort(404, 'Le formulaire demandé n\'existe pas.');
             }
 
-            if ($form->status != 'pending') {
-                abort(404, 'demande déja validée.');
-            }
+            // if ($form->status != 'pending') {
+            //     abort(404, 'demande déja validée.');
+            // }
 
             $employee = $form->employees;
             Carbon::setLocale('fr');
@@ -530,7 +530,6 @@ class WebController extends Controller
                         }
                     }
                 }
-                // dd($servieEmail);
 
                 if ($servieEmail->count() > 0) {
                     $emailData = array_merge($recipients, $backMessage);
@@ -554,6 +553,7 @@ class WebController extends Controller
                 foreach ($emailData as $data) {
                     Mail::to($data->email)->send(new GroupEmail($data->data, $data->view));
                 }
+                // dd($servieEmail);
             } elseif ($action == 'reject') {
                 // Logique pour rejeter le formulaire
                 $form->status = 'rejected';
