@@ -23,41 +23,45 @@
             <form action="{{ route('logout') }}" method="GET" class="d-inline">
                 @csrf
                 <ul class="dropDown" >
-                    <li>
-                        <a href="{{route('home')}}">
-                            <span>My requests</span>
-                            <i class="uil uil-arrow-up-right"></i>
-                        </a>
-                    </li>
-
-                     @if (session('user')->role == 'admin')
-
-                    <li>
-                        <a href="{{route('liste')}}">
-                            <span>Requests list</span>
-                            <i class="uil uil-arrow-up-right"></i>
-                        </a>
-                    </li>
+                    @if (session('user')->role == 'staff')
+                        <li>
+                            <a href="{{route('home')}}">
+                                <span>My requests</span>
+                                <i class="uil uil-arrow-up-right"></i>
+                            </a>
+                        </li>
+                    @endif
+                    @if (session('user')->matricule == 'A10865' || session('user')->matricule == 'A10825')
                     <li>
                         <a href="{{route('request.approve')}}">
                             <span>Requests list approuved</span>
                             <i class="uil uil-arrow-up-right"></i>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{route('service.email')}}">
-                            <span>Config email</span>
-                            <i class="uil uil-arrow-up-right"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{route('setting')}}">
-                            <span>Setting</span>
-                            <i class="uil uil-arrow-up-right"></i>
-                        </a>
-                    </li>
                     @endif
-                     <li>
+                    @if (session('user')->role == 'admin')
+                        <li>
+                            <a href="{{route('liste')}}">
+                                <span>Requests list</span>
+                                <i class="uil uil-arrow-up-right"></i>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('service.email')}}">
+                                <span>Config email</span>
+                                <i class="uil uil-arrow-up-right"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{route('setting')}}">
+                                <span>Setting</span>
+                                <i class="uil uil-arrow-up-right"></i>
+                            </a>
+                        </li>
+                    @endif
+
+                    <li>
                         <span>Change password</span>
                         <i class="uil uil-arrow-up-right"></i>
                     </li>

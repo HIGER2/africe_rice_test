@@ -92,6 +92,11 @@ class WebController extends Controller
                 ->get();
             $currency = ExchangeRate::first();
 
+            $authorize = $this->inAuthorize($employee->role, "admin", 'liste');
+
+            if ($authorize) {
+                return $authorize;
+            }
             return view('home', compact('employee', 'type', 'formData', 'currency'));
         } else {
             return redirect()->route('login');
@@ -614,6 +619,7 @@ class WebController extends Controller
         ]);
 
 
+
         $employee = Employee::where('email', $request->email)->first();
         if (!$employee) {
             return back()->withErrors([
@@ -658,6 +664,11 @@ class WebController extends Controller
 
         $employee = Auth::guard('employees')->user();
         session::put('user', $employee);
+
+        if ($employee->role == "admin") {
+            return redirect()->route('liste');
+        }
+
         return redirect()->route('home');
     }
 
@@ -895,5 +906,25 @@ class WebController extends Controller
         $email->delete();
         // Rediriger vers la route d'accueil avec un message de succès
         return redirect()->route('service.email.get')->with('success', 'Email supprimé avec succès');
+    }
+
+    public function redirectUser($email)
+    {
+        $existeEmail = ["k.olatifede@cgiar.org", "admintest@example.com"];
+        if (in_array($email, $existeEmail)) {
+            return redirect()->route('liste');
+        }
+    }
+
+    public function inAuthorize($role, $roles, $route)
+    {
+
+        if ($role == $roles) {
+            return redirect()->route($route);
+        }
+        // if (is_array($role, $roles)) {
+        //     return redirect()->route($route);
+        // }
+        return false;
     }
 }
