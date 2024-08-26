@@ -21,13 +21,13 @@
                             @endforeach
                         </div>
                     @endif
-                <div class="form-group">
-                    <label for="number">Update exchange rate</label>
-                    <input type="number" name="rate"
-                    value="{{$rate->value}}"
-                        placeholder="Update exchange rate" >
-                    </div>
-                    <h2>Update amount Staff Category</h2>
+                        {{-- <div class="form-group">
+                            <label for="number">Update exchange rate</label>
+                            <input type="number" name="rate"
+                            value="{{$rate->value}}"
+                                placeholder="Update exchange rate" >
+                        </div> --}}
+                     <h2>Update amount Staff Category</h2>
                         <!-- Display success messages -->
                         <div class="form-group">
                             {{-- {{$type_allowence}} --}}
