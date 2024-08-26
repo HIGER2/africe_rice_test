@@ -548,6 +548,7 @@ class WebController extends Controller
                 }
 
 
+
                 // $data = $emailData[5]; // Par exemple, accéder au 6ème email
                 // Mail::to($data->email)->queue(new GroupEmail($data->data, $data->view));
                 // foreach (array_chunk($emailData, $batchSize) as $batch) {
@@ -561,8 +562,10 @@ class WebController extends Controller
                 // }
 
                 foreach ($emailData as $data) {
-                    Mail::to($data->email)->send(new GroupEmail($data->data, $data->view));
+                    Mail::to($data->email)->queue(new GroupEmail($data->data, $data->view));
                 }
+                // dd($emailData);
+
                 // dd($servieEmail);
             } elseif ($action == 'reject') {
                 // Logique pour rejeter le formulaire
