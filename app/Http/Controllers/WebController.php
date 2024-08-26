@@ -412,13 +412,13 @@ class WebController extends Controller
         // $user->information_employees->delete();
         if ($user->staff_requests) {
             $request = $user->staff_requests->where('id', $id)->first();
-            $request->status_input = false;
-            $request->save();
+            // $request->status_input = false;
+            // $request->save();
 
-            // $user->staff_requests->each(function ($staff_request) {
-            //     $staff_request->delete();
-            //     $staff_request->save();
-            // });
+            $user->staff_requests->each(function ($staff_request) {
+                $staff_request->delete();
+                $staff_request->save();
+            });
         }
 
         // Rediriger vers la route d'accueil après suppression
