@@ -704,7 +704,7 @@ class WebController extends Controller
 
                 if ($request->children) {
                     foreach ($request->children as $data) {
-                        $data['employee_informatons_id'] = $response->id;
+                        $data['staff_requests_id'] = $response->id;
                         $children[] = StaffChild::create($data);
                     }
                 }
