@@ -75,7 +75,7 @@
                                 <div class="form-group">
                                     <label for="stc">Select department</label>
                                     {{-- {{$services}} --}}
-                                    <select name="service" id="" >
+                                    <select name="service" id="" required>
                                         <option value="">-- Select department --</option>
                                         @foreach ($services as $data )
                                             {{-- {{$data}} --}}
@@ -91,7 +91,7 @@
 
                                 <div class="form-group">
                                     <label for="stc">department email</label>
-                                    <input type="text" name="email" value="{{$singleEmail  ? $singleEmail->email : ''}}" placeholder="department email">
+                                    <input type="text" name="email" value="{{$singleEmail  ? $singleEmail->email : ''}}" placeholder="department email" required>
                                 </div>
                                 @error('email')
                                     <div class="text-danger">{{ $message }}</div>

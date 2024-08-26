@@ -20,21 +20,22 @@ const {
 <template>
     <div class="row-items">
     <ul class="items">
-        <li class="item rowItem">
-                <div class="info">
-                    <!-- {{ useManager.test }} -->
-                    <!-- {{ useManager.user.marital_status }} -->
-                    <span>Travel with Family</span>
-                    <span>{{separatorMillier(useManager.Total_T_W_F(type[0]))}} XOF</span>
-                </div>
-                <small class="info">
-                    {{ `(Staff=${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
-                        +(spouse=${
-                        useManager.user.marital_status == "yes"? separatorMillier(useManager.calculate_amount(type[0]?.staff_categories)) : 0})
+        <template v-if="useManager.employeeConnected?.show">
+                <li class="item rowItem">
+                    <div class="info">
+                        <!-- {{ useManager.test }} -->
+                        <!-- {{ useManager.user.marital_status }} -->
+                        <span>Travel with Family</span>
+                        <span>{{separatorMillier(useManager.Total_T_W_F(type[0]))}} XOF</span>
+                    </div>
+                    <small class="info">
+                        {{ `(Staff=${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
+                            +(spouse=${
+                            useManager.user.marital_status == "yes"? separatorMillier(useManager.calculate_amount(type[0]?.staff_categories)) : 0})
 
-                        + (${useManager.user.children?.length} child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
-                    ` }}
-                </small>
+                            + (${useManager.user.children?.length} child * ${separatorMillier(useManager.calculate_amount(type[0]?.staff_categories))})
+                        ` }}
+                    </small>
             </li>
             <li class="item rowItem">
                 <div class="info">
@@ -47,20 +48,27 @@ const {
                 </small>
                 <!-- {{ item?.staff_categories }} -->
             </li>
-
-
             <li class="item rowItem">
                 <div class="info">
                     <span>Personal effect Transportation</span>
                     <span>{{separatorMillier(useManager.calculate_amount(type[1]?.staff_categories))}} XOF</span>
                 </div>
             </li>
-                <li class="item rowItem">
+            <li class="item rowItem">
                 <div class="info">
                     <span>Unforseen</span>
                     <span>{{separatorMillier(useManager.calculate_amount(type[3]?.staff_categories))}} XOF</span>
                 </div>
             </li>
+       </template>
+       <template v-else>
+          <li class="item rowItem">
+                <div class="info">
+                    <span>Personal effect Transportation</span>
+                    <span>{{separatorMillier(useManager.calculate_amount(type[1]?.staff_categories))}} XOF</span>
+                </div>
+            </li>
+       </template>
 
             <!-- <li class="item rowItem">
                 <div class="info">

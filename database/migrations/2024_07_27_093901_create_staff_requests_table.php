@@ -22,17 +22,17 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->boolean('status_input')->default(false);
             $table->integer('room')->nullable()->default(0);
-            $table->string('marital_status');
+            $table->string('marital_status')->nullable();
 
-            $table->bigInteger('total_t_w_f')->nullable();
-            $table->bigInteger('total_p_e_t')->nullable();
-            $table->bigInteger('total_f_i_a')->nullable();
-            $table->bigInteger('total_u')->nullable();
-            $table->bigInteger('total_p_c_a')->nullable();
-            $table->bigInteger('total_amount')->nullable();
+            $table->bigInteger('total_t_w_f')->default(0);
+            $table->bigInteger('total_p_e_t')->default(0);
+            $table->bigInteger('total_f_i_a')->default(0);
+            $table->bigInteger('total_u')->default(0);
+            $table->bigInteger('total_p_c_a')->default(0);
+            $table->bigInteger('total_amount')->default(0);
             $table->date('depart_date')->nullable();
             $table->date('taking_date')->nullable();
-            $table->integer('number_child')->nullable()->default(0);
+            $table->integer('number_child')->nullable();
             $table->string('category')->nullable();
             $table->timestamps();
         });

@@ -140,24 +140,26 @@ const limit_age = (index) => {
                                 placeholder="Your category" disabled>
                         </div>
 
-                        <div class="form-group">
-                            <label for="password">Spouse</label>
-                            <select name="" id="" required v-model="useManager.user.marital_status"
-                                :disabled="data?.status_input">
-                                <option value=""></option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
-                        </div>
+                        <template v-if="useManager.employeeConnected?.show">
+                            <div class="form-group">
+                                <label for="password">Spouse</label>
+                                <select name="" id="" required v-model="useManager.user.marital_status"
+                                    :disabled="data?.status_input">
+                                    <option value=""></option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
 
-                          <div class="form-group">
-                            <label for="number">Number of children (limit 4)</label>
-                            <input type="tel" @input="loadChild()" v-model.number="useManager.user.number_child"
-                                min="1"
-                                max="4"
-                                :disabled="data?.status_input" id="password" name="password"
-                                placeholder="Number of children (limit 4)" required>
-                        </div>
+                            <div class="form-group">
+                                <label for="number">Number of children (limit 4)</label>
+                                <input type="tel" @input="loadChild()" v-model.number="useManager.user.number_child"
+                                    min="1"
+                                    max="4"
+                                    :disabled="data?.status_input" id="password" name="password"
+                                    placeholder="Number of children (limit 4)" required>
+                            </div>
+                        </template>
                         <div class="contentchild" v-if="useManager.user.children.length > 0">
                             <!-- {{ useManager.children }} -->
                             <h5>Children informations</h5>

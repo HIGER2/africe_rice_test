@@ -67,21 +67,25 @@ export const useManagerStore = defineStore('manager',() => {
     const calculate = (item) => {
         let amount = 0
 
-        if (item?.id ==1) {
-          amount =   Total_T_W_F(item)
+        if (employeeConnected.value?.show) {
+            if (item?.id ==1) {
+            amount =   Total_T_W_F(item)
+            }
+
+            if (item?.id ==3) {
+            amount = Total_F_I_A(item,user.children)
+            }
+            if (item?.id ==4) {
+            amount = Total_U(item)
+            }
+            if (item?.id ==5) {
+            //   amount =  Total_P_C_A(item)
+            }
         }
         if (item?.id ==2) {
           amount =  Total_P_E_T(item)
         }
-        if (item?.id ==3) {
-            amount = Total_F_I_A(item,user.children)
-        }
-        if (item?.id ==4) {
-           amount = Total_U(item)
-        }
-        if (item?.id ==5) {
-        //   amount =  Total_P_C_A(item)
-        }
+
         return amount
     }
 
@@ -248,6 +252,8 @@ const Total_F_I_A = (item,children) => {
 
 
     const Total_U = (item) => {
+
+
         return computed(() => {
          let amount = calculate_amount(item?.staff_categories)
 
@@ -280,11 +286,16 @@ const Total_F_I_A = (item,children) => {
 
     const save = async(type) => {
 
-        user.total_t_w_f=calculate(type[0])
-        user.total_p_e_t=calculate(type[1])
-        user.total_f_i_a = Total_F_I_A(type[2],user.children)
-        user.total_u =calculate(type[3])
+            user.total_p_e_t=calculate(type[1])
         // user.total_p_c_a = calculate(type[4])
+        if (employeeConnected.value?.show) {
+            user.total_u = calculate(type[ 3 ])
+            user.total_t_w_f = calculate(type[ 0 ])
+            user.total_f_i_a = Total_F_I_A(type[2],user.children)
+
+
+
+        }
         user.total_amount = Total_Amount(type)
         user.room = Total_CHAMBRE(user.children)
 

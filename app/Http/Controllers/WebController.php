@@ -94,6 +94,11 @@ class WebController extends Controller
 
             $authorize = $this->inAuthorize($employee->role, "admin", 'liste');
 
+            $employee->show = true;
+            if ($employee->role == "consultant") {
+                $employee->show = false;
+            }
+
             if ($authorize) {
                 return $authorize;
             }
@@ -626,6 +631,14 @@ class WebController extends Controller
                 'message' => 'invalid email.',
             ]);
         }
+
+        if ($employee->grade !== "abidjan") {
+            return back()->withErrors([
+                'message' => 'not authorized',
+            ]);
+        }
+
+
         if (Hash::needsRehash($employee->password)) {
             $url = "https://mycareer.africarice.org/api/auth/login";
             $options = [
@@ -653,6 +666,7 @@ class WebController extends Controller
                 ]);
             }
         }
+
 
         $attemptWithNumero = Auth::guard('employees')->attempt(['email' => $request->input('email'), 'password' => $request->input('password')]);
 
@@ -849,6 +863,7 @@ class WebController extends Controller
         $singleEmail = null;
         $emailExiste = ServiceEmail::where('service', $request->service)
             ->where('email', $request->email)->first();
+
         $verif = ServiceEmail::where('service', $request->service)->count();
 
 
@@ -877,9 +892,16 @@ class WebController extends Controller
             $data = $request->except('_token');
             ServiceEmail::where('id', $request->id)->update($data);
         } else {
-            if ($verif >= 2) {
+
+            if ($verif >= 5 && $request->service == "1") {
                 return redirect()->back()->with('error', 'The limit of two records has been reached. You cannot add more records.');
             }
+
+            if ($verif >= 2 && $request->service != "1") {
+                return redirect()->back()->with('error', 'The limit of two records has been reached. You cannot add more records.');
+            }
+
+
             ServiceEmail::create($request->all());
         }
         $emails = ServiceEmail::get();

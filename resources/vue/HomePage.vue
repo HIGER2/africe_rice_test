@@ -52,7 +52,7 @@ if (data) {
 <template>
     <!-- {{useManager.currency }} -->
     <!-- {{ useManager.employeeConnected.value}} -->
-    <!-- {{  employee.role}} -->
+    <!-- {{  employee.show}} -->
     <!-- {{ type[2] }} -->
     <!-- {{ useManager.user.total_p_e_t }} -->
     <div class="content">

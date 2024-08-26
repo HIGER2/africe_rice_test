@@ -413,6 +413,9 @@ padding:1rem;
                 border-radius: 10px;
                 box-shadow: $shadow;
                 transition: all .4s ease-in-out;
+                width: max-content;
+                position: sticky;
+                top: 60px;
                 // &:hover{
                 //     border:1px solid  $secondary-color;
                 // }
@@ -452,15 +455,16 @@ padding:1rem;
                 }
                 &:first-child{
                     width: 35%;
-                    // background-color: $background-color;
                     border-radius: 10px ;
                     padding:1rem 2rem;
                     border:1px solid  $secondary-color;
+
                     @media only screen and (max-width: 792px){
-                        position: relative;
+                        // position: relative;
                         width: 100%;
-                        position: sticky;
-                        top: 60px;
+                        // position: sticky;
+                        // top: 60px;
+
                     }
                     .card{
                         padding: 0;
@@ -488,7 +492,7 @@ padding:1rem;
                 form {
                 @media only screen and (max-width: 792px){
                     width: 100%;
-                     position: sticky;
+                    position: sticky;
                     top: 60px;
                 }
                 .form-group {

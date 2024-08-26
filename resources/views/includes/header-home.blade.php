@@ -23,7 +23,8 @@
             <form action="{{ route('logout') }}" method="GET" class="d-inline">
                 @csrf
                 <ul class="dropDown" >
-                    @if (session('user')->role == 'staff')
+                    {{-- {{session('user')->role }} --}}
+                    @if (session('user')->role == 'staff' || session('user')->role == 'consultant' || session('user')->role == 'superadmin' )
                         <li>
                             <a href="{{route('home')}}">
                                 <span>My requests</span>
@@ -31,7 +32,7 @@
                             </a>
                         </li>
                     @endif
-                    @if (session('user')->matricule == 'A10865' || session('user')->matricule == 'A10825')
+                    @if (session('user')->matricule == 'A10865' || session('user')->matricule == 'A10825' || session('user')->matricule == 'A1234')
                     <li>
                         <a href="{{route('request.approve')}}">
                             <span>Requests list approuved</span>
@@ -39,7 +40,7 @@
                         </a>
                     </li>
                     @endif
-                    @if (session('user')->role == 'admin')
+                    @if (session('user')->role === 'admin' || session('user')->role ===  "superadmin")
                         <li>
                             <a href="{{route('liste')}}">
                                 <span>Requests list</span>
