@@ -438,9 +438,9 @@ class WebController extends Controller
 
             DB::beginTransaction();
             $now = Carbon::now()->format('d-m-Y H:i:s');
-            Log::channel('custom_controller_log')->info('*************');
-            Log::channel('custom_controller_log')->info("demandeId:{$id} action:{$action} date:{$now}");
-            Log::channel('custom_controller_log')->info('*************');
+            // Log::channel('custom_controller_log')->info('*************');
+            // Log::channel('custom_controller_log')->info("demandeId:{$id} action:{$action} date:{$now}");
+            // Log::channel('custom_controller_log')->info('*************');
 
             // Trouvez le formulaire avec l'ID donné
             $form = StaffRequest::findOrFail($id);
@@ -563,7 +563,8 @@ class WebController extends Controller
                 // }
 
                 foreach ($emailData as $data) {
-                    Mail::to($data->email)->queue(new GroupEmail($data->data, $data->view));
+                    Mail::to($data->email)->send(new GroupEmail($data->data, $data->view));
+                    sleep(5);
                 }
                 // dd($emailData);
 
