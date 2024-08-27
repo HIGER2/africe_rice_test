@@ -564,7 +564,7 @@ class WebController extends Controller
 
                 foreach ($emailData as $data) {
                     Mail::to($data->email)->send(new GroupEmail($data->data, $data->view));
-                    sleep(5);
+                    // sleep(5);
                 }
                 // dd($emailData);
 
