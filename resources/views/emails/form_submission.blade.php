@@ -1,5 +1,5 @@
 @component('mail::message')
-# New request submitted
+# New request submitted N° {{$form->request_number}}
 
 Hello,
 

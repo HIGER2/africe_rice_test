@@ -8,10 +8,11 @@ The taking up of office is for the **{{$data->taking_date}}**
 
 Below are the details of the compensation
 
+
 **Travel Details**
 
+Reqest n° {{$data->requesè_number}}
 {{-- {{$data->marital_status == "yes" ? 10 000 : 0}} --}}
-
 <table border="1" cellpadding="10" cellspacing="0" width="100%">
     <thead>
         <tr>

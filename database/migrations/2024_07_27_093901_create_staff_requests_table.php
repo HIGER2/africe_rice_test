@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('staff_requests', function (Blueprint $table) {
             $table->id();
             $table->Integer('employees_id')->index();
+            $table->string('request_number')->unique()->nullable()->index();
             $table->foreign('employees_id')
                 ->references('employeeId')
                 ->on('employees')

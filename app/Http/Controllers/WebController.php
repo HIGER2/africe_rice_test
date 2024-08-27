@@ -2,30 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use GuzzleHttp\Client;
+use App\Models\Payment;
 use App\Mail\GroupEmail;
-use Illuminate\Support\Collection;
 use App\Models\Currency;
 use App\Models\Employee;
 use App\Models\StaffChild;
-use App\Models\StaffRequest;
+use Illuminate\Support\Str;
 use App\Models\ExchangeRate;
-use App\Models\Payment;
 use App\Models\ServiceEmail;
-use App\Models\StaffCategorie;
-use App\Models\TypeAllowance;
-use App\Notifications\EmployeeValidate;
-use Carbon\Carbon;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
+use App\Models\StaffRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\TypeAllowance;
+use App\Models\StaffCategorie;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Notifications\EmployeeValidate;
 use Illuminate\Support\Facades\Session;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Validator;
+use GuzzleHttp\Exception\RequestException;
 
 class WebController extends Controller
 {
@@ -416,15 +417,15 @@ class WebController extends Controller
         //  $user->employees
         // $user->information_employees->delete();
         if ($user->staff_requests) {
-            $request = $user->staff_requests->where('id', $id)->first();
+            // $request = $user->staff_requests->where('id', $id)->first();
             // $request->status_input = false;
             // $request->save();
 
             $user->staff_requests->each(function ($staff_request) {
                 $staff_request->delete();
-                $staff_request->save();
             });
         }
+        // return $user->staff_requests;
 
         // Rediriger vers la route d'accueil après suppression
         return redirect()->route('home')->with('success', 'Employé supprimé avec succès');
@@ -449,9 +450,9 @@ class WebController extends Controller
                 abort(404, 'Le formulaire demandé n\'existe pas.');
             }
 
-            // if ($form->status != 'pending') {
-            //     abort(404, 'demande déja validée.');
-            // }
+            if ($form->status != 'pending') {
+                abort(404, 'demande déja validée.');
+            }
 
             $employee = $form->employees;
             Carbon::setLocale('fr');
@@ -478,7 +479,7 @@ class WebController extends Controller
                     ],
                     (object)[
                         'email' => $employee->supervisor->email,
-                        'message' => "Hello,\n\nYou have approved the departure request of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
+                        'message' => "Hello,\n\nYou have approved the departure request **n° {$form->request_number}** of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
                         'view' => 'group'
                     ],
                     (object)[
@@ -513,12 +514,12 @@ class WebController extends Controller
 
                 $backMessage = [
                     (object)[
-                        'data' => "Hello,\n\nYou have approved the departure request of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
+                        'data' => "Hello,\n\nYou have approved the departure request **n° {$form->request_number}** of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
                         'view' => 'group',
                         'email' => $employee->supervisor->email,
                     ],
                     (object)[
-                        'data' => "Hello,\n\n Your departure request for Bouaké on **{$depart_date}** has been approved.",
+                        'data' => "Hello,\n\n Your departure request **n° {$form->request_number}** for Bouaké on **{$depart_date}** has been approved.",
                         'view' => 'group',
                         'email' => $employee->email,
                     ],
@@ -577,12 +578,12 @@ class WebController extends Controller
                     (object)[
                         'email' => $employee->supervisor->email,
                         'message' =>
-                        "Hello,\n\nYou have rejected the departure request of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
+                        "Hello,\n\nYou have rejected the departure request **n° {$form->request_number}**  of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
                         'view' => 'group'
                     ],
                     (object)[
                         'email' => $employee->email,
-                        'message' => "Hello,\n\nYour departure request for Bouaké on **{$form->depart_date}** has been rejected.",
+                        'message' => "Hello,\n\nYour departure request **n° {$form->request_number}**  for Bouaké on **{$form->depart_date}** has been rejected.",
                         'view' => 'group'
                     ]
 
@@ -951,5 +952,17 @@ class WebController extends Controller
         //     return redirect()->route($route);
         // }
         return false;
+    }
+
+    function generateUniqueRequestNumber()
+    {
+        do {
+            // Générer un numéro de demande aléatoire
+            $requestNumber = 'REQ-' . strtoupper(Str::random(6));
+            // Vérifier l'unicité dans la base de données
+            $exists = StaffRequest::where('request_number', $requestNumber)->exists();
+        } while ($exists); // Répéter la génération si le numéro existe déjà
+
+        return $requestNumber;
     }
 }

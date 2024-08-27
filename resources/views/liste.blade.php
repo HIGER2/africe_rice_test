@@ -91,7 +91,7 @@
                      @foreach ($liste as $data )
                      <tr>
                         {{-- {{$data}} --}}
-                            <td>{{$data->id}}</td>
+                            <td>{{$data->request_number}}</td>
                             <td class="user">
                                 {{-- <div class="ico"></div> --}}
                                 <div class="info">
