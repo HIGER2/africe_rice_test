@@ -35,7 +35,12 @@ return [
     |
     */
 
+
     'mailers' => [
+
+        // 'mailersend' => [
+        //     'transport' => 'mailersend',
+        // ],
 
         'smtp' => [
             'transport' => 'smtp',

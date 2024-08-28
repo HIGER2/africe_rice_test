@@ -9,24 +9,23 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-
-class GroupEmail extends Mailable implements ShouldQueue
+class HandleEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
     public $data;
     public $view;
-
+    public $ccAddresses;
     /**
      * Create a new message instance.
      */
-    public function __construct($data, $view)
+
+    public function __construct($data, $view, $ccAddresses = [])
     {
         $this->data = $data;
         $this->view = $view;
+        $this->ccAddresses = $ccAddresses; // Initialiser les adresses CC
+
     }
 
     /**
@@ -49,14 +48,26 @@ class GroupEmail extends Mailable implements ShouldQueue
     //         ->text($this->data); // Utilise le texte brut
     // }
 
-    public function content(): Content
-    {
-        return new Content(
-            markdown: "emails.{$this->view}",
-            with: ['data' => $this->data], // Pass the data to the view
-        );
-    }
+    // public function content(): Content
+    // {
+    //     return new Content(
+    //         markdown: "emails.{$this->view}",
+    //         with: ['data' => $this->data], // Pass the data to the view
+    //     );
+    // }
 
+    public function build()
+    {
+        $email = $this->markdown('emails.' . $this->view)
+            ->subject('Group Email')
+            ->with(['data' => $this->data]);
+
+        if (!empty($this->ccAddresses)) {
+            $email->cc($this->ccAddresses);
+        }
+
+        return $email;
+    }
 
     /**
      * Get the attachments for the message.

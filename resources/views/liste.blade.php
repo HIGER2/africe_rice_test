@@ -84,6 +84,7 @@
                         <th>Status Payment</th>
                         <th>Payment Date</th>
                         <th>submission date</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -142,7 +143,16 @@
                             </td>
                             </td>
                             <td>{{ isset($data->payments->date_payment) ? $data->payments->date_payment : 'N/A' }}</td>
-                            <td>{{$data->created_at}}</td>
+                            <td>{{$data->created_at}} </td>
+                            <td>
+                                 @if (($data->status == 'pending' || $data->payments->status_payment == 'pending'))
+                                   <button @disabled($data->status == 'pending' ? true : false) onclick="get_data_id({{$data->id}})" data-bs-toggle="modal" data-bs-target="#exampleModal"  type="button"class="btnpayement">
+                                   <i class="uil uil-redo"></i>
+                                </button>
+                                @else
+                                <span>...</span>
+                                @endif
+                            </td>
                         </tr>
                  @endforeach
                 @endif
@@ -158,7 +168,9 @@
     </div>
 </section>
 
-  <script>
-
-    </script>
+<script>
+    function get_data_id(id) {
+        document.querySelector('#data-id').value = id;
+    }
+</script>
 @endsection

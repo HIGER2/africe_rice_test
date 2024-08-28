@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendEmailJob;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use App\Models\Payment;
 use App\Mail\GroupEmail;
+use App\Mail\HandleEmail;
 use App\Models\Currency;
 use App\Models\Employee;
 use App\Models\StaffChild;
@@ -450,9 +452,9 @@ class WebController extends Controller
                 abort(404, 'Le formulaire demandé n\'existe pas.');
             }
 
-            if ($form->status != 'pending') {
-                abort(404, 'demande déja validée.');
-            }
+            // if ($form->status != 'pending') {
+            //     abort(404, 'demande déja validée.');
+            // }
 
             $employee = $form->employees;
             Carbon::setLocale('fr');
@@ -498,20 +500,26 @@ class WebController extends Controller
                     (object)[
                         'data' => $form,
                         'view' => 'finance_validate',
-                        'service' => 1
+                        'service' => 1,
+                        'cc' => [],
+                        'principale' => "doumaarmand@gmail.com",
                     ],
                     (object)[
                         'data' => "Hello,\n\nThe departure date for Bouaké for staff member **{$employee->firstName} {$employee->lastName}** is scheduled for **{$depart_date}**.\n\nThe taking up of office is scheduled for **{$taking_date}**.\n\nPlease prepare all the necessary administrative documents.",
                         'view' => 'group',
-                        'service' => 2
+                        'service' => 2,
+                        'cc' => [],
+                        'principale' => "doumaarmand@gmail.com",
+
                     ],
                     (object)[
                         'data' => "Hello everyone,\n\n In the context of the departure for Bouaké, the staff member **{$employee->firstName} {$employee->lastName}** has had their departure request approved. Thus, the staff member will leave Abidjan on **{$depart_date}**.\n\n And will start their position on **{$taking_date}**.\n\n Please prepare the logistics for their departure as well as all the logistics related to their new position.",
                         'view' => 'group',
-                        'service' => 3
+                        'service' => 3,
+                        'cc' => [],
+                        'principale' => "doumaarmand@gmail.com",
                     ],
                 ];
-
                 $backMessage = [
                     (object)[
                         'data' => "Hello,\n\nYou have approved the departure request **n° {$form->request_number}** of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
@@ -529,44 +537,53 @@ class WebController extends Controller
                 $emailData = "";
                 if ($servieEmail->count() > 0) {
                     foreach ($servieEmail as $data) {
-                        foreach ($messageService as $value) {
+                        foreach ($messageService  as $key => $value) {
                             if ($data->service == $value->service) {
-                                $recipients[] = (object)[
-                                    "email" => $data->email,
-                                    "data" => $value->data,
-                                    "view" => $value->view
-                                ];
+                                $messageService[$key]->cc[] = $data->email;
+
+                                // $recipients[] = (object)[
+                                //     "email" => $data->email,
+                                //     "data" => $value->data,
+                                //     "view" => $value->view
+                                // ];
                                 break; // Ajouter un log ici peut être utile pour vérifier le processus.
                             }
                         }
                     }
                 }
 
-                if ($servieEmail->count() > 0) {
-                    $emailData = array_merge($recipients, $backMessage);
-                } else {
-                    $emailData = $backMessage;
-                }
+                // dd($messageService[0]->view);
+
+                Mail::to($messageService[0]->principale)->send(new HandleEmail($messageService[0]->data, $messageService[0]->view, $messageService[0]->cc));
+                // sleep(1);
+                Mail::to($messageService[1]->principale)->send(new HandleEmail($messageService[1]->data, $messageService[1]->view, $messageService[1]->cc));
+                // sleep(1);
+                Mail::to($messageService[2]->principale)->send(new HandleEmail($messageService[2]->data, $messageService[2]->view, $messageService[2]->cc));
 
 
-
-                // $data = $emailData[5]; // Par exemple, accéder au 6ème email
-                // Mail::to($data->email)->queue(new GroupEmail($data->data, $data->view));
-                // foreach (array_chunk($emailData, $batchSize) as $batch) {
-                //     foreach ($batch as $data) {
-                //         Mail::to($data->email)->queue(new GroupEmail($data->data, $data->view));
-                //     }
-                //     sleep(10); // Pause de 10 secondes entre chaque lot
+                // if ($servieEmail->count() > 0) {
+                //     $emailData = array_merge($recipients, $backMessage);
+                // } else {
+                //     $emailData = $backMessage;
                 // }
+                // SendEmailJob::dispatch($backMessage[0]->email, $backMessage[0]->data, $backMessage[0]->view);
+                // SendEmailJob::dispatch($recipients[0]->email, $recipients[0]->data, $recipients[0]->view);
+                // SendEmailJob::dispatch($recipients[1]->email, $recipients[1]->data, $recipients[1]->view);
+                // SendEmailJob::dispatch($recipients[2]->email, $recipients[2]->data, $recipients[2]->view);
+                // SendEmailJob::dispatch($recipients[3]->email, $recipients[3]->data, $recipients[3]->view);
+                // SendEmailJob::dispatch($recipients[0]->email, $recipients[0]->data, $recipients[0]->view);
+                // SendEmailJob::dispatch($recipients[4]->email, $recipients[4]->data, $recipients[4]->view);
+                // SendEmailJob::dispatch($recipients[5]->email, $recipients[5]->data, $recipients[5]->view);
+                // SendEmailJob::dispatch($recipients[6]->email, $recipients[6]->data, $recipients[6]->view);
+                // SendEmailJob::dispatch($recipients[7]->email, $recipients[7]->data, $recipients[7]->view);
+                // SendEmailJob::dispatch($recipients[8]->email, $recipients[8]->data, $recipients[8]->view);
+                // SendEmailJob::dispatch($recipients[9]->email, $recipients[9]->data, $recipients[9]->view);
+
                 // foreach ($emailData as $data) {
                 //     Mail::to($data->email)->send(new GroupEmail($data->data, $data->view));
+                //     // SendEmailJob::dispatch($data->email, $data->data, $data->view);
                 // }
 
-                foreach ($emailData as $data) {
-                    Mail::to($data->email)->send(new GroupEmail($data->data, $data->view));
-                    // sleep(5);
-                }
-                // dd($emailData);
 
                 // dd($servieEmail);
             } elseif ($action == 'reject') {
@@ -582,16 +599,16 @@ class WebController extends Controller
                         "Hello,\n\nYou have rejected the departure request **n° {$form->request_number}**  of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
                         'view' => 'group'
                     ],
-                    (object)[
-                        'email' => $employee->email,
-                        'message' => "Hello,\n\nYour departure request **n° {$form->request_number}**  for Bouaké on **{$form->depart_date}** has been rejected.",
-                        'view' => 'group'
-                    ]
+                    // (object)[
+                    //     'email' => $employee->email,
+                    //     'message' => "Hello,\n\nYour departure request **n° {$form->request_number}**  for Bouaké on **{$form->depart_date}** has been rejected.",
+                    //     'view' => 'group'
+                    // ]
 
                 ];
 
                 foreach ($recipients as $data) {
-                    Mail::to($data->email)->send(new GroupEmail($data->message, $data->view));
+                    SendEmailJob::dispatch($data->message, $data->view);
                 }
             } else {
                 // Action invalide
@@ -604,6 +621,9 @@ class WebController extends Controller
             return redirect()->route('form.status', ['action' => $action]);
         } catch (\Throwable $th) {
             DB::rollBack();
+
+            dd($th->getMessage());
+
             Log::error("Erreur lors du traitement de la demande : " . $th->getMessage());
             return abort(500, 'Une erreur est survenue.');
         }
