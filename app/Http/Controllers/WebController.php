@@ -474,6 +474,8 @@ class WebController extends Controller
                     'staff_id' => $form->employees->employeeId,
                     'amount' => $form->total_amount
                 ]);
+                DB::commit();
+
 
                 $servieEmail = ServiceEmail::get();
                 $recipiend = [
@@ -605,6 +607,7 @@ class WebController extends Controller
                 $form->status = 'rejected';
                 $form->status_input = false;
                 $form->save();
+                DB::commit();
 
                 $recipients = [
                     (object)[
@@ -620,8 +623,8 @@ class WebController extends Controller
                     ]
                 ];
 
-                Mail::to($recipients[0]->email)->send(new HandleEmail($recipients[0]->data, $recipients[0]->view));
-                Mail::to($recipients[1]->email)->send(new HandleEmail($recipients[1]->data, $recipients[1]->view));
+                Mail::to($recipients[0]->email)->send(new HandleEmail($recipients[0]->message, $recipients[0]->view));
+                Mail::to($recipients[1]->email)->send(new HandleEmail($recipients[1]->message, $recipients[1]->view));
 
 
                 // foreach ($recipients as $data) {
@@ -634,7 +637,6 @@ class WebController extends Controller
 
             // Rediriger vers une page d'affichage ou vers une autre vue
 
-            DB::commit();
             return redirect()->route('form.status', ['action' => $action]);
         } catch (\Throwable $th) {
             DB::rollBack();
