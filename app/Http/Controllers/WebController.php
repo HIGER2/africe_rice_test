@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendEmailJob;
+use App\Mail\GroupeEmailWitoutQueue;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use App\Models\Payment;
@@ -25,10 +26,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\EmployeeValidate;
+use App\Notifications\HandleEmailNotification;
 use Illuminate\Support\Facades\Session;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Validator;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\Notification;
 
 class WebController extends Controller
 {
@@ -552,14 +555,21 @@ class WebController extends Controller
                     }
                 }
 
-                // dd($messageService[0]->view);
+                dd("hello");
 
-                Mail::to($messageService[0]->principale)->send(new HandleEmail($messageService[0]->data, $messageService[0]->view, $messageService[0]->cc));
-                // sleep(1);
-                Mail::to($messageService[1]->principale)->send(new HandleEmail($messageService[1]->data, $messageService[1]->view, $messageService[1]->cc));
-                // sleep(1);
-                Mail::to($messageService[2]->principale)->send(new HandleEmail($messageService[2]->data, $messageService[2]->view, $messageService[2]->cc));
+                // email des departements
+                // Mail::to($messageService[0]->principale)->send(new HandleEmail($messageService[0]->data, $messageService[0]->view, $messageService[0]->cc));
+                // Mail::to($messageService[1]->principale)->send(new HandleEmail($messageService[1]->data, $messageService[1]->view, $messageService[1]->cc));
+                // Mail::to($messageService[2]->principale)->send(new HandleEmail($messageService[2]->data, $messageService[2]->view, $messageService[2]->cc));
 
+                Notification::route('mail', $messageService[0]->principale)->notify(new HandleEmailNotification($messageService[0]->data, $messageService[0]->view, $messageService[0]->cc));
+                Notification::route('mail', $messageService[1]->principale)->notify(new HandleEmailNotification($messageService[1]->data, $messageService[1]->view, $messageService[1]->cc));
+                Notification::route('mail', $messageService[2]->principale)->notify(new HandleEmailNotification($messageService[2]->data, $messageService[2]->view, $messageService[2]->cc));
+
+
+                // email de retour
+                // Mail::to($backMessage[0]->email)->send(new GroupeEmailWitoutQueue($backMessage[0]->data, $backMessage[0]->view));
+                // Mail::to($backMessage[1]->email)->send(new GroupeEmailWitoutQueue($backMessage[1]->data, $backMessage[1]->view));
 
                 // if ($servieEmail->count() > 0) {
                 //     $emailData = array_merge($recipients, $backMessage);
@@ -585,7 +595,6 @@ class WebController extends Controller
                 // }
 
 
-                // dd($servieEmail);
             } elseif ($action == 'reject') {
                 // Logique pour rejeter le formulaire
                 $form->status = 'rejected';
@@ -607,9 +616,14 @@ class WebController extends Controller
 
                 ];
 
-                foreach ($recipients as $data) {
-                    SendEmailJob::dispatch($data->message, $data->view);
-                }
+                Mail::to($recipients[0]->email)->send(new HandleEmail($recipients[0]->data, $recipients[0]->view));
+                Mail::to($recipients[1]->email)->send(new HandleEmail($recipients[1]->data, $recipients[1]->view));
+
+
+
+                // foreach ($recipients as $data) {
+                //     SendEmailJob::dispatch($data->message, $data->view);
+                // }
             } else {
                 // Action invalide
                 return abort(400, 'Action invalide.');
