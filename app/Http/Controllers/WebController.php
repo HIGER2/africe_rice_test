@@ -614,7 +614,6 @@ class WebController extends Controller
                 $form->status_input = false;
                 $form->save();
                 DB::commit();
-
                 $recipients = [
                     (object)[
                         'email' => $employee->supervisor->email,
@@ -629,8 +628,13 @@ class WebController extends Controller
                     ]
                 ];
 
-                Mail::to("africarice-hrtrainee1@cgiar.org")->send(new HandleEmail($recipients[1]->message, $recipients[1]->view));
-                Mail::to($recipients[0]->email)->send(new HandleEmail($recipients[0]->message, $recipients[0]->view));
+                foreach ($recipients as $key => $data) {
+                    Mail::to($data->email)->send(new HandleEmail($data->message, $data->view));
+                    sleep(5);
+                }
+
+                // Mail::to("africarice-hrtrainee1@cgiar.org")->send(new HandleEmail($recipients[1]->message, $recipients[1]->view));
+                // Mail::to($recipients[0]->email)->send(new HandleEmail($recipients[0]->message, $recipients[0]->view));
 
 
                 // foreach ($recipients as $data) {
