@@ -544,7 +544,7 @@ class WebController extends Controller
                     foreach ($servieEmail as $data) {
                         foreach ($messageService  as $key => $value) {
                             if ($data->service == $value->service) {
-                                $messageService[$key]->cc[] = $data->email;
+                                $messageService[$key]->cc[] = trim($data->email);
 
                                 // $recipients[] = (object)[
                                 //     "email" => $data->email,
@@ -559,12 +559,13 @@ class WebController extends Controller
 
 
                 foreach ($messageService as $key => $data) {
-                    Mail::to($data->principale)->send(new HandleEmail($data->data, $data->view, $data->cc));
-                    sleep(5);
+                    SendEmailJob::dispatch($data->principale, $data->data, $data->view, $data->cc);
+                    // Mail::to(trim($data->cc[0]))->send(new HandleEmail($data->data, $data->view, $data->cc));
+                    // sleep(5);
                 }
 
                 foreach ($backMessage as $key => $data) {
-                    Mail::to($data->email)->send(new HandleEmail($data->data, $data->view));
+                    Mail::to(trim($data->email))->send(new HandleEmail($data->data, $data->view));
                     sleep(5);
                 }
 
@@ -616,16 +617,19 @@ class WebController extends Controller
                 DB::commit();
                 $recipients = [
                     (object)[
-                        'email' => $employee->supervisor->email,
+                        'email' =>
+                        "doumaarmand@gmail.com",
+                        'message' => "Hello,\n\nYour departure request **n° {$form->request_number}**  for Bouaké on **{$form->depart_date}** has been rejected.",
+                        'view' => 'group'
+                    ],
+                    (object)[
+                        'email' =>
+                        "doumaarmand@gmail.com",
                         'message' =>
                         "Hello,\n\nYou have rejected the departure request **n° {$form->request_number}**  of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
                         'view' => 'group'
                     ],
-                    (object)[
-                        'email' => $employee->email,
-                        'message' => "Hello,\n\nYour departure request **n° {$form->request_number}**  for Bouaké on **{$form->depart_date}** has been rejected.",
-                        'view' => 'group'
-                    ]
+
                 ];
 
                 foreach ($recipients as $key => $data) {
@@ -783,12 +787,12 @@ class WebController extends Controller
                 $response->taking_date = Carbon::parse($response->taking_date)->translatedFormat('d F Y');
 
                 Carbon::setLocale('fr');
+                DB::commit();
 
                 if ($employee->supervisor) {
                     // Envoyer une notification au supérieur
                     $employee->supervisor->notify(new EmployeeValidate($employee, $response, 'form_submission'));
                 }
-                DB::commit();
                 return response()->json(
                     [
                         'message' => 'information enregistré',
@@ -809,7 +813,13 @@ class WebController extends Controller
                 [
                     'message' => "une erreur s'est produite",
                     'data' => null,
-                    'error' => $th->getMessage()
+                    'error' => [
+                        'message' => $th->getMessage(),
+                        'code' => $th->getCode(),
+                        'file' => $th->getFile(),
+                        'line' => $th->getLine(),
+                        'trace' => $th->getTraceAsString(),
+                    ]
                 ],
                 500
             );
