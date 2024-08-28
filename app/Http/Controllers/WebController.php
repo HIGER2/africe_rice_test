@@ -556,11 +556,16 @@ class WebController extends Controller
                 }
 
 
+                foreach ($messageService as $key => $data) {
+                    Mail::to($data->principale)->send(new HandleEmail($data->data, $data->view, $data->cc));
+                    sleep(30);
+                }
+
                 // email des departements
 
                 // Mail::to($messageService[0]->principale)->send(new HandleEmail($messageService[0]->data, $messageService[0]->view, $messageService[0]->cc));
                 // Mail::to($messageService[1]->principale)->send(new HandleEmail($messageService[1]->data, $messageService[1]->view, $messageService[1]->cc));
-                Mail::to($messageService[2]->principale)->send(new HandleEmail($messageService[2]->data, $messageService[2]->view, $messageService[2]->cc));
+                // Mail::to($messageService[2]->principale)->send(new HandleEmail($messageService[2]->data, $messageService[2]->view, $messageService[2]->cc));
 
                 // Notification::route('mail', $messageService[0]->principale)->notify(new HandleEmailNotification($messageService[0]->data, $messageService[0]->view, $messageService[0]->cc));
                 // Notification::route('mail', $messageService[1]->principale)->notify(new HandleEmailNotification($messageService[1]->data, $messageService[1]->view, $messageService[1]->cc));
@@ -608,17 +613,15 @@ class WebController extends Controller
                         "Hello,\n\nYou have rejected the departure request **n° {$form->request_number}**  of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
                         'view' => 'group'
                     ],
-                    // (object)[
-                    //     'email' => $employee->email,
-                    //     'message' => "Hello,\n\nYour departure request **n° {$form->request_number}**  for Bouaké on **{$form->depart_date}** has been rejected.",
-                    //     'view' => 'group'
-                    // ]
-
+                    (object)[
+                        'email' => $employee->email,
+                        'message' => "Hello,\n\nYour departure request **n° {$form->request_number}**  for Bouaké on **{$form->depart_date}** has been rejected.",
+                        'view' => 'group'
+                    ]
                 ];
 
                 Mail::to($recipients[0]->email)->send(new HandleEmail($recipients[0]->data, $recipients[0]->view));
                 Mail::to($recipients[1]->email)->send(new HandleEmail($recipients[1]->data, $recipients[1]->view));
-
 
 
                 // foreach ($recipients as $data) {
