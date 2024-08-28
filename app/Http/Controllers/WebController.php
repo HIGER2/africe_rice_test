@@ -557,13 +557,14 @@ class WebController extends Controller
 
 
                 // email des departements
-                // Mail::to($messageService[0]->principale)->send(new HandleEmail($messageService[0]->data, $messageService[0]->view, $messageService[0]->cc));
-                // Mail::to($messageService[1]->principale)->send(new HandleEmail($messageService[1]->data, $messageService[1]->view, $messageService[1]->cc));
-                // Mail::to($messageService[2]->principale)->send(new HandleEmail($messageService[2]->data, $messageService[2]->view, $messageService[2]->cc));
 
-                Notification::route('mail', $messageService[0]->principale)->notify(new HandleEmailNotification($messageService[0]->data, $messageService[0]->view, $messageService[0]->cc));
-                Notification::route('mail', $messageService[1]->principale)->notify(new HandleEmailNotification($messageService[1]->data, $messageService[1]->view, $messageService[1]->cc));
-                Notification::route('mail', $messageService[2]->principale)->notify(new HandleEmailNotification($messageService[2]->data, $messageService[2]->view, $messageService[2]->cc));
+                Mail::to($messageService[0]->principale)->send(new HandleEmail($messageService[0]->data, $messageService[0]->view, $messageService[0]->cc));
+                Mail::to($messageService[1]->principale)->send(new HandleEmail($messageService[1]->data, $messageService[1]->view, $messageService[1]->cc));
+                Mail::to($messageService[2]->principale)->send(new HandleEmail($messageService[2]->data, $messageService[2]->view, $messageService[2]->cc));
+
+                // Notification::route('mail', $messageService[0]->principale)->notify(new HandleEmailNotification($messageService[0]->data, $messageService[0]->view, $messageService[0]->cc));
+                // Notification::route('mail', $messageService[1]->principale)->notify(new HandleEmailNotification($messageService[1]->data, $messageService[1]->view, $messageService[1]->cc));
+                // Notification::route('mail', $messageService[2]->principale)->notify(new HandleEmailNotification($messageService[2]->data, $messageService[2]->view, $messageService[2]->cc));
 
 
                 // email de retour
