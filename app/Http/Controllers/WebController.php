@@ -617,7 +617,7 @@ class WebController extends Controller
                 DB::commit();
                 $recipients = [
                     (object)[
-                        'email' => "africarice-hrtrainee1@cgiar.org",
+                        'email' => $employee->email,
                         'message' => "Hello,\n\nYour departure request **n° {$form->request_number}**  for Bouaké on **{$form->depart_date}** has been rejected.",
                         'view' => 'group'
                     ],
