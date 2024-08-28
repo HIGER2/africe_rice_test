@@ -559,7 +559,7 @@ class WebController extends Controller
 
 
                 foreach ($messageService as $key => $data) {
-                    SendEmailJob::dispatch($data->principale, $data->data, $data->view, $data->cc);
+                    SendEmailJob::dispatch(trim($data->principale), $data->data, $data->view, $data->cc);
                     // Mail::to(trim($data->cc[0]))->send(new HandleEmail($data->data, $data->view, $data->cc));
                     // sleep(5);
                 }
@@ -617,14 +617,12 @@ class WebController extends Controller
                 DB::commit();
                 $recipients = [
                     (object)[
-                        'email' =>
-                        "doumaarmand@gmail.com",
+                        'email' => "africarice-hrtrainee1@cgiar.org",
                         'message' => "Hello,\n\nYour departure request **n° {$form->request_number}**  for Bouaké on **{$form->depart_date}** has been rejected.",
                         'view' => 'group'
                     ],
                     (object)[
-                        'email' =>
-                        "doumaarmand@gmail.com",
+                        'email' => $employee->supervisor->email,
                         'message' =>
                         "Hello,\n\nYou have rejected the departure request **n° {$form->request_number}**  of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
                         'view' => 'group'
@@ -633,7 +631,7 @@ class WebController extends Controller
                 ];
 
                 foreach ($recipients as $key => $data) {
-                    Mail::to($data->email)->send(new HandleEmail($data->message, $data->view));
+                    Mail::to(trim($data->email))->send(new HandleEmail($data->message, $data->view));
                     sleep(5);
                 }
 
