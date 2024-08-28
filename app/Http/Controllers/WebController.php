@@ -565,7 +565,9 @@ class WebController extends Controller
                 }
 
                 foreach ($backMessage as $key => $data) {
-                    Mail::to(trim($data->email))->send(new HandleEmail($data->data, $data->view));
+                    SendEmailJob::dispatch(trim($data->email), $data->data, $data->view);
+
+                    // Mail::to(trim($data->email))->send(new HandleEmail($data->data, $data->view));
                     sleep(5);
                 }
 
