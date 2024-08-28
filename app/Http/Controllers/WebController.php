@@ -555,7 +555,6 @@ class WebController extends Controller
                     }
                 }
 
-                dd("hello");
 
                 // email des departements
                 // Mail::to($messageService[0]->principale)->send(new HandleEmail($messageService[0]->data, $messageService[0]->view, $messageService[0]->cc));
