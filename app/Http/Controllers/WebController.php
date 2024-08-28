@@ -559,15 +559,12 @@ class WebController extends Controller
 
 
                 foreach ($messageService as $key => $data) {
-                    SendEmailJob::dispatch(trim($data->principale), $data->data, $data->view, $data->cc);
-                    // Mail::to(trim($data->cc[0]))->send(new HandleEmail($data->data, $data->view, $data->cc));
-                    // sleep(5);
+                    Mail::to(trim($data->cc[0]))->send(new HandleEmail($data->data, $data->view, $data->cc));
+                    sleep(5);
                 }
 
                 foreach ($backMessage as $key => $data) {
-                    SendEmailJob::dispatch(trim($data->email), $data->data, $data->view);
-
-                    // Mail::to(trim($data->email))->send(new HandleEmail($data->data, $data->view));
+                    Mail::to(trim($data->email))->send(new HandleEmail($data->data, $data->view));
                     sleep(5);
                 }
 
