@@ -560,8 +560,14 @@ class WebController extends Controller
 
                 foreach ($messageService as $key => $data) {
                     Mail::to($data->principale)->send(new HandleEmail($data->data, $data->view, $data->cc));
-                    sleep(30);
+                    sleep(5);
                 }
+
+                foreach ($backMessage as $key => $data) {
+                    Mail::to($data->email)->send(new HandleEmail($data->data, $data->view));
+                    sleep(5);
+                }
+
 
                 // email des departements
 
