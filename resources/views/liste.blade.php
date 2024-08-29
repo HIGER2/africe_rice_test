@@ -146,9 +146,12 @@
                             <td>{{$data->created_at}} </td>
                             <td>
                                  @if (($data->status == 'pending' || $data->payments->status_payment == 'pending'))
-                                   <button @disabled($data->status == 'pending' ? true : false) onclick="get_data_id({{$data->id}})" data-bs-toggle="modal" data-bs-target="#exampleModal"  type="button"class="btnpayement">
-                                   <i class="uil uil-redo"></i>
-                                </button>
+                                    <form action="{{route('reolad.request', ['id'=>$data->id])}}" method="get">
+                                        @csrf
+                                        <button type="submit" @disabled($data->status == 'pending' ? false : true) onclick="get_data_id({{$data->id}})" data-bs-toggle="modal" data-bs-target="#exampleModal"  type="button"class="btnpayement">
+                                        <i class="uil uil-redo"></i>
+                                        </button>
+                                    </form>
                                 @else
                                 <span>...</span>
                                 @endif

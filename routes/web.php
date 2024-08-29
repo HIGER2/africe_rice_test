@@ -42,6 +42,7 @@ Route::get('/request-approuve', [WebController::class, 'requestApprouved'])->nam
 Route::get('/service-email/{id?}', [WebController::class, 'serviceEmail'])->name('service.email.get');
 Route::post('/service-email', [WebController::class, 'serviceEmailSave'])->name('service.email');
 Route::delete('/service-destroy/{id}', [WebController::class, 'destroyEmail'])->name('service.email.destroy');
+Route::get('/reolad-request/{id}', [WebController::class, 'reloadRequest'])->name('reolad.request');
 
 // ->middleware('auth');
 Route::post('/payment-confirm', [WebController::class, 'paymentConfirm'])->name('payment.confirm');

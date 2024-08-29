@@ -21,16 +21,9 @@
                             @endforeach
                         </div>
                     @endif
-                        {{-- <div class="form-group">
-                            <label for="number">Update exchange rate</label>
-                            <input type="number" name="rate"
-                            value="{{$rate->value}}"
-                                placeholder="Update exchange rate" >
-                        </div> --}}
-                     <h2>Update amount Staff Category</h2>
+                        <h2>Update amount Staff Category</h2>
                         <!-- Display success messages -->
                         <div class="form-group">
-                            {{-- {{$type_allowence}} --}}
                             <label for="tA">Select Type of Allowance</label>
                             <select name="type_allowance_id" id=""
                             value="{{$selectedTypeAllowenceId ? $selectedTypeAllowenceId : ''}}"
@@ -43,9 +36,6 @@
 
                         </div>
                         <div class="form-group">
-                            {{-- {{$amount}} --}}
-                            {{-- {{$staffCategories ? $staffCategories : ''}} --}}
-                            {{-- {{$selectedTypeAllowenceId}} --}}
                             <label for="stc">Select Staff Category</label>
                             <select name="staff_category_id" id=""  {{ $staffCategories->count() ==0 ? 'disabled' : '' }}
                             onchange="this.form.submit()"
@@ -73,8 +63,6 @@
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
-
-
                         <div class="form-group">
                             <label for="currency">Currency</span></label>
                             <select name="currency"
