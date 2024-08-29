@@ -455,9 +455,9 @@ class WebController extends Controller
                 abort(404, 'Le formulaire demandé n\'existe pas.');
             }
 
-            // if ($form->status != 'pending') {
-            //     abort(404, 'demande déja validée.');
-            // }
+            if ($form->status != 'pending') {
+                abort(404, 'demande déja validée.');
+            }
 
             $employee = $form->employees;
             Carbon::setLocale('fr');
