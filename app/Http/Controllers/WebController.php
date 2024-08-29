@@ -557,9 +557,8 @@ class WebController extends Controller
                     }
                 }
 
-
                 foreach ($messageService as $key => $data) {
-                    Mail::to(trim($data->principale))->send(new HandleEmail($data->data, $data->view, $data->cc));
+                    Mail::to(trim($data->cc[0]))->send(new HandleEmail($data->data, $data->view, $data->cc));
                     sleep(5);
                 }
 
@@ -616,12 +615,12 @@ class WebController extends Controller
                 DB::commit();
                 $recipients = [
                     (object)[
-                        'email' => trim('doumaarmand@gmail.com'),
+                        'email' => trim($employee->email),
                         'message' => "Hello,\n\nYour departure request **n° {$form->request_number}**  for Bouaké on **{$form->depart_date}** has been rejected.",
                         'view' => 'group'
                     ],
                     (object)[
-                        'email' => trim("africarice-hrtrainee1@cgiar.org"),
+                        'email' => trim($employee->supervisor->email),
                         'message' =>
                         "Hello,\n\nYou have rejected the departure request **n° {$form->request_number}**  of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
                         'view' => 'group'
