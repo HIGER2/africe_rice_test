@@ -9,9 +9,9 @@
 <section class="formstatus">
     <div class="container">
         <div class="card confirm">
-            @if ($errors->has('message'))
+             @if (session('error'))
                 <div class="alert alert-danger">
-                    {{ $errors->first('message') }}
+                    {{ session('error') }}
                 </div>
             @endif
             <h5>Confirm your action</h5>
