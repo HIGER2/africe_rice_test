@@ -9,11 +9,11 @@
 <section class="formstatus">
     <div class="container">
         <div class="card confirm">
-             @if (session('error'))
-                <div class="alert alert-danger">
-                    {{ session('error') }}
-                </div>
-            @endif
+            {{-- @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif --}}
             <h5>Confirm your action</h5>
             <p>Are you sure you want to {{ $action === 'approve' ? 'approve' : 'reject' }} this request?</p>
             <form action="{{ route('form.action', ['id' => $form->id, 'action' => $action]) }}" method="POST">
