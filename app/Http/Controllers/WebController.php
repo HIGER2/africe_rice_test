@@ -1107,9 +1107,7 @@ class WebController extends Controller
 
             return back()->with('success', 'Request successfully validated.');
         } catch (\Throwable $th) {
-            return back()->withErrors([
-                'message' => 'request already validated.',
-            ]);
+            return back()->with('error', ' Error request is not validated.');
         }
     }
 }

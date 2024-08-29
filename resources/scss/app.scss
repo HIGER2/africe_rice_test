@@ -68,10 +68,11 @@ body {
 
 .alert {
     padding: 15px;
-    margin: 10px 0;
     border: 1px solid transparent;
     border-radius: 4px;
     font-size: 16px;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 .alert-success {
@@ -92,7 +93,6 @@ body {
     font-size: 14px;
     border-radius: 5px;
     width: 100%;
-    margin: 10px 0;
     &.alert-danger{
         background-color: rgba(255, 0, 0,0.1);
         color: red;
