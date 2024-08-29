@@ -1044,7 +1044,7 @@ class WebController extends Controller
                 if ($employee->supervisor) {
                     $employee->supervisor->notify(new EmployeeValidate($employee, $request, 'form_submission'));
                 }
-            } elseif ($request->status_payment == "pending") {
+            } elseif (isset($request->payments) && $request->payments->status_payment == "pending") {
                 $messageService = [
                     (object)[
                         'data' => $request,

@@ -167,7 +167,6 @@
 
                                         onclick="get_data_id({{$data->id}})" data-bs-toggle="modal" data-bs-target="#exampleModal"  type="button"class="btnpayement">
                                         <i class="uil uil-redo"></i>
-                                        {{isset($data->payments)}}
                                         </button>
                                     </form>
                                 @else
