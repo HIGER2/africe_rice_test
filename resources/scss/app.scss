@@ -255,6 +255,10 @@ body {
       color: $secondary-color;
     }
 }
+
+.login{
+
+
 .container {
   width: 100%;
 padding:1rem;
@@ -277,7 +281,8 @@ padding:1rem;
         box-shadow: $shadow;
         background-color: $white;
         padding: 2rem;
-        width: 380px;
+        width: 390px;
+        // min-height: 400px;
         @media only screen and (max-width: 792px){
             width: 100%;
         }
@@ -344,7 +349,8 @@ padding:1rem;
       }
     }
 
-    .forgot-password {
+
+   .subtitle, .forgot-password {
       display: block;
       margin-top: 10px;
       font-size: 14px;
@@ -356,7 +362,15 @@ padding:1rem;
         text-decoration: underline;
       }
     }
+    .subtitle{
+        text-decoration: none;
+        font-weight: 400;
+        &:hover{
+            text-decoration: none;
+        }
+    }
   }
+}
 }
 
 .home{

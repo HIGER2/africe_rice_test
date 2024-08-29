@@ -2,7 +2,9 @@
 
 @section('content')
 @include('includes.header')
- <div class="container">
+
+<section class="login">
+    <div class="container">
         <div class="login-form">
             <div class="card">
                 <h2>Sign in</h2>
@@ -27,8 +29,11 @@
                             <i class="uil uil-arrow-right"></i>
                         </button>
                     </form>
-                    <a href="https://mycareer.africarice.org/auth/recovery" class="forgot-password">Forgot your password?</a>
+                    {{-- <a href="https://mycareer.africarice.org/auth/recovery" class="forgot-password">Forgot your password?</a> --}}
+                    <span class="subtitle">Please log in with your Mycareer Africarice credentials.</span>
             </div>
         </div>
 </div>
+</section>
+
 @endsection

@@ -27,7 +27,7 @@
                     @if (session('user')->role == 'staff' || session('user')->role == 'consultant' || session('user')->role == 'superadmin' )
                         <li>
                             <a href="{{route('home')}}">
-                                <span>My requests</span>
+                                <span>Home</span>
                                 <i class="uil uil-arrow-up-right"></i>
                             </a>
                         </li>

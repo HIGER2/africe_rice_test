@@ -621,7 +621,7 @@ class WebController extends Controller
                         'view' => 'group'
                     ],
                     (object)[
-                        'email' => trim($employee->supervisor->email),
+                        'email' => trim("africarice-hrtrainee1@cgiar.org"),
                         'message' =>
                         "Hello,\n\nYou have rejected the departure request **n° {$form->request_number}**  of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
                         'view' => 'group'
