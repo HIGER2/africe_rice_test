@@ -452,11 +452,15 @@ class WebController extends Controller
 
             if (!$form) {
                 // dd('jje');
-                abort(404, 'Le formulaire demandé n\'existe pas.');
+                return back()->withErrors([
+                    'message' => 'The requested form does not exist.',
+                ]);
             }
 
             if ($form->status != 'pending') {
-                abort(404, 'demande déja validée.');
+                return back()->withErrors([
+                    'message' => 'request already validated.',
+                ]);
             }
 
             $employee = $form->employees;
@@ -642,7 +646,9 @@ class WebController extends Controller
                 // }
             } else {
                 // Action invalide
-                return abort(400, 'Action invalide.');
+                return back()->withErrors([
+                    'message' => 'Action invalide.',
+                ]);
             }
 
             // Rediriger vers une page d'affichage ou vers une autre vue
