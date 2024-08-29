@@ -255,12 +255,16 @@ body {
       color: $secondary-color;
     }
 }
+.container{
+width: 100%;
+padding:1rem;
+}
 
 .login{
 
 
 .container {
-  width: 100%;
+width: 100%;
 padding:1rem;
 @media only screen and (max-width: 792px){
     width: 100%;
