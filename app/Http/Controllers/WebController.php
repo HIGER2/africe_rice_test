@@ -1099,10 +1099,10 @@ class WebController extends Controller
                     sleep(5);
                 }
 
-                foreach ($backMessage as $key => $data) {
-                    Mail::to(trim($data->email))->send(new HandleEmail($data->data, $data->view));
-                    sleep(5);
-                }
+                // foreach ($backMessage as $key => $data) {
+                //     Mail::to(trim($data->email))->send(new HandleEmail($data->data, $data->view));
+                //     sleep(5);
+                // }
             }
 
             return back()->with('success', 'Request successfully validated.');

@@ -60,7 +60,7 @@
             @endif
             @if(session('error'))
                 <div class="alert alert-danger">
-                    {{ session('success') }}
+                    {{ session('error') }}
                 </div>
             @endif
         <div class="contentTable">
@@ -158,8 +158,16 @@
                                  @if (($data->status == 'pending' || $data->payments->status_payment == 'pending'))
                                     <form action="{{route('reolad.request', ['id'=>$data->id])}}" method="get">
                                         @csrf
-                                        <button type="submit" @disabled($data->status == 'pending' ? false : true) onclick="get_data_id({{$data->id}})" data-bs-toggle="modal" data-bs-target="#exampleModal"  type="button"class="btnpayement">
+                                        <button type="submit"
+                                        @disabled(
+                                        ($data->status == 'pending' &&  false) ||
+
+                                        isset($data->payments) && ($data->payments->status_payment == 'pending' && false)
+                                        )
+
+                                        onclick="get_data_id({{$data->id}})" data-bs-toggle="modal" data-bs-target="#exampleModal"  type="button"class="btnpayement">
                                         <i class="uil uil-redo"></i>
+                                        {{isset($data->payments)}}
                                         </button>
                                     </form>
                                 @else
