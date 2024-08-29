@@ -1022,85 +1022,94 @@ class WebController extends Controller
 
     public function reloadRequest($requestId)
     {
-        $request = StaffRequest::find($requestId);
-        $employee = $request->employees;
-        $servieEmail = ServiceEmail::get();
-        $request->depart_date = Carbon::parse($request->depart_date)->translatedFormat('d F Y');
-        $request->taking_date = Carbon::parse($request->taking_date)->translatedFormat('d F Y');
-        // dd([
-        //     $servieEmail,
-        //     $request,
-        //     $employee
-        // ]);
-        Carbon::setLocale('fr');
 
-        if (!$request) {
-            return;
-        }
+        try {
+            $request = StaffRequest::find($requestId);
+            $employee = $request->employees;
+            $servieEmail = ServiceEmail::get();
+            $request->depart_date = Carbon::parse($request->depart_date)->translatedFormat('d F Y');
+            $request->taking_date = Carbon::parse($request->taking_date)->translatedFormat('d F Y');
+            // dd([
+            //     $servieEmail,
+            //     $request,
+            //     $employee
+            // ]);
+            Carbon::setLocale('fr');
 
-        if ($request->status == "pending") {
-            if ($employee->supervisor) {
-                $employee->supervisor->notify(new EmployeeValidate($employee, $request, 'form_submission'));
+            if (!$request) {
+                return;
             }
-        } elseif ($request->status_payment == "pending") {
-            $messageService = [
-                (object)[
-                    'data' => $request,
-                    'view' => 'finance_validate',
-                    'service' => 1,
-                    'cc' => [],
-                    'principale' => "doumaarmand@gmail.com",
-                ],
-                (object)[
-                    'data' => "Hello,\n\nThe departure date for Bouaké for staff member **{$employee->firstName} {$employee->lastName}** is scheduled for **{$request->depart_date}**.\n\nThe taking up of office is scheduled for **{$request->taking_date}**.\n\nPlease prepare all the necessary administrative documents.",
-                    'view' => 'group',
-                    'service' => 2,
-                    'cc' => [],
-                    'principale' => "doumaarmand@gmail.com",
 
-                ],
-                (object)[
-                    'data' => "Hello everyone,\n\n In the context of the departure for Bouaké, the staff member **{$employee->firstName} {$employee->lastName}** has had their departure request approved. Thus, the staff member will leave Abidjan on **{$request->depart_date}**.\n\n And will start their position on **{$request->taking_date}**.\n\n Please prepare the logistics for their departure as well as all the logistics related to their new position.",
-                    'view' => 'group',
-                    'service' => 3,
-                    'cc' => [],
-                    'principale' => "doumaarmand@gmail.com",
-                ],
-            ];
+            if ($request->status == "pending") {
+                if ($employee->supervisor) {
+                    $employee->supervisor->notify(new EmployeeValidate($employee, $request, 'form_submission'));
+                }
+            } elseif ($request->status_payment == "pending") {
+                $messageService = [
+                    (object)[
+                        'data' => $request,
+                        'view' => 'finance_validate',
+                        'service' => 1,
+                        'cc' => [],
+                        'principale' => "doumaarmand@gmail.com",
+                    ],
+                    (object)[
+                        'data' => "Hello,\n\nThe departure date for Bouaké for staff member **{$employee->firstName} {$employee->lastName}** is scheduled for **{$request->depart_date}**.\n\nThe taking up of office is scheduled for **{$request->taking_date}**.\n\nPlease prepare all the necessary administrative documents.",
+                        'view' => 'group',
+                        'service' => 2,
+                        'cc' => [],
+                        'principale' => "doumaarmand@gmail.com",
 
-            $backMessage = [
-                (object)[
-                    'data' => "Hello,\n\nYou have approved the departure request **n° {$request->request_number}** of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$request->depart_date}**.\nThe taking up of office is scheduled for **{$taking_date}**.",
-                    'view' => 'group',
-                    'email' => $employee->supervisor->email,
-                ],
-                (object)[
-                    'data' => "Hello,\n\n Your departure request **n° {$request->request_number}** for Bouaké on **{$request->depart_date}** has been approved.",
-                    'view' => 'group',
-                    'email' => $employee->email,
-                ],
-            ];
+                    ],
+                    (object)[
+                        'data' => "Hello everyone,\n\n In the context of the departure for Bouaké, the staff member **{$employee->firstName} {$employee->lastName}** has had their departure request approved. Thus, the staff member will leave Abidjan on **{$request->depart_date}**.\n\n And will start their position on **{$request->taking_date}**.\n\n Please prepare the logistics for their departure as well as all the logistics related to their new position.",
+                        'view' => 'group',
+                        'service' => 3,
+                        'cc' => [],
+                        'principale' => "doumaarmand@gmail.com",
+                    ],
+                ];
 
-            if ($servieEmail->count() > 0) {
-                foreach ($servieEmail as $data) {
-                    foreach ($messageService  as $key => $value) {
-                        if ($data->service == $value->service) {
-                            $messageService[$key]->cc[] = trim($data->email);
-                            break; // Ajouter un log ici peut être utile pour vérifier le processus.
+                $backMessage = [
+                    (object)[
+                        'data' => "Hello,\n\nYou have approved the departure request **n° {$request->request_number}** of staff member **{$employee->firstName} {$employee->lastName}** for Bouaké.\nThe departure request is for **{$request->depart_date}**.\nThe taking up of office is scheduled for **{$request->taking_date}**.",
+                        'view' => 'group',
+                        'email' => $employee->supervisor->email,
+                    ],
+                    (object)[
+                        'data' => "Hello,\n\n Your departure request **n° {$request->request_number}** for Bouaké on **{$request->depart_date}** has been approved.",
+                        'view' => 'group',
+                        'email' => $employee->email,
+                    ],
+                ];
+
+                if ($servieEmail->count() > 0) {
+                    foreach ($servieEmail as $data) {
+                        foreach ($messageService  as $key => $value) {
+                            if ($data->service == $value->service) {
+                                $messageService[$key]->cc[] = trim($data->email);
+                                break; // Ajouter un log ici peut être utile pour vérifier le processus.
+                            }
                         }
                     }
                 }
+
+                foreach ($messageService as $key => $data) {
+                    Mail::to(trim($data->cc[0]))->send(new HandleEmail($data->data, $data->view, $data->cc));
+                    sleep(5);
+                }
+
+                foreach ($backMessage as $key => $data) {
+                    Mail::to(trim($data->email))->send(new HandleEmail($data->data, $data->view));
+                    sleep(5);
+                }
             }
 
-            foreach ($messageService as $key => $data) {
-                Mail::to(trim($data->cc[0]))->send(new HandleEmail($data->data, $data->view, $data->cc));
-                sleep(5);
-            }
-
-            foreach ($backMessage as $key => $data) {
-                Mail::to(trim($data->email))->send(new HandleEmail($data->data, $data->view));
-                sleep(5);
-            }
+            return back()->with('success', 'Request successfully validated.');
+        } catch (\Throwable $th) {
+            return back()->withErrors([
+                'message' => 'request already validated.',
+            ]);
         }
     }
 }

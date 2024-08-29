@@ -55,6 +55,11 @@
             </div>
 
         <div class="contentTable">
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
             {{-- {{$liste}} --}}
             {{-- <a href="/listchecked">voir la liste</a>
             @foreach ($newTypeAllowance as $data )
