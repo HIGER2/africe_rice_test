@@ -43,7 +43,7 @@ class EmployeeValidate extends Notification
         return (new MailMessage)
             // ->subject('Welcome to Our Platform')
             // ->line("The introduction to the notification.{$this->user->firstName}");
-            ->subject('Nouveau formulaire soumis')
+            ->subject('Relocation AfricaRice')
             ->markdown('emails.' . $this->view, [
                 'user' => $this->user,
                 'form' => $this->form
