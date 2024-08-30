@@ -164,7 +164,7 @@
 
                                         isset($data->payments) && ($data->payments->status_payment == 'pending' && false)
                                         )
-                                       onclick="return confirm('Are you sure you want to confirm?')"
+                                       onclick="return confirm('Would you like to send a reminder?')"
                                        data-bs-toggle="modal" data-bs-target="#exampleModal"  type="button"class="btnpayement">
                                         <i class="uil uil-redo"></i>
                                         </button>
