@@ -443,25 +443,23 @@ class WebController extends Controller
 
             DB::beginTransaction();
             $now = Carbon::now()->format('d-m-Y H:i:s');
-            // Log::channel('custom_controller_log')->info('*************');
-            // Log::channel('custom_controller_log')->info("demandeId:{$id} action:{$action} date:{$now}");
-            // Log::channel('custom_controller_log')->info('*************');
-
             // Trouvez le formulaire avec l'ID donné
             $form = StaffRequest::findOrFail($id);
+            // dd("douma");
 
             if (!$form) {
-                // dd('jje');
-                return back()->withErrors([
+                return back()->with([
                     'message' => 'The requested form does not exist.',
                 ]);
             }
 
-            if ($form->status != 'pending') {
-                return back()->withErrors([
-                    'message' => 'request already validated.',
-                ]);
-            }
+            // if ($form->status != 'pending') {
+            //     return back()->with([
+            //         'message' => 'request already validated.',
+            //     ]);
+            // }
+
+
 
             $employee = $form->employees;
             Carbon::setLocale('fr');
@@ -560,7 +558,6 @@ class WebController extends Controller
                     sleep(5);
                 }
 
-
                 foreach ($backMessage as $key => $data) {
                     Mail::to(trim($data->email))->send(new HandleEmail($data->data, $data->view));
                     sleep(5);
@@ -651,9 +648,6 @@ class WebController extends Controller
             return redirect()->route('form.status', ['action' => $action]);
         } catch (\Throwable $th) {
             DB::rollBack();
-
-            dd($th->getMessage());
-
             Log::error("Erreur lors du traitement de la demande : " . $th->getMessage());
             return abort(500, 'Une erreur est survenue.');
         }
