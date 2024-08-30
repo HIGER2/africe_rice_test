@@ -62,10 +62,10 @@
                         </li>
                     @endif
 
-                    <li>
+                    {{-- <li>
                         <span>Change password</span>
                         <i class="uil uil-arrow-up-right"></i>
-                    </li>
+                    </li> --}}
                     <li>
                         <button type="submit">Logout
                             <i class="uil uil-arrow-up-right"></i>

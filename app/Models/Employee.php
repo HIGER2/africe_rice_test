@@ -17,8 +17,24 @@ class Employee extends Authenticatable
 
     // Attributs assignables
     protected $fillable = [
+        "employeeId",
         "supervisorId",
+        "role",
         'email',
+        "jobTitle",
+        "personalEmail",
+        "phone",
+        "phone2",
+        "address",
+        "firstName",
+        "lastName",
+        "category",
+        "grade",
+        "bgLevel",
+        "matricule",
+        "secretKey",
+        "deletedAt",
+        // "subordinates",
         'password',
         // autres colonnes...
     ];

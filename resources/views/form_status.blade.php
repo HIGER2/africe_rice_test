@@ -2,7 +2,7 @@
 
 
 @section('content')
-@include('includes.header')
+{{-- @include('includes.header') --}}
  <secton class="formstatus">
         <div class="container">
             @if ($action=="approve")

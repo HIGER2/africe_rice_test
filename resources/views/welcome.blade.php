@@ -1,12 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-@include('includes.header')
+{{-- @include('includes.header') --}}
 
 <section class="login">
     <div class="container">
         <div class="login-form">
             <div class="card">
+                <div class="logo">
+                    <img src="https://mycareer.africarice.org/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fafricarice.b93af9cc.webp&w=1080&q=75" alt="Logo" class="logo">
+                </div>
                 <h2>Sign in</h2>
                     <p>Sign into your staff account to get access to our platform.</p>
                     @if ($errors->has('message'))

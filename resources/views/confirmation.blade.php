@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 
-@section('content')
-@include('includes.header')
+{{-- @include('includes.header') --}}
 
 @section('content')
 
@@ -14,6 +13,9 @@
                 {{ $errors->first('message') }}
             </div>
         @endif
+          <div class="logo">
+                <img src="https://mycareer.africarice.org/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fafricarice.b93af9cc.webp&w=1080&q=75" alt="Logo" class="logo">
+        </div>
             <h5>Confirm your action</h5>
             <p>Are you sure you want to {{ $action === 'approve' ? 'approve' : 'reject' }} this request?</p>
                 <form id="formsubmit" action="{{ route('form.action', ['id' => $form->id, 'action' => $action]) }}" method="POST" onsubmit="submitForm(event)">
