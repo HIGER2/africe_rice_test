@@ -34,7 +34,7 @@ class HandleEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Group Email',
+            subject: 'Relocation AfricaRice',
         );
     }
 
