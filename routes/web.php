@@ -20,8 +20,8 @@ Route::get('/destroy/{id}', [WebController::class, 'destroy'])->name('employee.d
 
 
 Route::get('/form-status/{action}', [WebController::class, 'showStatus'])->name('form.status');
-Route::post('/form-action/{id}/{action}', [WebController::class, 'handleAction'])->name('form.action');
-Route::get('/form-action/{id}/{action}/confirm', [WebController::class, 'confirmAction'])->name('form.confirm');
+Route::post('/form-action/{id}/{action}', [WebController::class, 'handleAction'])->name('form.action')->middleware('signed');
+Route::get('/form-action/{id}/{action}/confirm', [WebController::class, 'confirmAction'])->name('form.confirm')->middleware('signed');
 
 Route::get('/export-request', function () {
     return Excel::download(new EmployeeInformationExport, 'request_staff.xlsx');
