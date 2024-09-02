@@ -6,7 +6,6 @@ Hello,
 The staff **{{ $user->firstName." ".$user->lastName }}** has submitted the departure form for Bouaké.
 The departure request is for **{{$form->depart_date}}**.
 The taking up of office is scheduled for **{{$form->taking_date}}**.
-
 @component('mail::button', ['url' =>'form.confirm', ['id' => $form->id, 'action' => 'approve'], 'color' => 'green'])
 Approve
 @endcomponent
