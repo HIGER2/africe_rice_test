@@ -453,11 +453,11 @@ class WebController extends Controller
                 ]);
             }
 
-            // if ($form->status != 'pending') {
-            //     return back()->with([
-            //         'message' => 'request already validated.',
-            //     ]);
-            // }
+            if ($form->status != 'pending') {
+                return back()->with([
+                    'message' => 'request already validated.',
+                ]);
+            }
 
             $employee = $form->employees;
             Carbon::setLocale('fr');
