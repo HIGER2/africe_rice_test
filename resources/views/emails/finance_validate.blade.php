@@ -1,18 +1,17 @@
 @component('mail::message')
 
-Dear finance and RH,
+Dear Finance and HR,
 
-The departure date for Bouaké of the **{{ $data->employees->firstName." ".$data->employees->lastName }}** staff is scheduled for **{{$data->depart_date}}**.
+The departure date to Bouaké of the **{{ $data->employees->firstName." ".$data->employees->lastName }}** staff is scheduled for **{{$data->depart_date}}**.
 
 The taking up of office is for the **{{$data->taking_date}}**.
 Please prepare all the necessary administrative documents.
 
-Below are the details of the compensation
-
+Below are the details of the compensation for Finance to make payment to staff accordingly:
 
 **Travel Details**
 
-Reqest N° {{$data->request_number}}
+{{-- Reqest N° {{$data->request_number}} --}}
 {{-- {{$data->marital_status == "yes" ? 10 000 : 0}} --}}
 <table border="1" cellpadding="10" cellspacing="0" width="100%">
     <thead>
