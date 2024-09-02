@@ -584,7 +584,6 @@ class WebController extends Controller
                     }
                 }
 
-                dd($messageService);
 
                 foreach ($messageService as $key => $data) {
                     Mail::to(trim($data->cc[0]))->send(new HandleEmail($data->data, $data->view, $data->cc));
