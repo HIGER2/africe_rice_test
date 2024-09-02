@@ -12,7 +12,7 @@ Below are the details of the compensation
 
 **Travel Details**
 
-Reqest n° {{$data->request_number}}
+Reqest N° {{$data->request_number}}
 {{-- {{$data->marital_status == "yes" ? 10 000 : 0}} --}}
 <table border="1" cellpadding="10" cellspacing="0" width="100%">
     <thead>
