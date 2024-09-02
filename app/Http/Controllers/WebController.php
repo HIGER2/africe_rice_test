@@ -453,11 +453,11 @@ class WebController extends Controller
                 ]);
             }
 
-            if ($form->status != 'pending') {
-                return back()->with([
-                    'message' => 'request already validated.',
-                ]);
-            }
+            // if ($form->status != 'pending') {
+            //     return back()->with([
+            //         'message' => 'request already validated.',
+            //     ]);
+            // }
 
             $employee = $form->employees;
             Carbon::setLocale('fr');
@@ -507,22 +507,24 @@ class WebController extends Controller
                         'view' => 'finance_validate',
                         'service' => 1,
                         'cc' => [],
-                        'principale' => "doumaarmand@gmail.com",
+                        'principale' => "",
                     ],
-                    (object)[
-                        'data' => "Hello,\n\nThe departure date for Bouaké for staff member **{$employee->firstName} {$employee->lastName}** is scheduled for **{$depart_date}**.\n\nThe taking up of office is scheduled for **{$taking_date}**.\n\nPlease prepare all the necessary administrative documents.",
-                        'view' => 'group',
-                        'service' => 2,
-                        'cc' => [],
-                        'principale' => "doumaarmand@gmail.com",
+                    // (object)[
+                    //     'data' => "Hello,\n\nThe departure date for Bouaké for staff member **{$employee->firstName} {$employee->lastName}** is scheduled for **{$depart_date}**.\n\nThe taking up of office is scheduled for **{$taking_date}**.",
 
-                    ],
+                    //     'view' => 'group',
+                    //     'service' => 2,
+                    //     'cc' => [],
+                    //     'principale' => "doumaarmand@gmail.com",
+
+                    // ],
+                    // \n\nPlease prepare all the necessary administrative documents.
                     (object)[
                         'data' => "Hello everyone,\n\n In the context of the departure for Bouaké, the staff member **{$employee->firstName} {$employee->lastName}** has had their departure request approved. Thus, the staff member will leave Abidjan on **{$depart_date}**.\n\n And will start their position on **{$taking_date}**.\n\n Please prepare the logistics for their departure as well as all the logistics related to their new position.",
                         'view' => 'group',
                         'service' => 3,
                         'cc' => [],
-                        'principale' => "doumaarmand@gmail.com",
+                        'principale' => "",
                     ],
                 ];
                 $backMessage = [
@@ -539,68 +541,60 @@ class WebController extends Controller
                 ];
 
                 $recipients = [];
+                // dd($servieEmail);
                 $emailData = "";
                 if ($servieEmail->count() > 0) {
-                    foreach ($servieEmail as $data) {
-                        foreach ($messageService  as $key => $value) {
-                            if ($data->service == $value->service) {
-                                $messageService[$key]->cc[] = trim($data->email);
-                                break; // Ajouter un log ici peut être utile pour vérifier le processus.
+                    foreach ($servieEmail as $key1 => $data) {
+                        if (isset($data->service)) {
+                            if ($data->service == 1 || $data->service == 2) {
+                                if (!in_array(trim($data->email), $messageService[0]->cc) && ($data->email != $messageService[0]->principale)) {
+                                    if ($data->service == 1) {
+                                        if (!$messageService[0]->principale) {
+                                            $messageService[0]->principale = $data->email;
+                                        } else {
+                                            $messageService[0]->cc[] = trim($data->email);
+                                        }
+                                    } else {
+                                        $messageService[0]->cc[] = trim($data->email);
+                                    }
+                                }
+                            } else {
+                                if (!in_array(trim($data->email), $messageService[1]->cc) && ($data->email != $messageService[1]->principale)) {
+                                    if (!$messageService[1]->principale) {
+                                        $messageService[1]->principale = $data->email;
+                                    } else {
+                                        $messageService[1]->cc[] = trim($data->email);
+                                    }
+                                }
                             }
                         }
+
+                        // foreach ($messageService  as $key => $value) {
+                        //     if ($data->service == 1 ||  $value->service) {
+                        //         if ($key1 == 0) {
+                        //             $messageService[$key]->principale = trim($data->email);
+
+                        //             // dd($servieEmail[$key1]);
+                        //         } else {
+                        //             $messageService[$key]->cc[] = trim($data->email);
+                        //         }
+                        //         break; // Ajouter un log ici peut être utile pour vérifier le processus.
+                        //     }
+                        // }
                     }
                 }
 
+                dd($messageService);
+
                 foreach ($messageService as $key => $data) {
                     Mail::to(trim($data->cc[0]))->send(new HandleEmail($data->data, $data->view, $data->cc));
-                    sleep(5);
+                    sleep(2);
                 }
 
                 foreach ($backMessage as $key => $data) {
                     Mail::to(trim($data->email))->send(new HandleEmail($data->data, $data->view));
-                    sleep(5);
+                    sleep(2);
                 }
-
-
-                // email des departements
-
-                // Mail::to($messageService[0]->principale)->send(new HandleEmail($messageService[0]->data, $messageService[0]->view, $messageService[0]->cc));
-                // Mail::to($messageService[1]->principale)->send(new HandleEmail($messageService[1]->data, $messageService[1]->view, $messageService[1]->cc));
-                // Mail::to($messageService[2]->principale)->send(new HandleEmail($messageService[2]->data, $messageService[2]->view, $messageService[2]->cc));
-
-                // Notification::route('mail', $messageService[0]->principale)->notify(new HandleEmailNotification($messageService[0]->data, $messageService[0]->view, $messageService[0]->cc));
-                // Notification::route('mail', $messageService[1]->principale)->notify(new HandleEmailNotification($messageService[1]->data, $messageService[1]->view, $messageService[1]->cc));
-                // Notification::route('mail', $messageService[2]->principale)->notify(new HandleEmailNotification($messageService[2]->data, $messageService[2]->view, $messageService[2]->cc));
-
-
-                // email de retour
-                // Mail::to($backMessage[0]->email)->send(new GroupeEmailWitoutQueue($backMessage[0]->data, $backMessage[0]->view));
-                // Mail::to($backMessage[1]->email)->send(new GroupeEmailWitoutQueue($backMessage[1]->data, $backMessage[1]->view));
-
-                // if ($servieEmail->count() > 0) {
-                //     $emailData = array_merge($recipients, $backMessage);
-                // } else {
-                //     $emailData = $backMessage;
-                // }
-                // SendEmailJob::dispatch($backMessage[0]->email, $backMessage[0]->data, $backMessage[0]->view);
-                // SendEmailJob::dispatch($recipients[0]->email, $recipients[0]->data, $recipients[0]->view);
-                // SendEmailJob::dispatch($recipients[1]->email, $recipients[1]->data, $recipients[1]->view);
-                // SendEmailJob::dispatch($recipients[2]->email, $recipients[2]->data, $recipients[2]->view);
-                // SendEmailJob::dispatch($recipients[3]->email, $recipients[3]->data, $recipients[3]->view);
-                // SendEmailJob::dispatch($recipients[0]->email, $recipients[0]->data, $recipients[0]->view);
-                // SendEmailJob::dispatch($recipients[4]->email, $recipients[4]->data, $recipients[4]->view);
-                // SendEmailJob::dispatch($recipients[5]->email, $recipients[5]->data, $recipients[5]->view);
-                // SendEmailJob::dispatch($recipients[6]->email, $recipients[6]->data, $recipients[6]->view);
-                // SendEmailJob::dispatch($recipients[7]->email, $recipients[7]->data, $recipients[7]->view);
-                // SendEmailJob::dispatch($recipients[8]->email, $recipients[8]->data, $recipients[8]->view);
-                // SendEmailJob::dispatch($recipients[9]->email, $recipients[9]->data, $recipients[9]->view);
-
-                // foreach ($emailData as $data) {
-                //     Mail::to($data->email)->send(new GroupEmail($data->data, $data->view));
-                //     // SendEmailJob::dispatch($data->email, $data->data, $data->view);
-                // }
-
-
             } elseif ($action == 'reject') {
                 // Logique pour rejeter le formulaire
                 $form->status = 'rejected';
@@ -626,14 +620,6 @@ class WebController extends Controller
                     Mail::to($data->email)->send(new HandleEmail($data->message, $data->view));
                     sleep(5);
                 }
-
-                // Mail::to("africarice-hrtrainee1@cgiar.org")->send(new HandleEmail($recipients[1]->message, $recipients[1]->view));
-                // Mail::to($recipients[0]->email)->send(new HandleEmail($recipients[0]->message, $recipients[0]->view));
-
-
-                // foreach ($recipients as $data) {
-                //     SendEmailJob::dispatch($data->message, $data->view);
-                // }
             } else {
                 // Action invalide
                 return back()->withErrors([
