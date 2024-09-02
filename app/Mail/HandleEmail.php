@@ -34,7 +34,7 @@ class HandleEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Relocation AfricaRice',
+            subject: "Relocation AfricaRice",
         );
     }
 
@@ -59,7 +59,7 @@ class HandleEmail extends Mailable
     public function build()
     {
         $email = $this->markdown('emails.' . $this->view)
-            ->subject('Group Email')
+            ->subject('Relocation AfricaRice')
             ->with(['data' => $this->data]);
 
         if (!empty($this->ccAddresses)) {

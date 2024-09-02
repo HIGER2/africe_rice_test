@@ -520,7 +520,7 @@ class WebController extends Controller
                     // ],
                     // \n\nPlease prepare all the necessary administrative documents.
                     (object)[
-                        'data' => "Hello everyone,\n\n In the context of the departure for Bouaké, the staff member **{$employee->firstName} {$employee->lastName}** has had their departure request approved. Thus, the staff member will leave Abidjan on **{$depart_date}**.\n\n And will start their position on **{$taking_date}**.\n\n Please prepare the logistics for their departure as well as all the logistics related to their new position.",
+                        'data' => "Hello everyone,\n\n In the context of the Staff relocation to Bouaké, the staff member **{$employee->firstName} {$employee->lastName}** has had his/her departure request approved. Thus, the staff member will leave Abidjan **{$depart_date}**.\n\n And will start their position on **{$taking_date}**.\n\n Please prepare the logistics for departure as well as all the logistics related to installation in Mbe.",
                         'view' => 'group',
                         'service' => 3,
                         'cc' => [],
