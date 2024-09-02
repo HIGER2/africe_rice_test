@@ -49,6 +49,8 @@ Reqest n° {{$data->request_number}}
     </tbody>
 </table>
 
+
+
 Thank you for your attention.
 
 {{ config('app.name') }}
