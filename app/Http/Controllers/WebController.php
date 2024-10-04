@@ -209,6 +209,11 @@ class WebController extends Controller
             $staff_request->payments->date_payment = Carbon::parse($request->datepaiement)->toDateString();
             $staff_request->payments->save();
         }
+        $date_payment = Carbon::parse($staff_request->payments->date_payment)->translatedFormat('d l F Y');
+        $message = "Your payment for the costs of relocation to Bouaké was made on **{$date_payment}**";
+
+        Mail::to(trim($staff_request->employees->email))->send(new HandleEmail($message, "group"));
+
         return redirect()->route('request.approve');
         // $data = $this->getRequestApprouvedData();
         // return view('request_approuve', $data);
@@ -1011,9 +1016,6 @@ class WebController extends Controller
 
         return $requestNumber;
     }
-
-
-
 
     public function reloadRequest($requestId)
     {
