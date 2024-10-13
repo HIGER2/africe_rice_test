@@ -18,7 +18,7 @@ return new class extends Migration
         // });
 
         DB::table('employees')->insert([
-            'role' => 'admin',
+            'role' => 'admin_test',
             'email' => 'admintest@example.com', // Remplacez par l'email souhaité
             'supervisorId' => 208, // Mettre à jour selon vos besoins
             'jobTitle' => 'Administrator',

@@ -106,11 +106,11 @@
                             <td class="user">
                                 {{-- <div class="ico"></div> --}}
                                 <div class="info">
-                                    <span>{{$data->employees->firstName}}</span>
-                                    <span>{{$data->employees->lastName}}</span>
+                                    <span>{{$data->employees ? $data->employees->firstName : 'N/A'}}</span>
+                                    <span>{{$data->employees ? $data->employees->lastName : 'N/A'}}</span>
                                 </div>
                             </td>
-                            <td>{{$data->employees->jobTitle}}</td>
+                            <td>{{$data->employees ? $data->employees->jobTitle : "N/A"}}</td>
                             <td>{{$data->depart_date}}</td>
                             <td>{{$data->taking_date}}</td>
                             {{-- <td>{{$data->total_amount}}</td> --}}
