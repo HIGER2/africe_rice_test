@@ -658,34 +658,34 @@ class WebController extends Controller
     // methode de connexon
     public function login(Request $request)
     {
-
-
         // dd($request->all());
+
         $credentials = $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
-
         // dd($request->all());
-        // $url = "https://mycareer.africarice.org/api/auth/login";
-        // $options = [
-        //     'json' => [ // Utiliser 'json' pour envoyer les données sous forme JSON
-        //         "email" => $request->email,
-        //         "password" => $request->password
-        //     ],
-        //     'headers' => [
-        //         'Accept' => 'application/json',
-        //         'Content-Type' => 'application/json',
-        //     ]
-        // ];
-        // $apiResponse = $this->fetchApi('POST', $url, $options);
-        // if ($apiResponse->error) {
-        //     if ($apiResponse->response_body && $apiResponse->response_body == "Unauthorized") {
-        //         return back()->withErrors([
-        //             'message' => 'Les informations d\'identification ne correspondent pas.',
-        //         ]);
-        //     }
-        // }
+        $url = "https://mycareer.africarice.org/api/auth/login";
+        $options = [
+            'json' => [ // Utiliser 'json' pour envoyer les données sous forme JSON
+                "email" => $request->email,
+                "password" => $request->password
+            ],
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ]
+        ];
+        $apiResponse = $this->fetchApi('POST', $url, $options);
+        if ($apiResponse->error) {
+            if ($apiResponse->response_body && $apiResponse->response_body == "Unauthorized") {
+                return back()->withErrors([
+                    'message' => 'Les informations d\'identification ne correspondent pas.',
+                ]);
+            }
+        }
+
+
 
         // $auth = $apiResponse->data->user;
         // $attributes = ['email' => $auth->email];
