@@ -24,7 +24,12 @@
                 @csrf
                 <ul class="dropDown" >
                     {{-- {{session('user')->role }} --}}
-                    @if (session('user')->role == 'staff' || session('user')->role == 'consultant' || session('user')->role == 'superadmin' )
+                    @if ((session('user')->role == 'staff'
+                        ||
+                        session('user')->role == 'consultant'
+                        || session('user')->role == 'superadmin')
+                        && session('user')->matricule != 'A10517'
+                        )
                         <li>
                             <a href="{{route('home')}}">
                                 <span>Home</span>
@@ -32,7 +37,7 @@
                             </a>
                         </li>
                     @endif
-                    @if (session('user')->matricule == 'A10865' || session('user')->matricule == 'A10825' || session('user')->matricule == 'A1234')
+                    @if (session('user')->matricule == 'A10517' || session('user')->matricule == 'A10825' || session('user')->matricule == 'A1234')
                     <li>
                         <a href="{{route('request.approve')}}">
                             <span>Requests list approuved</span>

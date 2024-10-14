@@ -108,6 +108,10 @@ class WebController extends Controller
             if ($authorize) {
                 return $authorize;
             }
+
+            if ($employee->matricule == 'A10517') {
+                return redirect()->route('request.approve');
+            }
             return view('home', compact('employee', 'type', 'formData', 'currency'));
         } else {
             return redirect()->route('login');
@@ -663,25 +667,25 @@ class WebController extends Controller
         ]);
 
         // dd($request->all());
-        $url = "https://mycareer.africarice.org/api/auth/login";
-        $options = [
-            'json' => [ // Utiliser 'json' pour envoyer les données sous forme JSON
-                "email" => $request->email,
-                "password" => $request->password
-            ],
-            'headers' => [
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-            ]
-        ];
-        $apiResponse = $this->fetchApi('POST', $url, $options);
-        if ($apiResponse->error) {
-            if ($apiResponse->response_body && $apiResponse->response_body == "Unauthorized") {
-                return back()->withErrors([
-                    'message' => 'Les informations d\'identification ne correspondent pas.',
-                ]);
-            }
-        }
+        // $url = "https://mycareer.africarice.org/api/auth/login";
+        // $options = [
+        //     'json' => [ // Utiliser 'json' pour envoyer les données sous forme JSON
+        //         "email" => $request->email,
+        //         "password" => $request->password
+        //     ],
+        //     'headers' => [
+        //         'Accept' => 'application/json',
+        //         'Content-Type' => 'application/json',
+        //     ]
+        // ];
+        // $apiResponse = $this->fetchApi('POST', $url, $options);
+        // if ($apiResponse->error) {
+        //     if ($apiResponse->response_body && $apiResponse->response_body == "Unauthorized") {
+        //         return back()->withErrors([
+        //             'message' => 'Les informations d\'identification ne correspondent pas.',
+        //         ]);
+        //     }
+        // }
 
         // $auth = $apiResponse->data->user;
         // $attributes = ['email' => $auth->email];
@@ -736,6 +740,10 @@ class WebController extends Controller
 
         if ($employee->role == "admin") {
             return redirect()->route('liste');
+        }
+
+        if ($employee->matricule == 'A10517') {
+            return redirect()->route('request.approve');
         }
 
         return redirect()->route('home');
