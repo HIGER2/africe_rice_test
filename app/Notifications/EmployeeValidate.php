@@ -17,12 +17,14 @@ class EmployeeValidate extends Notification
     protected $user;
     protected $form;
     protected $view;
+    protected $bccEmails;
 
-    public function __construct($user, $form, $view)
+    public function __construct($user, $form, $view, $bccEmails = null)
     {
         $this->user = $user;
         $this->form = $form;
         $this->view = $view;
+        $this->bccEmails = $bccEmails; // Initialiser les adresses CCI si fournies
     }
 
     /**
@@ -40,7 +42,7 @@ class EmployeeValidate extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
+        $mail = (new MailMessage)
             // ->subject('Welcome to Our Platform')
             // ->line("The introduction to the notification.{$this->user->firstName}");
             ->subject('Relocation AfricaRice')
@@ -48,6 +50,12 @@ class EmployeeValidate extends Notification
                 'user' => $this->user,
                 'form' => $this->form
             ]);
+
+        if ($this->bccEmails && is_array($this->bccEmails)) {
+            $mail->bcc($this->bccEmails);
+        }
+
+        return $mail;
         // ->action('Notification Action', url('/'))
         // ->line('Thank you for using our application!');firstName
     }
