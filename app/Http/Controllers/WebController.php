@@ -665,26 +665,28 @@ class WebController extends Controller
             'password' => 'required|string',
         ]);
         // dd($request->all());
-        $url = "https://mycareer.africarice.org/api/auth/login";
-        $options = [
-            'json' => [ // Utiliser 'json' pour envoyer les données sous forme JSON
-                "email" => $request->email,
-                "password" => $request->password
-            ],
-            'headers' => [
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-            ]
-        ];
-        $apiResponse = $this->fetchApi('POST', $url, $options);
-        if ($apiResponse->error) {
-            if ($apiResponse->response_body && $apiResponse->response_body == "Unauthorized") {
-                return back()->withErrors([
-                    'message' => 'Les informations d\'identification ne correspondent pas.',
-                ]);
+
+        if (env('app_env') == 'production') {
+            $url = "https://mycareer.africarice.org/api/auth/login";
+            $options = [
+                'json' => [ // Utiliser 'json' pour envoyer les données sous forme JSON
+                    "email" => $request->email,
+                    "password" => $request->password
+                ],
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                ]
+            ];
+            $apiResponse = $this->fetchApi('POST', $url, $options);
+            if ($apiResponse->error) {
+                if ($apiResponse->response_body && $apiResponse->response_body == "Unauthorized") {
+                    return back()->withErrors([
+                        'message' => 'Les informations d\'identification ne correspondent pas.',
+                    ]);
+                }
             }
         }
-
 
 
         // $auth = $apiResponse->data->user;

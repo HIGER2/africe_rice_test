@@ -33,7 +33,7 @@ Route::get('/logout', [WebController::class, 'logout'])->name('logout');
 Route::post('/save', [WebController::class, 'save'])->name('save');
 Route::get('/', [WebController::class, 'index'])->name('home');
 Route::get('/myrequest', [WebController::class, 'myRequest'])->name('myRequest');
-Route::get('/setting', [WebController::class, 'setting'])->name('setting');
+Route::get('/setting', [WebController::class, 'setting'])->name('setting.index');
 Route::post('/setting', [WebController::class, 'settingIndex'])->name('setting');
 Route::get('/liste', [WebController::class, 'showInformations'])->name('liste');
 Route::get('/request-approuve', [WebController::class, 'requestApprouved'])->name('request.approve');
