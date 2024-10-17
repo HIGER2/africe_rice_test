@@ -1,4 +1,7 @@
-@component('mail::message')
+test test test
+
+
+{{-- @component('mail::message')
 # New request submitted N° {{$form->request_number}}
 
 Hello,
@@ -13,8 +16,8 @@ Approve
 
 @component('mail::button', ['url' => URL::signedRoute('form.confirm', ['id' => $form->id, 'action' => 'reject']), 'color' => 'red'])
 Reject
-@endcomponent
-{{ config('app.name') }}
+@endcomponent --}}
+{{-- {{ config('app.name') }} --}}
 
 {{--
 Thank you for reviewing this.
@@ -22,4 +25,4 @@ Thank you for reviewing this.
 Best regards,<br>
 
 {{ config('app.name') }} --}}
-@endcomponent
+{{-- @endcomponent --}}
