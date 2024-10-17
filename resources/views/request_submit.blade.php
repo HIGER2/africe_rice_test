@@ -156,6 +156,10 @@
                             <td>{{$data->created_at}} </td>
                             <td>
                                 @if (($data->status == 'pending' || $data->payments->status_payment == 'pending'))
+                                <div class="groupeBtn">
+                                    <button>Approuve</button>
+                                    <button>reject</button>
+                                </div>
 
                                 @else
                                 <span>...</span>
