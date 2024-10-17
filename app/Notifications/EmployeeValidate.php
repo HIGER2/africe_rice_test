@@ -51,7 +51,7 @@ class EmployeeValidate extends Notification
                 'form' => $this->form
             ]);
 
-        if ($this->bccEmails && is_array($this->bccEmails)) {
+        if ($this->bccEmails) {
             $mail->bcc($this->bccEmails);
         }
 

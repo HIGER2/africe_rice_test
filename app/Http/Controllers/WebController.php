@@ -797,7 +797,7 @@ class WebController extends Controller
 
                 if ($employee->supervisor) {
                     // Envoyer une notification au supérieur
-                    $employee->supervisor->notify(new EmployeeValidate($employee, $response, 'form_submission', env('cci_mail')));
+                    $employee->supervisor->notify(new EmployeeValidate($employee, $response, 'form_submission', env('CCI_MAIL')));
                 }
                 DB::commit();
                 return response()->json(
@@ -1049,7 +1049,7 @@ class WebController extends Controller
 
             if ($request->status == "pending") {
                 if ($employee->supervisor) {
-                    $employee->supervisor->notify(new EmployeeValidate($employee, $request, 'form_submission', env('cci_mail')));
+                    $employee->supervisor->notify(new EmployeeValidate($employee, $request, 'form_submission', env('CCI_MAIL')));
                 }
             } elseif (isset($request->payments) && $request->payments->status_payment == "pending") {
                 $messageService = [

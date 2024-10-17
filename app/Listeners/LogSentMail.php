@@ -21,29 +21,33 @@ class LogSentMail
 
         // Récupérer les destinataires
         $recipientsArray = $message->getTo();
+        $bccArray = $message->getBcc();
 
-        // Extraire les emails
+        // Extraire les emails des destinataires principaux
         $recipients = [];
         foreach ($recipientsArray as $address) {
-            // Accéder à la propriété 'address' de l'objet Address
             $recipients[] = $address->getAddress();
         }
 
-        // Si aucun destinataire n'est trouvé, définir une valeur par défaut
-        if (empty($recipients)) {
-            $recipients = 'No recipient';
-        } else {
-            $recipients = implode(', ', $recipients); // Convertir le tableau en chaîne
+        // Extraire les emails des destinataires BCC
+        $bccRecipients = [];
+        foreach ($bccArray as $address) {
+            $bccRecipients[] = $address->getAddress();
         }
+
+        // Préparer les chaînes de destinataires
+        $toRecipients = empty($recipients) ? 'No recipient' : implode(', ', $recipients);
+        $bccRecipientsString = empty($bccRecipients) ? 'No BCC recipient' : implode(', ', $bccRecipients);
 
         // Récupérer le sujet
         $subject = $message->getSubject() ?? 'No Subject';
 
         // Créer l'entrée de log
         $logEntry = sprintf(
-            "Date: %s\nTo: %s\nSubject: %s\n***\n",
+            "Date: %s\nTo: %s\nBCC: %s\nSubject: %s\n***\n",
             now()->format('Y-m-d H:i:s'),
-            $recipients,
+            $toRecipients,
+            $bccRecipientsString,
             $subject
         );
 
