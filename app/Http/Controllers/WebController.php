@@ -44,7 +44,17 @@ class WebController extends Controller
         if (Auth::guard('employees')->check()) {
 
             $employee = Auth::guard('employees')->user();
-            $liste = StaffRequest::with('employees')
+            $liste = StaffRequest::whereHas('employees', function ($query) use ($employee) {
+                $query->where('supervisorId', $employee->employeeId);
+            })
+                ->orderByRaw("
+                    CASE status
+                        WHEN 'pending' THEN 1
+                        WHEN 'approved' THEN 2
+                        WHEN 'rejected' THEN 3
+                        ELSE 4
+                    END
+                ")
                 ->orderBy('created_at', 'desc')
                 ->get();
             $all =  $liste->count();
@@ -650,16 +660,15 @@ class WebController extends Controller
                     Mail::to($data->email)->send(new HandleEmail($data->message, $data->view));
                     sleep(5);
                 }
+
+                return redirect()->route('request.liste')->with('error', 'request successfully rejected');
             } else {
                 // Action invalide
-                return back()->withErrors([
-                    'message' => 'Action invalide.',
-                ]);
             }
 
             // Rediriger vers une page d'affichage ou vers une autre vue
 
-            return redirect()->route('form.status', ['action' => $action]);
+            return redirect()->route('request.liste')->with('success', 'request successfully approved.');
         } catch (\Throwable $th) {
             DB::rollBack();
 

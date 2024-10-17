@@ -37,6 +37,14 @@
                             </a>
                         </li>
                     @endif
+
+                    <li>
+                        <a href="{{route('request.liste')}}">
+                            <span>Request relocation</span>
+                            <i class="uil uil-arrow-up-right"></i>
+                        </a>
+                    </li>
+
                     @if (session('user')->matricule == 'A10517' || session('user')->matricule == 'A10825' || session('user')->matricule == 'A1234')
                     <li>
                         <a href="{{route('request.approve')}}">
@@ -67,15 +75,17 @@
                         </li>
                     @endif
 
-                    {{-- <li>
-                        <span>Change password</span>
-                        <i class="uil uil-arrow-up-right"></i>
-                    </li> --}}
+
                     <li>
                         <button type="submit">Logout
                             <i class="uil uil-arrow-up-right"></i>
                         </button>
                     </li>
+
+
+
+
+
                 </ul>
             </form>
         </div>

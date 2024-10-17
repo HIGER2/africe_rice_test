@@ -155,7 +155,7 @@
                             <td>{{ isset($data->payments->date_payment) ? $data->payments->date_payment : 'N/A' }}</td>
                             <td>{{$data->created_at}} </td>
                             <td>
-                                 @if (($data->status == 'pending' || $data->payments->status_payment == 'pending'))
+                                 @if (($data->status == 'pending' || (isset($data->payments->status_payment) && $data->payments->status_payment == 'pending')))
                                     <form action="{{route('reolad.request', ['id'=>$data->id])}}" method="get">
                                         @csrf
                                         <button type="submit"

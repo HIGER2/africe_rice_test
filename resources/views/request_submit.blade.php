@@ -45,13 +45,13 @@
                     </div>
                 </div>
             </div>
-              <form action="{{ route('request.export') }}" method="GET">
+            {{-- <form action="{{ route('request.export') }}" method="GET">
                 @csrf
                 <button type="submit" class="btnexport">
                     Export
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm1.8 18H14l-2-3.4l-2 3.4H8.2l2.9-4.5L8.2 11H10l2 3.4l2-3.4h1.8l-2.9 4.5zM13 9V3.5L18.5 9z"/></svg>
                 </button>
-            </form>
+            </form> --}}
             </div>
             @if(session('success'))
                 <div class="alert alert-success">
@@ -91,8 +91,8 @@
                         <th>Date of taking up office</th>
                         {{-- <th>Tatal amount</th> --}}
                         <th>Status Request</th>
-                        <th>Status Payment</th>
-                        <th>Payment Date</th>
+                        {{-- <th>Status Payment</th> --}}
+                        {{-- <th>Payment Date</th> --}}
                         <th>submission date</th>
                         <th>Action</th>
                     </tr>
@@ -129,7 +129,7 @@
                                     </div>
                                 @endif
                             </td>
-                            <td>
+                            {{-- <td>
                                 @if (isset($data->payments->status_payment) )
                                     @if ($data->payments->status_payment == 'paid')
                                     <div class="status approuve" >
@@ -152,14 +152,19 @@
                                 @endif
                             </td>
                             </td>
-                            <td>{{ isset($data->payments->date_payment) ? $data->payments->date_payment : 'N/A' }}</td>
+                            <td>{{ isset($data->payments->date_payment) ? $data->payments->date_payment : 'N/A' }}</td> --}}
                             <td>{{$data->created_at}} </td>
                             <td>
-                                @if (($data->status == 'pending' || $data->payments->status_payment == 'pending'))
+                                @if (($data->status == 'pending'))
                                 <div class="groupeBtn">
-                                    <button>Approuve</button>
-                                    <button>reject</button>
+                                      <button style="padding: 5px; background-color: green; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                                        <a href="{{ URL::signedRoute('form.confirm', ['id' => $data->id, 'action' => 'approve']) }}" style="text-decoration: none; color: white;">Approve</a>
+                                    </button>
+                                    <button style="padding: 5px 7px; background-color: red; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                                        <a href="{{ URL::signedRoute('form.confirm', ['id' => $data->id, 'action' => 'reject']) }}" style="text-decoration: none; color: white;">Reject</a>
+                                    </button>
                                 </div>
+
 
                                 @else
                                 <span>...</span>
@@ -181,8 +186,19 @@
 </section>
 
 <script>
-    function get_data_id(id) {
-        document.querySelector('#data-id').value = id;
+ function submitForm(event) {
+        // Prevent the form from submitting immediately
+        event.preventDefault();
+
+        // Change the button text to indicate processing
+        const submitButton = document.getElementById('submitButton');
+        submitButton.textContent = 'Processing please wait...';
+
+        // Optionally disable the button to prevent multiple submissions
+        submitButton.disabled = true;
+
+        // Submit the form after updating the button text
+        event.target.submit();
     }
 </script>
 @endsection

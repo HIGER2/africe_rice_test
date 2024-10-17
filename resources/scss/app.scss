@@ -1314,7 +1314,9 @@ justify-content: center;
                         font-weight: 400;
                         // width: calc(100% / 7);
                         .groupeBtn{
-
+                            display: flex;
+                            align-items: center;
+                            gap: 5px;
                         }
                         .btnpayement{
                             width: max-content;
