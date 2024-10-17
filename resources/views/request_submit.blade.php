@@ -134,7 +134,7 @@
                                     @if ($data->payments->status_payment == 'paid')
                                     <div class="status approuve" >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2m0 14H4v-6h16zm0-10H4V6h16z"/></svg>
-                                        paid
+                                         paid
                                     </div>
                                 @elseif ($data->payments->status_payment == 'failed')
                                     <div class="status reject" >
@@ -155,20 +155,8 @@
                             <td>{{ isset($data->payments->date_payment) ? $data->payments->date_payment : 'N/A' }}</td>
                             <td>{{$data->created_at}} </td>
                             <td>
-                                 @if (($data->status == 'pending' || $data->payments->status_payment == 'pending'))
-                                    <form action="{{route('reolad.request', ['id'=>$data->id])}}" method="get">
-                                        @csrf
-                                        <button type="submit"
-                                        @disabled(
-                                        ($data->status == 'pending' &&  false) ||
+                                @if (($data->status == 'pending' || $data->payments->status_payment == 'pending'))
 
-                                        isset($data->payments) && ($data->payments->status_payment == 'pending' && false)
-                                        )
-                                       onclick="return confirm('Would you like to send a reminder?')"
-                                       data-bs-toggle="modal" data-bs-target="#exampleModal"  type="button"class="btnpayement">
-                                        <i class="uil uil-redo"></i>
-                                        </button>
-                                    </form>
                                 @else
                                 <span>...</span>
                                 @endif

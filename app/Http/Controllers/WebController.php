@@ -37,6 +37,26 @@ class WebController extends Controller
 {
     //
 
+
+    public function request_liste()
+    {
+
+        if (Auth::guard('employees')->check()) {
+
+            $employee = Auth::guard('employees')->user();
+            $liste = StaffRequest::with('employees')
+                ->orderBy('created_at', 'desc')
+                ->get();
+            $all =  $liste->count();
+            $pending =  $liste->where('status', 'pending')->count();
+            $approuve =  $liste->where('status', 'approved')->count();
+            $rejected =  $liste->where('status', 'rejected')->count();
+            return view('request_submit', compact('liste', 'pending', 'approuve', 'rejected', 'all'));
+        } else {
+            return redirect()->route('login');
+            // return redirect()->route('login', compact('type', 'employee', 'formData'));
+        }
+    }
     public function newTypeAllowance($type_allowence)
     {
         $newTypeAllowance = collect();
@@ -83,6 +103,8 @@ class WebController extends Controller
 
         return  $newTypeAllowance;
     }
+
+
     public function index()
     {
         if (Auth::guard('employees')->check()) {
@@ -362,7 +384,6 @@ class WebController extends Controller
                             $staffCategory->amount = $request->amount;
                             $staffCategory->currency = $request->currency;
                             $staffCategory->save(); // Enregistrer les modifications
-
                         }
                     }
 

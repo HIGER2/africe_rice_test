@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/login', function () {
-
     if (Auth::guard('employees')->check()) {
         return   redirect('/');
     }
@@ -16,9 +15,6 @@ Route::get('/login', function () {
 
 
 Route::get('/destroy/{id}', [WebController::class, 'destroy'])->name('employee.destroy');
-
-
-
 Route::get('/form-status/{action}', [WebController::class, 'showStatus'])->name('form.status');
 Route::post('/form-action/{id}/{action}', [WebController::class, 'handleAction'])->name('form.action');
 Route::get('/form-action/{id}/{action}/confirm', [WebController::class, 'confirmAction'])->name('form.confirm')->middleware('signed');
@@ -46,6 +42,9 @@ Route::get('/reolad-request/{id}', [WebController::class, 'reloadRequest'])->nam
 
 // ->middleware('auth');
 Route::post('/payment-confirm', [WebController::class, 'paymentConfirm'])->name('payment.confirm');
+
+
+Route::get('/request-liste', [WebController::class, 'request_liste'])->name('request.liste');
 
 // Route::middleware(['auth'])->group(function () {
 // });

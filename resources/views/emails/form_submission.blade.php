@@ -1,43 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Notification</title>
-    <style>
-        /* Ajoutez ici des styles pour les boutons */
-        .button {
-            padding: 10px 20px;
-            text-decoration: none;
-            color: #fff;
-            border-radius: 5px;
-            margin: 5px;
-        }
-        .green {
-            background-color: green;
-        }
-        .red {
-            background-color: red;
-        }
-    </style>
-</head>
-<body>
-    <h1>New request submitted N° {{ $form->request_number }}</h1>
+<x-mail::message>
+# New request submitted N° {{$form->request_number}}
 
-    <p>Hello,</p>
+Hello,
 
-    <p>The staff <strong>{{ $user->firstName." ".$user->lastName }}</strong> has submitted the departure form for Bouaké.</p>
-    <p>The departure request is for <strong>{{ $form->depart_date }}</strong>.</p>
-    <p>The taking up of office is scheduled for <strong>{{ $form->taking_date }}</strong>.</p>
+The staff **{{ $user->firstName." ".$user->lastName }}** has submitted the departure form for Bouaké.
+The departure request is for **{{$form->depart_date}}**.
+The taking up of office is scheduled for **{{$form->taking_date}}**.
 
-    <a class="button green" href="{{ URL::signedRoute('form.confirm', ['id' => $form->id, 'action' => 'approve']) }}">Approve</a>
-    <a class="button red" href="{{ URL::signedRoute('form.confirm', ['id' => $form->id, 'action' => 'reject']) }}">Reject</a>
+<x-mail::button :url="URL::signedRoute('form.confirm', ['id' => $form->id, 'action' => 'approve'])" color="success">
+Approve
+</x-mail::button>
 
-    <p>{{ config('app.name') }}</p>
+<x-mail::button :url="URL::signedRoute('form.confirm', ['id' => $form->id, 'action' => 'reject'])" color="error">
+Reject
+</x-mail::button>
 
-    {{--
-    <p>Thank you for reviewing this.</p>
-    <p>Best regards,<br>{{ config('app.name') }}</p>
-    --}}
-</body>
-</html>
+{{ config('app.name') }}
+
+</x-mail::message>
