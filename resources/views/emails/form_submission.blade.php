@@ -14,7 +14,7 @@
     <p>The departure request is for <strong>{{ $form->depart_date }}</strong>.</p>
     <p>The taking up of office is scheduled for <strong>{{ $form->taking_date }}</strong>.</p>
 
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+    {{-- <table role="presentation" cellspacing="0" cellpadding="0" border="0">
         <tr>
             <td>
                 <button style="padding: 10px 20px; background-color: green; color: white; border: none; border-radius: 5px; cursor: pointer;">
@@ -27,7 +27,7 @@
                 </button>
             </td>
         </tr>
-    </table>
+    </table> --}}
 
     <p>{{ config('app.name') }}</p>
 </body>
