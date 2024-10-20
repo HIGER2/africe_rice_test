@@ -658,17 +658,21 @@ class WebController extends Controller
 
                 foreach ($recipients as $key => $data) {
                     Mail::to($data->email)->send(new HandleEmail($data->message, $data->view));
-                    sleep(5);
+                    sleep(3);
                 }
-
-                return redirect()->route('request.liste')->with('error', 'request successfully rejected');
             } else {
                 // Action invalide
             }
 
             // Rediriger vers une page d'affichage ou vers une autre vue
-
-            return redirect()->route('request.liste')->with('success', 'request successfully approved.');
+            if (Auth::guard('employees')->check()) {
+                if ($action == "reject") {
+                    return redirect()->route('request.liste')->with('error', 'request successfully rejected');
+                } else {
+                    return redirect()->route('request.liste')->with('success', 'request successfully approved.');
+                }
+            }
+            return redirect()->route('form.status', ['action' => $action]);
         } catch (\Throwable $th) {
             DB::rollBack();
 
