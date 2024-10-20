@@ -40,7 +40,7 @@
 
                     <li>
                         <a href="{{route('request.liste')}}">
-                            <span>Request relocation</span>
+                            <span>Confirm Request relocation</span>
                             <i class="uil uil-arrow-up-right"></i>
                         </a>
                     </li>

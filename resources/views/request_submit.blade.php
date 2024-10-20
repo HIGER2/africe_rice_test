@@ -5,7 +5,7 @@
 <section class="liste">
     <div class="container">
         <div class="card">
-            <h5>All requests ({{$all}})</h5>
+            <h5> Requests for Relocation ({{$all}})</h5>
             <div class="headers">
                 <div class="boxItem">
                 {{-- <div class="box">
