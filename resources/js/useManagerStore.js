@@ -161,7 +161,6 @@ const options = {
             let enfantsPlus23 = 0
 
             if (children?.length > 0) {
-
                 enfantsPlus23 = children.filter((enfant) => {
                     if (enfant.age && enfant.sex) {
                         return enfant.age > 23
@@ -175,7 +174,7 @@ const options = {
                 });
 
                 if (enfantsMoins23.length > 0) {
-                    enfants15a23 = enfantsMoins23.filter(enfant => enfant.age >= 15 && enfant.age <= 23);
+                    enfants15a23 = enfantsMoins23.filter(enfant => enfant?.age >= 15 && enfant?.age <= 23);
                     enfantsMoins15 = enfantsMoins23.filter(enfant => enfant.age < 15);
                 }
 
@@ -188,7 +187,9 @@ const options = {
                     enfantsMoins15.forEach(element => {
                         groupe++
                         if (groupe < 2) {
-                            chambres++
+                            if (chambres < 3) {
+                                chambres++
+                            }
                         } else {
                             groupe = 0
                         }
@@ -198,14 +199,25 @@ const options = {
                     // Attribuer des chambres aux enfants de 16 à 23 ans en fonction du sexe
 
                 if (enfants15a23.length > 0) {
+
                     let groupeF=0;
                     let groupeM = 0;
-                    if (enfants15a23.length >=2) {
-                            chambres+=2
+                    if (enfants15a23.length >= 2) {
+                        if (chambres < 3) {
+                            if (chambres == 2) {
+                                chambres++
+                            } else {
+                            chambres += 2
+                            }
+                        }
                     }
                     if (enfants15a23.length == 1) {
-                            chambres++
+                            if (chambres < 3) {
+                                chambres++
+                            }
                     }
+
+
                     // enfants15a23.forEach(element => {
                     //     if (element?.sex && element?.age) {
                     //         if (element.sex == "F") {
