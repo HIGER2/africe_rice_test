@@ -198,7 +198,7 @@ const limit_age = (index) => {
                             Confirm
                         </span>
                     </button>
-                <button v-else type="button" class="test" @click="destroy(data?.id)">Supprimer pour réessayer</button>
+                <!-- <button v-else type="button" class="test/" @click="destroy(data?.id)">Supprimer pour réessayer</button> -->
     </form>
     </div>
 </template>
