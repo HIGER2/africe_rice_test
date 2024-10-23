@@ -632,7 +632,7 @@ class WebController extends Controller
                 }
 
                 foreach ($backMessage as $key => $data) {
-                    Mail::to(trim($data->email))->send(new HandleEmail($data->data, $data->view));
+                    Mail::to(trim($data->email))->send(new HandleEmail($data->data, $data->view, null, env('CCI_MAIL')));
                     sleep(2);
                 }
             } elseif ($action == 'reject') {
@@ -657,7 +657,7 @@ class WebController extends Controller
                 ];
 
                 foreach ($recipients as $key => $data) {
-                    Mail::to($data->email)->send(new HandleEmail($data->message, $data->view));
+                    Mail::to($data->email)->send(new HandleEmail($data->message, $data->view, null, env('CCI_MAIL')));
                     sleep(3);
                 }
             } else {

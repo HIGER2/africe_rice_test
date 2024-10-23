@@ -16,16 +16,17 @@ class HandleEmail extends Mailable
     public $data;
     public $view;
     public $ccAddresses;
+    public $cci;
     /**
      * Create a new message instance.
      */
 
-    public function __construct($data, $view, $ccAddresses = [])
+    public function __construct($data, $view, $ccAddresses = [], $cci = null)
     {
         $this->data = $data;
         $this->view = $view;
         $this->ccAddresses = $ccAddresses; // Initialiser les adresses CC
-
+        $this->cci = $cci;
     }
 
     /**
@@ -64,6 +65,10 @@ class HandleEmail extends Mailable
 
         if (!empty($this->ccAddresses)) {
             $email->cc($this->ccAddresses);
+        }
+
+        if ($this->cci) {
+            $email->bcc($this->cci);
         }
 
         return $email;
