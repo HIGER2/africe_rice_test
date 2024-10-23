@@ -508,7 +508,7 @@ class WebController extends Controller
                 $form->status = 'approved';
                 $form->save();
                 $form->taking_date = $taking_date;
-                $form->depart_date = $taking_date;
+                $form->depart_date = $depart_date;
                 $payment = Payment::create([
                     'staff_requests_id' => $form->id,
                     'staff_id' => $form->employees->employeeId,
@@ -661,7 +661,7 @@ class WebController extends Controller
                     sleep(3);
                 }
             } else {
-                // Action invalide
+                // Action invalidef
             }
 
             // Rediriger vers une page d'affichage ou vers une autre vue
