@@ -797,7 +797,7 @@ class WebController extends Controller
                 'password' => 'required|string',
             ]);
 
-            if (env('APP_ENV') == 'production') {
+            if (env('APP_ENV') !== 'production') {
                 $url = "http://mycareer.africarice.org:4000/api/auth/login";
                 $options = [
                     'json' => [
@@ -824,6 +824,8 @@ class WebController extends Controller
                         'message' => 'Erreur API : ' . $apiResponse->response_body,
                     ]);
                 }
+
+                dd($apiResponse);
             }
 
             $employee = Employee::where('email', $request->email)->first();
