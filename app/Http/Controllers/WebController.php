@@ -690,103 +690,179 @@ class WebController extends Controller
     }
 
     // methode de connexon
+    // public function login(Request $request)
+    // {
+    //     // dd($request->all());
+
+    //     $credentials = $request->validate([
+    //         'email' => 'required|string|email',
+    //         'password' => 'required|string',
+    //     ]);
+    //     // dd($request->all());
+
+    //     if (env('APP_ENV') == 'production') {
+
+    //         $url = "http://mycareer.africarice.org:4000/api/auth/login";
+    //         // $url = "https://mycareer.africarice.org/api/auth/login";
+
+    //         // http://mycareer.africarice.org:4000/auth
+    //         $options = [
+    //             'json' => [ // Utiliser 'json' pour envoyer les données sous forme JSON
+    //                 "email" => $request->email,
+    //                 "password" => $request->password
+    //             ],
+    //             'headers' => [
+    //                 'Accept' => 'application/json',
+    //                 'Content-Type' => 'application/json',
+    //             ]
+    //         ];
+    //         $apiResponse = $this->fetchApi('POST', $url, $options);
+    //         if ($apiResponse->error) {
+    //             if ($apiResponse->response_body && $apiResponse->response_body == "Unauthorized") {
+    //                 return back()->withErrors([
+    //                     'message' => 'Les informations d\'identification ne correspondent pas.',
+    //                 ]);
+    //             }
+    //         }
+    //     }
+
+
+    //     // $auth = $apiResponse->data->user;
+    //     // $attributes = ['email' => $auth->email];
+    //     // $user = Employee::updateOrCreate($attributes, json_decode(json_encode($auth), true));
+
+    //     // dd($user);
+
+
+    //     $employee = Employee::where('email', $request->email)->first();
+    //     if (!$employee) {
+    //         return back()->withErrors([
+    //             'message' => 'invalid email.',
+    //         ]);
+    //     }
+    //     if ($employee->grade !== "abidjan") {
+    //         return back()->withErrors([
+    //             'message' => 'not authorized',
+    //         ]);
+    //     }
+    //     Auth::guard('employees')->login($employee);
+    //     $employee = Auth::guard('employees')->user();
+
+    //     // if (Hash::needsRehash($employee->password)) {
+    //     //     $url = "https://mycareer.africarice.org/api/auth/login";
+    //     //     $options = [
+    //     //         'json' => [ // Utiliser 'json' pour envoyer les données sous forme JSON
+    //     //             "email" => $request->email,
+    //     //             "password" => $request->password
+    //     //         ],
+    //     //         'headers' => [
+    //     //             'Accept' => 'application/json',
+    //     //             'Content-Type' => 'application/json',
+    //     //         ]
+    //     //     ];
+    //     //     $apiResponse = $this->fetchApi('POST', $url, $options);
+    //     //     if ($apiResponse->error) {
+    //     //         if ($apiResponse->response_body && $apiResponse->response_body == "Unauthorized") {
+    //     //             return back()->withErrors([
+    //     //                 'message' => 'Les informations d\'identification ne correspondent pas.',
+    //     //             ]);
+    //     //         }
+    //     //         // dd($apiResponse->response_body);
+    //     //     } else {
+    //     //         // auth by api and check if credentail is correcte
+    //     //         $employee->update([
+    //     //             "password" => Hash::make($request->password),
+    //     //         ]);
+    //     //     }
+    //     // }
+
+    //     session::put('user', $employee);
+
+    //     if ($employee->role == "admin") {
+    //         return redirect()->route('liste');
+    //     }
+
+    //     if ($employee->matricule == 'A10517') {
+    //         return redirect()->route('request.approve');
+    //     }
+
+    //     return redirect()->route('home');
+    // }
+
     public function login(Request $request)
     {
-        // dd($request->all());
+        try {
+            $credentials = $request->validate([
+                'email' => 'required|string|email',
+                'password' => 'required|string',
+            ]);
 
-        $credentials = $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
-        // dd($request->all());
+            if (env('APP_ENV') == 'production') {
+                $url = "http://mycareer.africarice.org:4000/api/auth/login";
+                $options = [
+                    'json' => [
+                        "email" => $request->email,
+                        "password" => $request->password
+                    ],
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                    ]
+                ];
 
-        if (env('APP_ENV') == 'production') {
+                // Appel API encapsulé dans le bloc try-catch
+                $apiResponse = $this->fetchApi('POST', $url, $options);
 
-            $url = "http://mycareer.africarice.org:4000/api/auth/login";
-            // $url = "https://mycareer.africarice.org/api/auth/login";
-
-            // http://mycareer.africarice.org:4000/auth
-            $options = [
-                'json' => [ // Utiliser 'json' pour envoyer les données sous forme JSON
-                    "email" => $request->email,
-                    "password" => $request->password
-                ],
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'application/json',
-                ]
-            ];
-            $apiResponse = $this->fetchApi('POST', $url, $options);
-            if ($apiResponse->error) {
-                if ($apiResponse->response_body && $apiResponse->response_body == "Unauthorized") {
+                if ($apiResponse->error) {
+                    if ($apiResponse->response_body && $apiResponse->response_body == "Unauthorized") {
+                        return back()->withErrors([
+                            'message' => 'Les informations d\'identification ne correspondent pas.',
+                        ]);
+                    }
+                    // Retourne d'autres erreurs API
                     return back()->withErrors([
-                        'message' => 'Les informations d\'identification ne correspondent pas.',
+                        'message' => 'Erreur API : ' . $apiResponse->response_body,
                     ]);
                 }
             }
-        }
 
+            $employee = Employee::where('email', $request->email)->first();
+            if (!$employee) {
+                return back()->withErrors([
+                    'message' => 'Email invalide.',
+                ]);
+            }
+            if ($employee->grade !== "abidjan") {
+                return back()->withErrors([
+                    'message' => 'Non autorisé.',
+                ]);
+            }
 
-        // $auth = $apiResponse->data->user;
-        // $attributes = ['email' => $auth->email];
-        // $user = Employee::updateOrCreate($attributes, json_decode(json_encode($auth), true));
+            Auth::guard('employees')->login($employee);
+            $employee = Auth::guard('employees')->user();
 
-        // dd($user);
+            session::put('user', $employee);
 
+            if ($employee->role == "admin") {
+                return redirect()->route('liste');
+            }
 
-        $employee = Employee::where('email', $request->email)->first();
-        if (!$employee) {
+            if ($employee->matricule == 'A10517') {
+                return redirect()->route('request.approve');
+            }
+
+            return redirect()->route('home');
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            // Erreur d'appel à l'API
             return back()->withErrors([
-                'message' => 'invalid email.',
+                'message' => 'Erreur de connexion à l\'API : ' . $e->getMessage(),
+            ]);
+        } catch (\Exception $e) {
+            // Toute autre exception
+            return back()->withErrors([
+                'message' => 'Une erreur inattendue est survenue : ' . $e->getMessage(),
             ]);
         }
-        if ($employee->grade !== "abidjan") {
-            return back()->withErrors([
-                'message' => 'not authorized',
-            ]);
-        }
-        Auth::guard('employees')->login($employee);
-        $employee = Auth::guard('employees')->user();
-
-        // if (Hash::needsRehash($employee->password)) {
-        //     $url = "https://mycareer.africarice.org/api/auth/login";
-        //     $options = [
-        //         'json' => [ // Utiliser 'json' pour envoyer les données sous forme JSON
-        //             "email" => $request->email,
-        //             "password" => $request->password
-        //         ],
-        //         'headers' => [
-        //             'Accept' => 'application/json',
-        //             'Content-Type' => 'application/json',
-        //         ]
-        //     ];
-        //     $apiResponse = $this->fetchApi('POST', $url, $options);
-        //     if ($apiResponse->error) {
-        //         if ($apiResponse->response_body && $apiResponse->response_body == "Unauthorized") {
-        //             return back()->withErrors([
-        //                 'message' => 'Les informations d\'identification ne correspondent pas.',
-        //             ]);
-        //         }
-        //         // dd($apiResponse->response_body);
-        //     } else {
-        //         // auth by api and check if credentail is correcte
-        //         $employee->update([
-        //             "password" => Hash::make($request->password),
-        //         ]);
-        //     }
-        // }
-
-        session::put('user', $employee);
-
-        if ($employee->role == "admin") {
-            return redirect()->route('liste');
-        }
-
-        if ($employee->matricule == 'A10517') {
-            return redirect()->route('request.approve');
-        }
-
-        return redirect()->route('home');
     }
 
     public function save(Request $request)
