@@ -701,7 +701,10 @@ class WebController extends Controller
         // dd($request->all());
 
         if (env('APP_ENV') == 'production') {
-            $url = "https://mycareer.africarice.org/api/auth/login";
+            $url = "http://mycareer.africarice.org:4000/auth/api/auth/login";
+            // $url = "https://mycareer.africarice.org/api/auth/login";
+
+            // http://mycareer.africarice.org:4000/auth
             $options = [
                 'json' => [ // Utiliser 'json' pour envoyer les données sous forme JSON
                     "email" => $request->email,
