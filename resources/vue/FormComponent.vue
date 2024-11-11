@@ -11,7 +11,7 @@ const today = new Date();
 let minDate = today.toISOString().split('T')[0];
 
 // Ajouter 30 jours
-today.setDate(today.getDate() + 21);
+today.setDate(today.getDate() + 14);
 
 // Obtenir la date au format ISO (YYYY-MM-DD) pour l'attribut max
 let maxDate = today.toISOString().split('T')[ 0 ];
