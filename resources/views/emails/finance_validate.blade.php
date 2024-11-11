@@ -23,13 +23,13 @@ Below are the details of the compensation for Finance to make payment to staff a
     <tbody>
         <tr>
             <td>Travel with Family <br>
-               (Staff=10 000) +(spouse= {{$data->marital_status == 'yes' ? '10 000' : '0'}}) + ({{$data->number_child}} child * 10 000)
+               (Staff=15 000) +(spouse= {{$data->marital_status == 'yes' ? '15 000' : '0'}}) + ({{$data->number_child}} child * 15 000)
             </td>
             <td align="right">{{number_format($data->total_t_w_f, 0, ',', ' ')}} XOF</td>
         </tr>
         <tr>
             <td>Family initial accommodation <br>
-               ({{$data->room}} Rooms x 15 000) x 7 days
+               ({{$data->room}} Rooms x 35 000) x 7 days
             </td>
             <td align="right">{{number_format($data->total_f_i_a, 0, ',', ' ')}} XOF</td>
         </tr>
