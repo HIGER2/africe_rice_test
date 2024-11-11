@@ -878,11 +878,11 @@ class WebController extends Controller
                 $employee = Auth::guard('employees')->user();
                 $infoExist = StaffRequest::where('employees_id', $employee->employeeId)->first();
 
-                $dateMaxe = Carbon::now()->addDays(30)->toDateString();
+                $dateMaxe = Carbon::now()->addDays(14)->toDateString();
 
                 if ($dateMaxe > $request->taking_date || $dateMaxe > $request->depart_date) {
                     return response()->json([
-                        'message' => 'la date de prise de fonction doit etre au dela de 30 jours ',
+                        'message' => 'la date de prise de fonction doit etre au dela de 14 jours ',
                         'data' => $infoExist
                     ], 400);
                 }
